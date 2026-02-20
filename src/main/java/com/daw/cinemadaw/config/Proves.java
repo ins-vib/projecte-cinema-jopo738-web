@@ -102,6 +102,8 @@ public class Proves implements CommandLineRunner {   // es per provar que tot es
     // o deixar de veure el cinema que has eliminat.
         System.out.println(cinema);
     }
+
+    
     }
 
     
