@@ -82,7 +82,7 @@ public class Room {
     }
 
     public void setCinema(Cinema cinema11) {
-        throw new UnsupportedOperationException("Not supported yet.");
+       this.cinema = cinema11;
     }
 
     public Cinema getCinema() {

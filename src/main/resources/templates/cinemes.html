@@ -1,0 +1,13 @@
+Llista cinemes
+
+<div th:each="cinema : ${llista}">
+    <h3 th:text="${cinema.name}">Nom</h3>
+    <p th:text="${cinema.city}">Ciutat</p>
+    <hr>
+</div>
+
+<!-- L'Iterador (th:each): Si a la teva base de dades tens 3 cinemes, Thymeleaf crearà tres blocs <div> sencers.
+
+L'Accés a Dades: Quan escrius ${cinema.name}, Thymeleaf crida internament al mètode getName() de la teva classe Java Cinema.
+
+El Resultat Final: El navegador no veurà mai el codi th:text. Rebrà un HTML pur amb els noms i ciutats ja escrits, com per exemple: <h3>Cines Full</h3> <p>Cornellà</p>. -->
