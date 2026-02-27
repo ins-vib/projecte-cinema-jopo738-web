@@ -1,11 +1,16 @@
 package com.daw.cinemadaw.domain.cinema;
 
+import java.util.ArrayList;
+import java.util.List;
+
+import jakarta.persistence.CascadeType;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.ManyToOne;
+import jakarta.persistence.OneToMany;
 
 @Entity()
 public class Room {
@@ -29,6 +34,18 @@ public class Room {
 // A nivell de Base de Dades, JPA crearà automàticament una columna 
 // anomenada 'cinema_id' que actuarà com a Clau Forana (Foreign Key).
     private Cinema cinema;
+
+
+    @OneToMany(mappedBy="room",cascade=CascadeType.ALL, orphanRemoval=true)
+    private List<Seat> seats= new ArrayList<>();
+
+    public List<Seat> getSeats(){
+        return seats;
+    }
+
+    public void setSeats(List<Seat>seats){
+        this.seats=seats;
+    }
 
     public Room() {   // aquest constructor és obligatori perque el framework el busca
     }
@@ -63,6 +80,26 @@ public class Room {
     public void setCapacity(int capacity) {
         this.capacity = capacity;
     }
+
+    public void setCinema(Cinema cinema11) {
+        throw new UnsupportedOperationException("Not supported yet.");
+    }
+
+    public Cinema getCinema() {
+        return cinema;
+    }
+
+    
+
+
+
+
+
+
+
+
+
+    
 
 
 

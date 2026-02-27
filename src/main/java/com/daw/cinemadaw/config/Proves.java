@@ -7,21 +7,31 @@ import org.springframework.boot.CommandLineRunner;
 import org.springframework.stereotype.Component;
 
 import com.daw.cinemadaw.domain.cinema.Cinema;
+import com.daw.cinemadaw.domain.cinema.Room;
+import com.daw.cinemadaw.domain.cinema.Seat;
+import com.daw.cinemadaw.domain.cinema.SeatType;
 import com.daw.cinemadaw.repository.CinemaRepository;
+import com.daw.cinemadaw.repository.RoomRepository;
+import com.daw.cinemadaw.repository.SeatRepository;
+
+import jakarta.transaction.Transactional;
 
 @Component
 public class Proves implements CommandLineRunner {   // es per provar que tot està funcionant 
 
     private CinemaRepository cinemaRepository; // la creem per poder treballar amb ella
-
+    private RoomRepository roomRepository;
+    private SeatRepository seatRepository;
     
 
-    public Proves(CinemaRepository cinemaRepository) {
+    public Proves(CinemaRepository cinemaRepository,RoomRepository roomRepository, SeatRepository seatRepository) {
         this.cinemaRepository = cinemaRepository;
+        this.roomRepository= roomRepository;
+        this.seatRepository= seatRepository;
     }
 
 
-
+    @Transactional
     @Override  // Indica que aquest mètode està sobrescrivint un mètode de la interfície pare (probablement CommandLineRunner). Serveix per assegurar-se que la signatura és correcta.
     public void run (String... args) throws Exception{  // Defineix el mètode que conté la lògica a executar. El paràmetre String... args permet rebre arguments des de la línia de comandes si fos necessari.
 
@@ -102,6 +112,79 @@ public class Proves implements CommandLineRunner {   // es per provar que tot es
     // o deixar de veure el cinema que has eliminat.
         System.out.println(cinema);
     }
+
+    Cinema cinema11= new Cinema("ocine", "Gavarres,45", "tarragona", "43206");
+    cinemaRepository.save(cinema11);
+
+    Room room1= new Room(50, "Sala 1");
+    room1.setCinema(cinema11);
+    roomRepository.save(room1);
+
+    Room room2= new Room(60, "Sala 2");
+    room1.setCinema(cinema11);
+    roomRepository.save(room2);
+
+    Room room3= new Room(70, "Sala 3");
+    room1.setCinema(cinema11);
+    roomRepository.save(room2);
+
+
+    Cinema cinema3D= new Cinema("Cine 3d", "Gavarres,46", "Tarragona", "43567");
+    Room room3D1= new Room(500, "sala 3d 1");
+    room3D1.setCinema(cinema3D);
+    cinema3D.getRooms().add(room3D1);
+    cinemaRepository.save(cinema3D);
+
+    
+
+    for(Room room: roomRepository.findAll()){
+        int seatCount= 0;
+        for (int i = 0; i < 10; i++) {
+            for(int j= 0; j<10;j++){
+                char nouChar= (char)('A'+i);
+                if(seatCount<50){
+                    Seat seat=new Seat(true,i,i,j,room,j,SeatType.STANDARD);
+                    seat.setRoom(room);
+                    seatRepository.save(seat);
+                }else if(seatCount<85){
+                    Seat seat = new Seat(true, i, i, j, room,j, SeatType.STANDARD);
+                    seat.setRoom(room);
+                    seatRepository.save(seat);
+                }else{
+                    Seat seat =new Seat(true, i, i, j, room,j, SeatType.STANDARD);
+                    seat.setRoom(room);
+                    seatRepository.save(seat);
+
+                }
+                seatCount++;
+            }
+        }
+roomRepository.save(room);
+    }
+
+    
+
+
+    Optional<Cinema> optionalC=cinemaRepository.findById(1L);
+    if(optionalC.isPresent()){
+        Cinema c= optionalC.get();
+        System.out.println(c);
+
+        List<Room> sales= c.getRooms();
+        for(Room room: sales){
+            System.err.println(room);
+            List<Seat> seients = room.getSeats();
+            for(Seat s: seients){
+                System.err.println(s);
+            }
+        }
+
+    }
+
+
+
+
+    
 
     
     }
