@@ -1,0 +1,84 @@
+@startuml
+
+class Cinema {
+    - id : Long
+    - name : String
+    - address : String
+    - city : String
+    - postalCode : String
+    - rooms : List<Room>
+
+    + Cinema()
+    + Cinema(name:String, address:String, city:String, postalCode:String)
+
+    + getId() : Long
+    + getName() : String
+    + setName(name:String) : void
+    + getAddress() : String
+    + setAddress(address:String) : void
+    + getCity() : String
+    + setCity(city:String) : void
+    + getPostalCode() : String
+    + setPostalCode(postalCode:String) : void
+    + getRooms() : List<Room>
+    + setRooms(rooms:List<Room>) : void
+    + toString() : String
+}
+
+class Room {
+    - id : Long
+    - name : String
+    - capacity : int
+    - cinema : Cinema
+    - seats : List<Seat>
+
+    + Room()
+    + Room(name:String, capacity:int)
+
+    + getId() : Long
+    + getName() : String
+    + setName(name:String) : void
+    + getCapacity() : int
+    + setCapacity(capacity:int) : void
+    + getCinema() : Cinema
+    + setCinema(cinema:Cinema) : void
+    + getSeats() : List<Seat>
+    + setSeats(seats:List<Seat>) : void
+    + toString() : String
+}
+
+class Seat {
+    - id : Long
+    - seatRow : String
+    - number : int
+    - posX : int
+    - posY : int
+    - type : SeatType
+    - active : boolean
+    - room : Room
+
+    + Seat()
+    + Seat(seatRow:String, number:int, posX:int, posY:int, type:SeatType, active:boolean)
+
+    + getId() : Long
+    + getSeatRow() : String
+    + setSeatRow(seatRow:String) : void
+    + getNumber() : int
+    + setNumber(number:int) : void
+    + getPosX() : int
+    + setPosX(posX:int) : void
+    + getPosY() : int
+    + setPosY(posY:int) : void
+    + getType() : SeatType
+    + setType(type:SeatType) : void
+    + isActive() : boolean
+    + setActive(active:boolean) : void
+    + getRoom() : Room
+    + setRoom(room:Room) : void
+    + toString() : String
+}
+
+Cinema "1" -- "0.." Room : rooms
+Room "1" -- "0.." Seat : seats
+
+@enduml
