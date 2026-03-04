@@ -1,7 +1,7 @@
 
 
 <h1>Llista cinemes</h1>
-
+<a th:href="@{/cinema/create}">Afegeix nou cinema</a>
 
 <!-- per mostrar en fomrat taula -->
 
@@ -24,6 +24,12 @@
             <td>
                 <a th:href="@{/cinema/{id}(id=${cinema.id})}">
                 veure detall
+                </a>
+                <a th:href="@{/cinema/delete/{id}(id=${cinema.id})}">
+                eliminar
+                </a>
+                <a th:href="@{/cinema/update/{id}(id=${cinema.id})}">
+                editar
                 </a>
             </td>
         </tr>
