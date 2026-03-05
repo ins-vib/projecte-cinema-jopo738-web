@@ -5,6 +5,8 @@ import java.util.List;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.ModelAttribute;
+import org.springframework.web.bind.annotation.PostMapping;
 
 import com.daw.cinemadaw.domain.cinema.Movie;
 import com.daw.cinemadaw.repository.MovieRepository;
@@ -43,6 +45,12 @@ public class MovieController {
             model.addAttribute("pelicula", movie);
             
         return "movies/create-pelicules";
+    }
+
+    @PostMapping("/pelicula/create")
+    public String guardarpelicula(@ModelAttribute("pelicula") Movie movie){
+        movieRepository.save(movie);
+        return "redirect:/movies";
     }
     
 }

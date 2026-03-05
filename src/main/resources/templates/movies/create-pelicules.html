@@ -11,7 +11,7 @@
         <form th:action="@{/pelicula/create}" th:object="${pelicula}" method="post">
             
             <label>Títol:</label><br>
-            <input type="text" th:field="*{titol}"/><br><br>
+            <input type="text" th:field="*{títol}"/><br><br>
 
             <label>Durada (minuts):</label><br>
             <input type="text" th:field="*{durada}"/><br><br>
@@ -20,10 +20,10 @@
             <input type="text"th:field="*{genere}"/><br><br>
 
             <label>Descripció / sinopsi:</label><br>
-            <input type="text"th:field="*{des}"/><br><br>
+            <input type="text"th:field="*{descripcio}"/><br><br>
 
             <label>Data d'estrena:</label><br>
-            <input type="text"th:field="*{Data d'estrena}"/><br><br>
+            <input type="date"th:field="*{data_estrena}"/><br><br>
 
 
             <button type="submit">Guardar</button>

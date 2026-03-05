@@ -23,16 +23,16 @@ public class Movie {
      @Column 
     private String genere;  
      @Column 
-    private String descrpcio;  
+    private String descripcio;  
      @Column 
     private LocalDate data_estrena;  
 
     public Movie() {
     }
 
-    public Movie(LocalDate data_estrena, String descrpcio, int durada, String genere, String títol) {
+    public Movie(LocalDate data_estrena, String descripcio, int durada, String genere, String títol) {
         this.data_estrena = data_estrena;
-        this.descrpcio = descrpcio;
+        this.descripcio = descripcio;
         this.durada = durada;
         this.genere = genere;
         this.títol = títol;
@@ -72,12 +72,12 @@ public class Movie {
         this.genere = genere;
     }
 
-    public String getDescrpcio() {
-        return descrpcio;
+    public String getDescripcio() {
+        return descripcio;
     }
 
-    public void setDescrpcio(String descrpcio) {
-        this.descrpcio = descrpcio;
+    public void setDescripcio(String descripcio) {
+        this.descripcio = descripcio;
     }
 
     public LocalDate getData_estrena() {
@@ -96,7 +96,7 @@ public class Movie {
         sb.append(", t\u00edtol=").append(títol);
         sb.append(", durada=").append(durada);
         sb.append(", genere=").append(genere);
-        sb.append(", descrpcio=").append(descrpcio);
+        sb.append(", descripcio=").append(descripcio);
         sb.append(", data_estrena=").append(data_estrena);
         sb.append('}');
         return sb.toString();
