@@ -16,12 +16,14 @@
            </nav> 
         </header> -->
         <section>
-            <h2 th:text="${cinema.name}"></h2>
-            <p th:text="${cinema.city}">Ciutat:</p>
-            <p th:text="${cinema.address}">Adreça:</p>
+            <strong>Títol:</strong><p th:text="${pelicula.títol}">Títol:</p>
+            <strong>Durada:</strong><p th:text="${pelicula.durada}">Durada:</p>
+            <strong>Gènere:</strong><p th:text="${pelicula.genere}">Gènere:</p>
+            <strong>Descripció:</strong><p th:text="${pelicula.descripcio}">Descripció:</p>
+            <strong>Data estrena:</strong><p th:text="${pelicula.data_estrena}">Data estrena:</p>
 
         </section>
-        <section>
+        <!-- <section>
             <h2><strong>SALES</strong></h2>
             <ul>
                 <li th:each="sala: ${cinema.rooms}">
@@ -38,7 +40,7 @@
                 </li>
             </ul>
 
-        </section>
+        </section> -->
 
         <footer>
             <p>2026 Cinema Daw</p>

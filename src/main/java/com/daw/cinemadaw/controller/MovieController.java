@@ -1,11 +1,13 @@
 package com.daw.cinemadaw.controller;
 
 import java.util.List;
+import java.util.Optional;
 
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 
 import com.daw.cinemadaw.domain.cinema.Movie;
@@ -52,5 +54,55 @@ public class MovieController {
         movieRepository.save(movie);
         return "redirect:/movies";
     }
+
+
+    @GetMapping("/pelicula/{id}")
+        public String detall(@PathVariable Long id, Model model){
+
+    
+            Optional<Movie> optional=movieRepository.findById(id);
+            if(optional.isPresent()){
+                Movie pelicula= optional.get();
+                model.addAttribute("pelicula", pelicula);
+                return "movies/detall-pelicules";
+            }
+           return "redirect:/";
+        }
+
+        @GetMapping("/pelicula/update/{id}")
+        public String mostrarFormulariEditar(@PathVariable Long id, Model model){
+
+            Optional<Movie> optional = movieRepository.findById(id);
+            if(optional.isPresent()){
+                Movie pelicula = optional.get();
+                model.addAttribute("pelicula",pelicula);
+                 return "movies/editar-pelicules";
+            }
+            return "redirect:/movies";
+
+            
+           
+        }
+
+
+        
+        @PostMapping("/pelicula/edit")
+        public String editCinema(@ModelAttribute Movie pelicula){
+            movieRepository.save(pelicula);  // serveix per desar un nou i desar un actualitzat, crea un nou si no posem identificador
+            return "redirect:/movies";
+        }
+
+        //delete
+        @GetMapping("/pelicula/delete/{id}")
+        public String delete(@PathVariable Long id){
+
+            Optional<Movie> optional=movieRepository.findById(id);
+            if(optional.isPresent()){
+                Movie pelicula= optional.get();
+                movieRepository.deleteById(id);     
+            } 
+
+            return "redirect:/movies";
+        }
     
 }
