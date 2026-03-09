@@ -20,6 +20,15 @@
 
         </section>
 
+        <section>
+        <h2> NOTÍCIES</h2>
+            <div th:each="noticia : ${llista}">
+                <h3 th:text="${noticia.titol}">Títol de la notícia</h3>
+                <p th:text="${noticia.noticia}">Contingut de la notícia</p>
+            </div>
+        </section>
+
+
         <footer>
             <p>2026 Cinema Daw</p>
         </footer>
