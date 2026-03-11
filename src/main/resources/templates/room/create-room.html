@@ -1,0 +1,37 @@
+<!DOCTYPE html>
+<html xmlns:th="https://www.thymeleaf.org">
+    <head>
+        <meta charset="UTF-8">
+        <title>CinemaDaw</title>
+        <link rel="stylesheet" th:href="@{/css/style.css}">
+    </head>
+    <body>
+
+        <h2><strong>CREAR SALA:</strong></h2>
+        <form th:action="@{/pelicula/create}" th:object="${sala}" method="post">
+            
+            <label>Títol:</label><br>
+            <input type="text" th:field="*{títol}"/><br><br>
+
+            <label>Durada (minuts):</label><br>
+            <input type="text" th:field="*{durada}"/><br><br>
+
+            <label>Gènere:</label><br>
+            <input type="text"th:field="*{genere}"/><br><br>
+
+            <label>Descripció / sinopsi:</label><br>
+            <input type="text"th:field="*{descripcio}"/><br><br>
+
+            <label>Data d'estrena:</label><br>
+            <input type="date"th:field="*{data_estrena}"/><br><br>
+
+
+            <button type="submit">Guardar</button>
+
+        </form>
+
+        <footer>
+            <p>2026 Cinema Daw</p>
+        </footer>
+    </body>
+</html>

@@ -23,8 +23,8 @@
         <section>
         <h2> NOTÍCIES</h2>
             <div th:each="noticia : ${llista}">
-                <h3 th:text="${noticia.titol}">Títol de la notícia</h3>
-                <p th:text="${noticia.noticia}">Contingut de la notícia</p>
+                <h3 th:text="${noticia.headline}">Títol de la notícia</h3>
+                <p th:text="${noticia.body}">Contingut de la notícia</p>
             </div>
         </section>
 

@@ -13,14 +13,16 @@
             <a href="#">contacte</a>
            </nav> 
         </header> -->
-        <section>
-            <h2 th:text="${cinema.name}"></h2>
-            <p th:text="${cinema.city}">Ciutat:</p>
-            <p th:text="${cinema.address}">Adreça:</p>
+        <!-- <section>
+            <h2><strong>DETALLS CINEMA:</strong></h2>
+            <strong>Nom ciutat:</strong><p th:text="${cinema.name}"></p>
+            <strong>Ciutat:</strong><p th:text="${cinema.city}">Ciutat:</p>
+            <strong>Adreça:</strong><p th:text="${cinema.address}">Adreça:</p>
 
         </section>
         <section>
-            <h2><strong>SALES</strong></h2>
+            <h2><strong>SALES:</strong></h2>
+            <a th:href="@{/room/create}">Afegeix nova sala</a>
             <ul>
                 <li th:each="sala: ${cinema.rooms}">
                     <strong>Nom de la sala:</strong><p th:text="${sala.name}"></p>   
@@ -34,9 +36,58 @@
                      
                     <strong>ID:</strong> <p th:text="${sala.id}">ID</p> 
                 </li>
+                <td>
+                <a th:href="@{/room/{id}(id=${sala.id})}">Veure detall </a>
+                <a th:href="@{/cinema/delete/{id}(id=${cinema.id})}">
+                eliminar
+                </a>
+                <a th:href="@{/cinema/update/{id}(id=${cinema.id})}">
+                editar
+                </a>
+            </td>
+            <button type="submit">Guardar</button>
+                
             </ul>
 
+        </section> -->
+
+        <section>
+            <h2><strong>DETALLS CINEMA:</strong></h2>
+            <p><strong>Nom:</strong> <span th:text="${cinema.name}">Nom del Cinema</span></p>
+            <p><strong>Ciutat:</strong> <span th:text="${cinema.city}">Ciutat</span></p>
+            <p><strong>Adreça:</strong> <span th:text="${cinema.address}">Adreça</span></p>
+            
+            <!-- <div class="cinema-actions">
+                <a th:href="@{/cinema/update/{id}(id=${cinema.id})}">Editar Cinema</a> | 
+                <a th:href="@{/cinema/delete/{id}(id=${cinema.id})}">Eliminar Cinema</a>
+              
+            </div> -->
         </section>
+
+        <hr>
+
+        <section>
+            <h2><strong>SALES D'AQUEST CINEMA:</strong></h2>
+            <a th:href="@{/room/create}">Afegeix nova sala</a>
+            
+            <ul style="margin-top: 20px;">
+                <li th:each="sala : ${cinema.rooms}">
+                    <strong>ID:</strong> <span th:text="${sala.id}">ID</span><br>
+                    <strong>Nom de la sala:</strong> <span th:text="${sala.name}">Nom Sala</span><br>
+                    <strong>Capacitat:</strong> <span th:text="${sala.capacity}">0</span> persones<br>
+                    
+                    <div style="margin-top: 8px;">
+                        <a th:href="@{/room/{id}(id=${sala.id})}">
+                            Veure detall de la sala
+                        </a>
+                    </div>
+                </li>
+                <li th:if="${#lists.isEmpty(cinema.rooms)}">Aquest cinema encara no té sales.</li>
+            </ul>
+        </section>
+
+
+        
 
         <footer>
             <p>2026 Cinema Daw</p>
