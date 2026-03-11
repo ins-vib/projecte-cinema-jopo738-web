@@ -81,6 +81,16 @@
                             Veure detall de la sala
                         </a>
                     </div>
+                    <div style="margin-top: 8px;">
+                        <a th:href="@{/room/{id}/edit(id=${sala.id})}">
+                            Editar sala
+                        </a>
+                    </div>
+                    <div style="margin-top: 8px;">
+                        <a th:href="@{/room/{id}/delete(id=${sala.id})}">
+                            Eliminar sala
+                        </a>
+                    </div>
                 </li>
                 <li th:if="${#lists.isEmpty(cinema.rooms)}">Aquest cinema encara no té sales.</li>
             </ul>

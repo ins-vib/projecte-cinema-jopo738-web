@@ -1,0 +1,31 @@
+<!DOCTYPE html>
+<html xmlns:th="https://www.thymeleaf.org">
+    <head>
+        <meta charset="UTF-8">
+        <title>CinemaDaw</title>
+        <link rel="stylesheet" th:href="@{/css/style.css}">
+    </head>
+    <body>
+
+        <h2>EDITAR SALA:</h2>
+        <form th:action="@{/room/edit}" th:object="${sala}" method="post">
+
+            <input type="text" th:field="*{id}" hidden/><br><br>
+            
+            <label>Nom:</label><br>
+            <input type="text" th:field="*{name}"/><br><br>
+
+            <label>Capacitat:</label><br>
+            <input type="text" th:field="*{capacity}"/><br><br>
+
+            
+
+            <button type="submit">Guardar</button>
+
+        </form>
+
+        <footer>
+            <p>2026 Cinema Daw</p>
+        </footer>
+    </body>
+</html>

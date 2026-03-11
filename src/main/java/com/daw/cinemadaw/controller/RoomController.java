@@ -35,7 +35,7 @@ public class RoomController {
     @PostMapping("/create")
     public String guardarroom(@ModelAttribute("sala") Room room){
         roomRepository.save(room);
-        return "redirect:/movies";
+        return "redirect:/cinemes";
     }
 
     //detall 
@@ -64,6 +64,23 @@ public class RoomController {
 
         }
         return "redirect:/cinema/"+cinemaId;
+    }
+
+    //editar
+
+    @GetMapping("/{id}/edit")
+    public String editarformulari(@PathVariable Long id, Model model){
+        Optional<Room> optional= roomRepository.findById(id);
+        if(optional.isPresent()){
+            model.addAttribute("sala",optional.get());
+            return "room/edit-room";
+        }
+        return "redirect:edit-room";
+    }
+
+    @PostMapping("/edit")
+    public String actualitzarsala(@ModelAttribute("sala") Room room){
+        return "redirect:/cinema/";
     }
 
     
