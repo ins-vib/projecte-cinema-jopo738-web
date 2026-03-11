@@ -10,6 +10,8 @@
         <h2><strong>CREAR SALA:</strong></h2>
         <form th:action="@{/room/create}" th:object="${sala}" method="post">
             
+            <input type="hidden" th:field="*{cinema}"/>
+
             <label>nom de la sala:</label><br>
             <input type="text" th:field="*{name}"/><br><br>
 

@@ -68,7 +68,7 @@
 
         <section>
             <h2><strong>SALES D'AQUEST CINEMA:</strong></h2>
-            <a th:href="@{/room/create}">Afegeix nova sala</a>
+            <a th:href="@{/room/create(cinemaId=${cinema.id})}">Afegeix nova sala</a>
             
             <ul style="margin-top: 20px;">
                 <li th:each="sala : ${cinema.rooms}">

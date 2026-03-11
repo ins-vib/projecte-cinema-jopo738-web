@@ -9,37 +9,48 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 
+import com.daw.cinemadaw.domain.cinema.Cinema;
 import com.daw.cinemadaw.domain.cinema.Room;
+import com.daw.cinemadaw.repository.CinemaRepository;
 import com.daw.cinemadaw.repository.RoomRepository;
 
 @Controller
-@RequestMapping("/room")//prefix
+//@RequestMapping("/room")//prefix
 public class RoomController {
 
     @Autowired
     private RoomRepository roomRepository;
 
+    @Autowired
+    private CinemaRepository cinemaRepository;
 
- @GetMapping("/create")
-    public String create_room(Model model){
 
-       Room room = new Room();    // Tots els valors del formulari sorten amb blanc perque hem creat un nou cinema
+ @GetMapping("/room/create")
+    public String create_room(@RequestParam("cinemaId") Long cinemaId,Model model){
+
+        Room room = new Room();    // Tots els valors del formulari sorten amb blanc perque hem creat un nou cinema
+
+       Cinema cinema= cinemaRepository.findById(cinemaId).orElseThrow();
+       room.setCinema(cinema);
+       
+       
+        
             
             model.addAttribute("sala", room);
             
         return "room/create-room";
     }
 
-    @PostMapping("/create")
+    @PostMapping("/room/create")
     public String guardarroom(@ModelAttribute("sala") Room room){
         roomRepository.save(room);
-        return "redirect:/cinemes";
+        return "redirect:/cinema/" + room.getCinema().getId();
     }
 
     //detall 
-    @GetMapping("/{id}")
+    @GetMapping("/room/{id}")
     public String show(@PathVariable Long id, Model model){
         Optional<Room>optional=roomRepository.findById(id);
         if(optional.isEmpty()){
@@ -51,7 +62,7 @@ public class RoomController {
     }
 
     // delete
-    @GetMapping("{id}/delete")
+    @GetMapping("/room/{id}/delete")
     public String delete(@PathVariable Long id){
         Optional<Room>optional =roomRepository.findById(id);
         Long cinemaId=null;
@@ -68,19 +79,34 @@ public class RoomController {
 
     //editar
 
-    @GetMapping("/{id}/edit")
+    @GetMapping("/room/{id}/edit")
     public String editarformulari(@PathVariable Long id, Model model){
         Optional<Room> optional= roomRepository.findById(id);
         if(optional.isPresent()){
             model.addAttribute("sala",optional.get());
-            return "room/edit-room";
+            return "room/editar-room";
         }
-        return "redirect:edit-room";
+        return "redirect:/cinemes";
     }
 
-    @PostMapping("/edit")
+    @PostMapping("/room/edit")
     public String actualitzarsala(@ModelAttribute("sala") Room room){
-        return "redirect:/cinema/";
+
+        Room salaBD = roomRepository.findById(room.getId()).orElseThrow();
+    
+    
+    salaBD.setName(room.getName());
+    salaBD.setCapacity(room.getCapacity());
+    
+    
+    roomRepository.save(salaBD);
+
+    Long idCinema= salaBD.getCinema().getId();
+
+    if(idCinema==null){
+        return "redirect:/cinemes";
+    }
+       return "redirect:/cinema/" + idCinema;
     }
 
     
