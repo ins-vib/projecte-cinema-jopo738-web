@@ -5,6 +5,7 @@ import java.util.Optional;
 
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
+import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -12,6 +13,8 @@ import org.springframework.web.bind.annotation.PostMapping;
 
 import com.daw.cinemadaw.domain.cinema.Movie;
 import com.daw.cinemadaw.repository.MovieRepository;
+
+import jakarta.validation.Valid;
 
 @Controller
 public class MovieController {
@@ -50,7 +53,11 @@ public class MovieController {
     }
 
     @PostMapping("/pelicula/create")
-    public String guardarpelicula(@ModelAttribute("pelicula") Movie movie){
+    public String guardarpelicula(@Valid @ModelAttribute("pelicula") Movie movie,BindingResult result, Model model){
+
+        if(result.hasErrors()){
+            return "movies/create-pelicules";
+        }
         movieRepository.save(movie);
         return "redirect:/movies";
     }
@@ -83,11 +90,14 @@ public class MovieController {
             
            
         }
-
-
         
         @PostMapping("/pelicula/edit")
-        public String editCinema(@ModelAttribute Movie pelicula){
+        public String editCinema(@Valid @ModelAttribute("pelicula") Movie pelicula, BindingResult result,Model model){
+
+
+            if(result.hasErrors()){
+                return "movies/create-pelicules";
+            }
             movieRepository.save(pelicula);  // serveix per desar un nou i desar un actualitzat, crea un nou si no posem identificador
             return "redirect:/movies";
         }

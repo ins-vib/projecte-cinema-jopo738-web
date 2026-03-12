@@ -8,15 +8,15 @@
     <body>
 
         <h2><strong>CREAR SALA:</strong></h2>
-        <form th:action="@{/room/create}" th:object="${sala}" method="post">
+        <form th:action="@{/room/create/{cinemaId}(cinemaId=${cinemaId})}" th:object="${room}" method="post">
             
-            <input type="hidden" th:field="*{cinema}"/>
+            <!-- <input type="hidden" th:field="*{cinema}"/> -->
 
             <label>nom de la sala:</label><br>
             <input type="text" th:field="*{name}"/><br><br>
 
             <label>capacitat:</label><br>
-            <input type="text" th:field="*{capacity}"/><br><br>
+            <input type="number" th:field="*{capacity}"/><br><br>
 
             
 

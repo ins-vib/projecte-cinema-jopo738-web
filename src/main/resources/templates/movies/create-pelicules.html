@@ -12,18 +12,28 @@
             
             <label>Títol:</label><br>
             <input type="text" th:field="*{títol}"/><br><br>
+            <div th:if="${#fields.hasErrors('títol')}" th:errors="*{títol}"></div>
+
 
             <label>Durada (minuts):</label><br>
             <input type="text" th:field="*{durada}"/><br><br>
+            <!-- <div th:if="${#fields.hasErrors('durada')}" th:errors="*{durada}"></div> -->
+
 
             <label>Gènere:</label><br>
             <input type="text"th:field="*{genere}"/><br><br>
+            <div th:if="${#fields.hasErrors('genere')}" th:errors="*{genere}"></div>
+
 
             <label>Descripció / sinopsi:</label><br>
             <input type="text"th:field="*{descripcio}"/><br><br>
+            <div th:if="${#fields.hasErrors('descripcio')}" th:errors="*{descripcio}"></div>
+
 
             <label>Data d'estrena:</label><br>
             <input type="date"th:field="*{data_estrena}"/><br><br>
+            <!-- <div th:if="${#fields.hasErrors('data_estrena')}" th:errors="*{data_estrena}"></div> -->
+
 
 
             <button type="submit">Guardar</button>

@@ -9,6 +9,8 @@ import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
+import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.Size;
 
 @Entity
 public class Movie {
@@ -18,14 +20,28 @@ public class Movie {
     @GeneratedValue(strategy=GenerationType.IDENTITY)
     private Long id; 
     
+    @NotBlank(message="El títol és obligatori")
+    @Size(min=5,max=150,message="El t´tol ha de tenir entre 2 i 100 caràcters")
      @Column(nullable=false, length=200)
     private String títol;  
+
+    //@NotBlank(message="La durada és obligatoria")
+   // @Size(min=5,max=150,message="La durada ha de tenir entre 2 i 100 caràcters")
      @Column (name="duration_minutes",nullable=false)
-    private int durada;  
+    private int durada; 
+    
+    @NotBlank(message="El gènere és obligatori")
+    @Size(min=5,max=150,message="El gènere ha de tenir entre 2 i 100 caràcters")
      @Column (length=50)
-    private String genere;  
+    private String genere; 
+    
+    @NotBlank(message="La descripció és obligatoria")
+    @Size(min=5,max=150,message="La descripció ha de tenir entre 2 i 100 caràcters")
      @Column (columnDefinition="TEXT")
     private String descripcio;  
+
+    //@NotBlank(message="La data és obligatoria")
+    //@Size(min=5,max=150,message="La data ha de tenir entre 2 i 100 caràcters")
      @Column (name="release_date")
      @DateTimeFormat(pattern="yyyy-MM-dd")
     private LocalDate data_estrena;  

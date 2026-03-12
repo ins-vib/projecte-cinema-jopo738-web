@@ -11,6 +11,8 @@ import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.ManyToOne;
 import jakarta.persistence.OneToMany;
+import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.Size;
 
 @Entity()
 public class Room {
@@ -18,8 +20,14 @@ public class Room {
     @Id //Indica que aquest atribut és la clau primària (PK)
     @GeneratedValue(strategy=GenerationType.IDENTITY) // Genera automàticament l'ID al inserir un nou registre
     private Long id;
+
+    @NotBlank(message="El nom és obligatori")
+    @Size(min=5,max=150,message="El nom ha de tenir entre 2 i 100 caràcters")
     @Column // si només posem column vol dir que aquest atribut (el de sota) és una columna, al costat del column podem posar el nom que volem per aquella columna
     private String name;
+
+    //@NotBlank(message="La capacitat és obligatoria")
+    //@Size(min=5,max=150,message="La capacitat ha de tenir entre 2 i 100 caràcters")
     @Column 
     private int capacity;
 

@@ -9,7 +9,6 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestParam;
 
 import com.daw.cinemadaw.domain.cinema.Cinema;
 import com.daw.cinemadaw.domain.cinema.Room;
@@ -26,27 +25,37 @@ public class RoomController {
     @Autowired
     private CinemaRepository cinemaRepository;
 
+    public RoomController(CinemaRepository cinemaRepository, RoomRepository roomRepository) {
+        this.cinemaRepository = cinemaRepository;
+        this.roomRepository = roomRepository;
+    }
 
- @GetMapping("/room/create")
-    public String create_room(@RequestParam("cinemaId") Long cinemaId,Model model){
+
+
+// crear
+ @GetMapping("/room/create/{cinemaId}")
+    public String create_room(@PathVariable Long cinemaId,Model model){
 
         Room room = new Room();    // Tots els valors del formulari sorten amb blanc perque hem creat un nou cinema
 
-       Cinema cinema= cinemaRepository.findById(cinemaId).orElseThrow();
-       room.setCinema(cinema);
-       
-       
-        
-            
-            model.addAttribute("sala", room);
+        model.addAttribute("room",room);
+        model.addAttribute("cinemaId",cinemaId);
             
         return "room/create-room";
     }
 
-    @PostMapping("/room/create")
-    public String guardarroom(@ModelAttribute("sala") Room room){
+    @PostMapping("/room/create/{cinemaId}")
+    public String guardarroom(@PathVariable Long cinemaId, @ModelAttribute Room room){
+        Optional cinemaOpt=cinemaRepository.findById(cinemaId);
+        if(cinemaOpt.isEmpty()){
+            return"redirect:/cinema/";
+        }
+
+        Cinema cinema=(Cinema)cinemaOpt.get();
+        room.setCinema(cinema);
         roomRepository.save(room);
-        return "redirect:/cinema/" + room.getCinema().getId();
+        
+        return "redirect:/cinema/" + cinemaId;
     }
 
     //detall 
@@ -90,23 +99,17 @@ public class RoomController {
     }
 
     @PostMapping("/room/edit")
-    public String actualitzarsala(@ModelAttribute("sala") Room room){
-
-        Room salaBD = roomRepository.findById(room.getId()).orElseThrow();
+    public String actualitzarsala(@ModelAttribute Room room){
+        Optional<Room>existingRoom=roomRepository.findById(room.getId());
+        if(existingRoom.isEmpty()){
+            return "redirect:/cinemes";
+        }
+        Room oldRoom = existingRoom.get();
+        oldRoom.setName(room.getName());
+        oldRoom.setCapacity(room.getCapacity());
+        roomRepository.save(oldRoom);
+        return "redirect:/cinema/"+oldRoom.getCinema().getId();
     
-    
-    salaBD.setName(room.getName());
-    salaBD.setCapacity(room.getCapacity());
-    
-    
-    roomRepository.save(salaBD);
-
-    Long idCinema= salaBD.getCinema().getId();
-
-    if(idCinema==null){
-        return "redirect:/cinemes";
-    }
-       return "redirect:/cinema/" + idCinema;
     }
 
     

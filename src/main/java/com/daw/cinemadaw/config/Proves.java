@@ -35,7 +35,7 @@ public class Proves implements CommandLineRunner {   // es per provar que tot es
     @Override  // Indica que aquest mètode està sobrescrivint un mètode de la interfície pare (probablement CommandLineRunner). Serveix per assegurar-se que la signatura és correcta.
     public void run (String... args) throws Exception{  // Defineix el mètode que conté la lògica a executar. El paràmetre String... args permet rebre arguments des de la línia de comandes si fos necessari.
 
-        Cinema cinema1 = new Cinema("Ocine", "Gavarres, 46", "Tarragona", "431220");
+        Cinema cinema1 = new Cinema("Ocine", "Gavarres, 46", "Tarragona", "43122");
         cinemaRepository.save(cinema1);
 
         List<Cinema> llista = cinemaRepository.findAll(); // Aquí demanes al repositori que recuperi tots els registres de la taula de cinemes. El resultat es guarda en una llista d'objectes tipus Cinema.

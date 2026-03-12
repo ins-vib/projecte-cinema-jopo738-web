@@ -10,7 +10,7 @@
         <h2>EDITAR SALA:</h2>
         <form th:action="@{/room/edit}" th:object="${sala}" method="post">
 
-            <input type="text" th:field="*{id}" hidden/><br><br>
+            <input type="hidden" th:field="*{id}"/><br><br>
             
             <label>Nom:</label><br>
             <input type="text" th:field="*{name}"/><br><br>
