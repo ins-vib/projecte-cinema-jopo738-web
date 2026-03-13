@@ -125,7 +125,11 @@ public class CinemaController {
 
         
         @PostMapping("/cinema/edit")
-        public String editCinema(@ModelAttribute Cinema cinema){
+        public String editCinema(@Valid @ModelAttribute("cinema") Cinema cinema, BindingResult result){
+            if (result.hasErrors()) {
+       
+        return "editar-cinema"; 
+    }
             cinemaRepository.save(cinema);  // serveix per desar un nou i desar un actualitzat, crea un nou si no posem identificador
             return "redirect:/cinemes";
         }

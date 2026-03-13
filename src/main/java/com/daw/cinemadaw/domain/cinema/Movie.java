@@ -21,7 +21,7 @@ public class Movie {
     private Long id; 
     
     @NotBlank(message="El títol és obligatori")
-    @Size(min=5,max=150,message="El t´tol ha de tenir entre 2 i 100 caràcters")
+    @Size(min=5,max=150,message="El titol ha de tenir entre 2 i 100 caràcters")
      @Column(nullable=false, length=200)
     private String títol;  
 
