@@ -1,4 +1,11 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
 
+<body>
+
+<div th:replace="~{layout :: layout(~{::content})}">
+
+    <div th:fragment="content">
 
 <h1>Llista cinemes</h1>
 <a th:href="@{/cinema/create}">Afegeix nou cinema</a>
@@ -35,6 +42,11 @@
         </tr>
     </tbody>
 </table>
+    </div>
+</div>
+</body>
+</html>
+
 
 
 

@@ -11,6 +11,8 @@ import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.ManyToOne;
 import jakarta.persistence.OneToMany;
+import jakarta.validation.constraints.Max;
+import jakarta.validation.constraints.Min;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.Size;
 
@@ -28,6 +30,8 @@ public class Room {
 
     //@NotBlank(message="La capacitat és obligatoria")
     //@Size(min=5,max=150,message="La capacitat ha de tenir entre 2 i 100 caràcters")
+    @Min(value=1, message="La capacitat ha de ser com a mínim d'una persona")
+    @Max(value=500, message="La capacitat no pot superar les 500 persones")
     @Column 
     private int capacity;
 

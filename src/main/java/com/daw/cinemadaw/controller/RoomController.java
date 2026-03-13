@@ -5,6 +5,7 @@ import java.util.Optional;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
+import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -14,6 +15,8 @@ import com.daw.cinemadaw.domain.cinema.Cinema;
 import com.daw.cinemadaw.domain.cinema.Room;
 import com.daw.cinemadaw.repository.CinemaRepository;
 import com.daw.cinemadaw.repository.RoomRepository;
+
+import jakarta.validation.Valid;
 
 @Controller
 //@RequestMapping("/room")//prefix
@@ -45,8 +48,13 @@ public class RoomController {
     }
 
     @PostMapping("/room/create/{cinemaId}")
-    public String guardarroom(@PathVariable Long cinemaId, @ModelAttribute Room room){
-        Optional cinemaOpt=cinemaRepository.findById(cinemaId);
+    public String guardarroom(@PathVariable Long cinemaId,@Valid @ModelAttribute("room") Room room, BindingResult result, Model model){
+
+        if(result.hasErrors()){
+            model.addAttribute("cinemaId",cinemaId);
+            return "room/create-room";
+        }
+        Optional<Cinema> cinemaOpt=cinemaRepository.findById(cinemaId);
         if(cinemaOpt.isEmpty()){
             return"redirect:/cinema/";
         }

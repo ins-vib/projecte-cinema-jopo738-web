@@ -1,6 +1,13 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
 
+<body>
 
-<h1>Llista cinemes</h1>
+<div th:replace="~{layout :: layout(~{::content})}">
+
+    <div th:fragment="content">
+
+<h1>Llista Pelicules</h1>
 <a th:href="@{/pelicula/create}">Afegeix nova pelicula</a>
 
 <!-- per mostrar en fomrat taula -->
@@ -29,7 +36,7 @@
         <tr th:each="peli : ${llista}">
             <td th:text="${peli.títol}">Títol de la peli</td>
             <td th:text="${peli.genere}">Acció</td>
-            <td th:text="${peli.genere}">120 min</td>
+            <td th:text="${peli.durada}">120 min</td>
             <td th:text="${peli.data_estrena}">2026-03-05</td>
 
             <td>
@@ -46,6 +53,11 @@
         </tr>
     </tbody>
 </table>
+    </div>
+</div>
+</body>
+</html>
+
 
 
 

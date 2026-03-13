@@ -1,11 +1,11 @@
 <!DOCTYPE html>
-<html xmlns:th="https://www.thymeleaf.org">
-    <head>
-        <meta charset="UTF-8">
-        <title>CinemaDaw</title>
-        <link rel="stylesheet" th:href="@{/css/style.css}">
-    </head>
-    <body>
+<html xmlns:th="http://www.thymeleaf.org">
+
+<body>
+
+<div th:replace="~{layout :: layout(~{::content})}">
+
+    <div th:fragment="content">
 
         <h2><strong>CREAR SALA:</strong></h2>
         <form th:action="@{/room/create/{cinemaId}(cinemaId=${cinemaId})}" th:object="${room}" method="post">
@@ -13,10 +13,12 @@
             <!-- <input type="hidden" th:field="*{cinema}"/> -->
 
             <label>nom de la sala:</label><br>
-            <input type="text" th:field="*{name}"/><br><br>
+            <input type="text" th:field="*{name}"/>
+            <p th:if="${#fields.hasErrors('name')}" th:errors="*{name}" ></p><br></br>
 
             <label>capacitat:</label><br>
             <input type="number" th:field="*{capacity}"/><br><br>
+            <p th:if="${#fields.hasErrors('capacity')}" th:errors="*{capacity}" ></p>
 
             
 
@@ -25,8 +27,8 @@
 
         </form>
 
-        <footer>
-            <p>2026 Cinema Daw</p>
-        </footer>
+    </div>
+</div>
+
     </body>
 </html>
