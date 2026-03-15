@@ -28,7 +28,7 @@ public class Movie {
     //@NotBlank(message="La durada és obligatoria")
    // @Size(min=5,max=150,message="La durada ha de tenir entre 2 i 100 caràcters")
      @Column (name="duration_minutes",nullable=false)
-    private int durada; 
+    private Integer durada; 
     
     @NotBlank(message="El gènere és obligatori")
     @Size(min=5,max=150,message="El gènere ha de tenir entre 2 i 100 caràcters")
@@ -75,7 +75,7 @@ public class Movie {
         this.títol = títol;
     }
 
-    public int getDurada() {
+    public Integer getDurada() {
         return durada;
     }
 

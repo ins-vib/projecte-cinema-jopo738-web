@@ -24,7 +24,7 @@ public class Room {
     private Long id;
 
     @NotBlank(message="El nom és obligatori")
-    @Size(min=5,max=150,message="El nom ha de tenir entre 2 i 100 caràcters")
+    @Size(min=2,max=150,message="El nom ha de tenir entre 2 i 100 caràcters")
     @Column // si només posem column vol dir que aquest atribut (el de sota) és una columna, al costat del column podem posar el nom que volem per aquella columna
     private String name;
 
@@ -33,7 +33,7 @@ public class Room {
     @Min(value=1, message="La capacitat ha de ser com a mínim d'una persona")
     @Max(value=500, message="La capacitat no pot superar les 500 persones")
     @Column 
-    private int capacity;
+    private Integer capacity;
 
 
 /**
@@ -85,7 +85,7 @@ public class Room {
         this.name = name;
     }
 
-    public int getCapacity() {
+    public Integer getCapacity() {
         return capacity;
     }
 

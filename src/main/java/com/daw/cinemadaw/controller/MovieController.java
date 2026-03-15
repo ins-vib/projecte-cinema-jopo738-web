@@ -96,7 +96,7 @@ public class MovieController {
 
 
             if(result.hasErrors()){
-                return "movies/create-pelicules";
+                return "movies/editar-pelicules";
             }
             movieRepository.save(pelicula);  // serveix per desar un nou i desar un actualitzat, crea un nou si no posem identificador
             return "redirect:/movies";

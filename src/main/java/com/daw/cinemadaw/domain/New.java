@@ -4,9 +4,9 @@ public class New {
     private String headline;
     private String body;
 
-    public New(String body, String headline) {
-        this.body = body;
+    public New(String headline, String body) {
         this.headline = headline;
+        this.body = body;
     }
 
     public String getHeadline() {

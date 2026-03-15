@@ -107,7 +107,14 @@ public class RoomController {
     }
 
     @PostMapping("/room/edit")
-    public String actualitzarsala(@ModelAttribute Room room){
+    public String actualitzarsala(@Valid @ModelAttribute("sala") Room room, BindingResult result, Model model){
+
+        if (result.hasErrors()) {
+        return "room/editar-room";
+    }
+
+    
+
         Optional<Room>existingRoom=roomRepository.findById(room.getId());
         if(existingRoom.isEmpty()){
             return "redirect:/cinemes";
@@ -116,7 +123,10 @@ public class RoomController {
         oldRoom.setName(room.getName());
         oldRoom.setCapacity(room.getCapacity());
         roomRepository.save(oldRoom);
-        return "redirect:/cinema/"+oldRoom.getCinema().getId();
+        if (oldRoom.getCinema() != null) {
+            return "redirect:/cinema/" + oldRoom.getCinema().getId();
+        }
+        return "redirect:/cinema/" + oldRoom.getCinema().getId();
     
     }
 

@@ -10,13 +10,15 @@
         <h2>EDITAR LA PELICULA:</h2>
         <form th:action="@{/pelicula/edit}" th:object="${pelicula}" method="post">
 
+            
+
             <input type="hidden" th:field="*{id}" />
             
             <label>Títol:</label><br>
             <input type="text" th:field="*{títol}"/><br><br>
 
             <label>Durada:</label><br>
-            <input type="text" th:field="*{durada}"/><br><br>
+            <input type="number" th:field="*{durada}"/><br><br>
 
             <label>Gènere:</label><br>
            <input type="text"th:field="*{genere}"/><br><br>
