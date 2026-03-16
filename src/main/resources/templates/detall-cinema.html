@@ -91,6 +91,11 @@
                             Eliminar sala
                         </a>
                     </div>
+                    <div style="margin-top: 8px;">
+                        <a th:href="@{/seats/room/{id}(id=${sala.id})}">
+                            Seats
+                        </a>
+                    </div>
                 </li>
                 <li th:if="${#lists.isEmpty(cinema.rooms)}">Aquest cinema encara no té sales.</li>
             </ul>
