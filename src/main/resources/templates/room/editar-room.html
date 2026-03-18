@@ -14,11 +14,13 @@
             
             <label>Nom:</label><br>
             <input type="text" th:field="*{name}"/><br><br>
-            <p th:if="${#fields.hasErrors('name')}" th:errors="*{name}" ></p>
+            
 
             <label>Capacitat:</label><br>
             <input type="number" th:field="*{capacity}"/><br><br>
-            <p th:if="${#fields.hasErrors('capacity')}" th:errors="*{capacity}"></p>
+
+            
+            
 
             
 

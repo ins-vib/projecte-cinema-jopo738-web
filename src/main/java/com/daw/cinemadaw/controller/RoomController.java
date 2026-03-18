@@ -119,6 +119,14 @@ public class RoomController {
         if(existingRoom.isEmpty()){
             return "redirect:/cinemes";
         }
+        if (existingRoom.isPresent()) {
+        Room oldRoom = existingRoom.get();
+        oldRoom.setName(room.getName());
+        oldRoom.setCapacity(room.getCapacity());
+        
+        roomRepository.save(oldRoom); 
+        return "redirect:/cinema/" + oldRoom.getCinema().getId();
+    }
         Room oldRoom = existingRoom.get();
         oldRoom.setName(room.getName());
         oldRoom.setCapacity(room.getCapacity());

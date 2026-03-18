@@ -48,9 +48,10 @@ public class SeatController {
                     Seat seat=new Seat();
                     int row=(i/seatsperfila)+1;
                     int col= (i%seatsperfila)+1;
+                    int numerocadira=i+1;
 
                     seat.setSeatRow(row);
-                    seat.setNumber(col);
+                    seat.setNumber(numerocadira);
                     seat.setActive(true);
                     seat.setSeatType(SeatType.STANDARD);
                     seat.setPosX(col*50);
@@ -73,6 +74,7 @@ public class SeatController {
         if(optional.isPresent()){
             Room room=optional.get();
             List<Seat>seats=room.getSeats();
+            model.addAttribute("room", room);
             model.addAttribute("seats",seats);
             return "seat";
         }
@@ -87,8 +89,13 @@ public class SeatController {
             if(optional.isPresent()){
                 model.addAttribute("seat",optional.get());
                 model.addAttribute("rooms",roomRepository.findAll());
+
+                 model.addAttribute("types",SeatType.values());
                  return "editar-seat";
             }
+
+           
+            
             return "redirect:/cinemes";
 
             
@@ -101,6 +108,47 @@ public class SeatController {
         public String editCinema(@Valid @ModelAttribute("seat") Seat seat){
          
             seatRepository.save(seat);  // serveix per desar un nou i desar un actualitzat, crea un nou si no posem identificador
+            return "redirect:/cinemes";
+        }
+
+
+
+        @GetMapping("/seats/delete/{id}")
+        public String eliminarSeients(@PathVariable Long id){
+            Optional<Seat>seatOpt=seatRepository.findById(id);
+            if(seatOpt.isPresent()){
+                Seat seat=seatOpt.get();
+                Long roomId =seat.getRoom().getId();
+                seatRepository.delete(seat);
+                return "redirect:/seats/room/"+roomId;
+            }
+            return "redirect:/cinemes";
+        }
+
+        @GetMapping("/seats/room/{roomId}/new")
+        public String crearNovaCadira(@PathVariable Long roomId, Model model){
+            Optional<Room>roomOpt=roomRepository.findById(roomId);
+            if(roomOpt.isPresent()){
+                
+                Seat seat=new Seat();
+                model.addAttribute("seat",seat);
+                model.addAttribute("roomId",roomId);
+                model.addAttribute("types",SeatType.values());
+                return "crear-seat";
+
+            }
+            return "redirect:/cinemes";
+        }
+
+        @PostMapping("/seats/room/{roomId}/save")
+        public String guardarNouSeient(@PathVariable Long roomId, @ModelAttribute("seat")Seat seat){
+            Optional <Room> roomOpt=roomRepository.findById(roomId);
+            if(roomOpt.isPresent()){
+                seat.setRoom(roomOpt.get());
+                seat.setActive(true);
+                seatRepository.save(seat);
+                return "redirect:/seats/room/"+roomId;
+            }
             return "redirect:/cinemes";
         }
 

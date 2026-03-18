@@ -1,4 +1,10 @@
 <h1>Seats</h1>
+<div style="margin-bottom: 20px;">
+    <a th:href="@{/seats/room/{id}/new(id=${room.id})}" 
+       >
+        AFEGIR NOVA CADIRA
+    </a>
+</div>
 <ul>
 <li th:each="seat : ${seats}">
 <span th:text="${seat.posX}"></span>
@@ -34,6 +40,7 @@ c15,3.4,26.2,16.8,26.2,32.8v167.4H368.749z"
 
 fill="currentColor"/>
 </svg>
+
 </a>
 </g>
 </svg>
