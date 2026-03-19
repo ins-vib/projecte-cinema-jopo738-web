@@ -8,15 +8,16 @@
     <div th:fragment="content">
 
         <h2>EDITAR SEAT:</h2>
-        <form th:action="@{/seats/edit}" th:object="${seat}" method="post">
-
-           <a th:href="@{/seats/delete/{id}(id=${seat.id})}" 
+        <a th:href="@{/seats/delete/{id}(id=${seat.id})}" 
                 class="boto-eliminar"
                 th:id="'btn-delete-' + ${seat.id}">
                 Eliminar
             </a>
+        <form th:action="@{/seats/edit}" th:object="${seat}" method="post">
 
-            <input type="text" th:field="*{id}" hidden/><br><br>
+           
+
+            <input type="hidden" th:field="*{id}" /><br><br>
             
             <label>Fila:</label><br>
             <input type="number" th:field="*{seatRow}"/><br><br>

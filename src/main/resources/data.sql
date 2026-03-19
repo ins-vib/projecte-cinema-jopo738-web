@@ -10,26 +10,56 @@ INSERT INTO CINEMA(ADDRESS,CITY,NAME,POSTAL_CODE) VALUES
 INSERT INTO room (id, name, capacity, cinema_id) 
 VALUES (10, 'Sala Nemo Estàndard', 20, 2);
 
--- -- Fila 1 (Seients 1 a 10)
--- INSERT INTO seat (active, number, pos_x, pos_y, seat_row, seat_type, room_id) VALUES (true, 1, 50, 50, 1, 'STANDARD', 10);
--- INSERT INTO seat (active, number, pos_x, pos_y, seat_row, seat_type, room_id) VALUES (true, 2, 100, 50, 1, 'STANDARD', 10);
--- INSERT INTO seat (active, number, pos_x, pos_y, seat_row, seat_type, room_id) VALUES (true, 3, 150, 50, 1, 'STANDARD', 10);
--- INSERT INTO seat (active, number, pos_x, pos_y, seat_row, seat_type, room_id) VALUES (true, 4, 200, 50, 1, 'STANDARD', 10);
--- INSERT INTO seat (active, number, pos_x, pos_y, seat_row, seat_type, room_id) VALUES (true, 5, 250, 50, 1, 'STANDARD', 10);
--- INSERT INTO seat (active, number, pos_x, pos_y, seat_row, seat_type, room_id) VALUES (true, 6, 300, 50, 1, 'STANDARD', 10);
--- INSERT INTO seat (active, number, pos_x, pos_y, seat_row, seat_type, room_id) VALUES (true, 7, 350, 50, 1, 'STANDARD', 10);
--- INSERT INTO seat (active, number, pos_x, pos_y, seat_row, seat_type, room_id) VALUES (true, 8, 400, 50, 1, 'STANDARD', 10);
--- INSERT INTO seat (active, number, pos_x, pos_y, seat_row, seat_type, room_id) VALUES (true, 9, 450, 50, 1, 'STANDARD', 10);
--- INSERT INTO seat (active, number, pos_x, pos_y, seat_row, seat_type, room_id) VALUES (true, 10, 500, 50, 1, 'STANDARD', 10);
+-- Sales per al Cinema 1 (Oscars - Tarragona)
+INSERT INTO room (name, capacity, cinema_id) VALUES 
+('Sala Oscars 1', 150, 1),
+('Sala Oscars 2', 100, 1),
+('Sala Oscars IMAX', 250, 1);
 
--- -- Fila 2 (Seients 1 a 10)
--- INSERT INTO seat (active, number, pos_x, pos_y, seat_row, seat_type, room_id) VALUES (true, 1, 50, 100, 2, 'STANDARD', 10);
--- INSERT INTO seat (active, number, pos_x, pos_y, seat_row, seat_type, room_id) VALUES (true, 2, 100, 100, 2, 'STANDARD', 10);
--- INSERT INTO seat (active, number, pos_x, pos_y, seat_row, seat_type, room_id) VALUES (true, 3, 150, 100, 2, 'STANDARD', 10);
--- INSERT INTO seat (active, number, pos_x, pos_y, seat_row, seat_type, room_id) VALUES (true, 4, 200, 100, 2, 'STANDARD', 10);
--- INSERT INTO seat (active, number, pos_x, pos_y, seat_row, seat_type, room_id) VALUES (true, 5, 250, 100, 2, 'STANDARD', 10);
--- INSERT INTO seat (active, number, pos_x, pos_y, seat_row, seat_type, room_id) VALUES (true, 6, 300, 100, 2, 'STANDARD', 10);
--- INSERT INTO seat (active, number, pos_x, pos_y, seat_row, seat_type, room_id) VALUES (true, 7, 350, 100, 2, 'STANDARD', 10);
--- INSERT INTO seat (active, number, pos_x, pos_y, seat_row, seat_type, room_id) VALUES (true, 8, 400, 100, 2, 'STANDARD', 10);
--- INSERT INTO seat (active, number, pos_x, pos_y, seat_row, seat_type, room_id) VALUES (true, 9, 450, 100, 2, 'STANDARD', 10);
--- INSERT INTO seat (active, number, pos_x, pos_y, seat_row, seat_type, room_id) VALUES (true, 10, 500, 100, 2, 'STANDARD', 10);
+-- Sales extres per al Cinema 2 (Jack - Reus) 
+INSERT INTO room (name, capacity, cinema_id) VALUES 
+('Sala Jack VIP', 30, 2),
+('Sala Jack 2', 120, 2),
+('Sala Jack Infantil', 80, 2);
+
+-- Sales per al Cinema 3 (Nemo - Cambrils)
+INSERT INTO room (name, capacity, cinema_id) VALUES 
+('Sala Nemo 1', 90, 3),
+('Sala Nemo 2', 90, 3),
+('Sala Nemo 3D', 110, 3);
+
+INSERT INTO movie (títol, duration_minutes, genere, descripcio, release_date) VALUES
+-- ID 1: DUNE
+('Dune: Part Two', 166, 'Ciència-ficció', 'En Paul Atreides s''uneix a Chani i als Fremen mentre busca venjança contra els conspiradors que van destruir la seva família.', '2024-03-01'),
+
+-- ID 2: INSIDE OUT 2
+('Inside Out 2', 96, 'Animació', 'Les emocions de la Riley tornen a la seva ment quan ella es converteix en adolescent i apareixen noves emocions inesperades.', '2024-06-14'),
+
+-- ID 3: DEADPOOL 2
+('Deadpool 2', 119, 'Acció / Comèdia', 'El mercenari mutat Wade Wilson reuneix un equip de mutants per protegir un jove amb habilitats sobrenaturals.', '2018-05-18');
+
+
+
+INSERT INTO screening (screening_date_time, price, movie_id, room_id) VALUES
+-- DUNE (id 1)
+('2026-03-20T18:00',8.50,1,1),
+('2026-03-20T21:00',9.50,1,1),
+('2026-03-23T18:00',8.00,1,1),
+('2026-04-22T20:00',7.50,1,1),
+('2026-03-22T19:00',6.50,1,1),
+
+-- INSIDE OUT 2 (ID=2)
+('2026-03-20T18:00',8.50,2,1),
+('2026-03-20T21:00',9.50,2,1),
+('2026-03-23T18:00',8.00,2,1),
+('2026-04-22T20:00',7.50,2,1),
+('2026-03-22T19:00',6.50,2,1),
+
+-- DEADPOOL 2 (ID=3)
+('2026-03-20T18:00',8.50,3,1),
+('2026-03-20T21:00',9.50,3,1),
+('2026-03-23T18:00',8.00,3,1),
+('2026-04-22T20:00',7.50,3,1),
+('2026-03-22T19:00',6.50,3,1);
+
+

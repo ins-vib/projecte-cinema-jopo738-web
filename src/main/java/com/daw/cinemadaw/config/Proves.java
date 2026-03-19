@@ -36,7 +36,7 @@ public class Proves implements CommandLineRunner {   // es per provar que tot es
     public void run (String... args) throws Exception{  // Defineix el mètode que conté la lògica a executar. El paràmetre String... args permet rebre arguments des de la línia de comandes si fos necessari.
 
         Cinema cinema1 = new Cinema("Ocine", "Gavarres, 46", "Tarragona", "43122");
-        cinemaRepository.save(cinema1);
+        //cinemaRepository.save(cinema1);
 
         List<Cinema> llista = cinemaRepository.findAll(); // Aquí demanes al repositori que recuperi tots els registres de la taula de cinemes. El resultat es guarda en una llista d'objectes tipus Cinema.
         for(Cinema cinema: llista){  // És un bucle (for-each) que recorre la llista que acabes d'obtenir de la base de dades, element per element.
@@ -65,7 +65,7 @@ public class Proves implements CommandLineRunner {   // es per provar que tot es
         // 2. Tornem a cridar al mètode .save(). 
 // Com que l'objecte 'cinema' ja té un ID que existeix a la BD (l'ID 4 que hem buscat abans),
 // Spring Data JPA entén que no ha de crear un registre nou, sinó fer un UPDATE.
-        cinemaRepository.save(cinema);
+        //cinemaRepository.save(cinema);
     }else{
         // 2. Imprimeix un missatge d'error o avís a la consola.
        // Això informa a l'usuari/programador que l'ID buscat (p.ex. el 1) no existeix a la BD.
@@ -93,7 +93,7 @@ public class Proves implements CommandLineRunner {   // es per provar que tot es
 // 1. llista2.get(0): Obtenim el primer objecte Cinema de la llista (posició 0).
 // 2. cinemaRepository.delete(...): Passem aquest objecte al mètode delete.
 // Spring Data JPA buscarà el seu ID i executarà un "DELETE FROM cinema WHERE id = ?"
-    cinemaRepository.delete(llista2.get(0)); 
+    // cinemaRepository.delete(llista2.get(0)); 
 
 
 /**
@@ -114,26 +114,26 @@ public class Proves implements CommandLineRunner {   // es per provar que tot es
     }
 
     Cinema cinema11= new Cinema("ocine", "Gavarres,45", "tarragona", "43206");
-    cinemaRepository.save(cinema11);
+    //cinemaRepository.save(cinema11);
 
-    Room room1= new Room(50, "Sala 1");
-    room1.setCinema(cinema11);
-    roomRepository.save(room1);
+    // Room room1= new Room(50, "Sala 1");
+    // room1.setCinema(cinema11);
+    // roomRepository.save(room1);
 
-    Room room2= new Room(60, "Sala 2");
-    room1.setCinema(cinema11);
-    roomRepository.save(room2);
+    // Room room2= new Room(60, "Sala 2");
+    // room1.setCinema(cinema11);
+    // roomRepository.save(room2);
 
-    Room room3= new Room(70, "Sala 3");
-    room1.setCinema(cinema11);
-    roomRepository.save(room2);
+    // Room room3= new Room(70, "Sala 3");
+    // room1.setCinema(cinema11);
+    // roomRepository.save(room2);
 
 
     Cinema cinema3D= new Cinema("Cine 3d", "Gavarres,46", "Tarragona", "43567");
     Room room3D1= new Room(500, "sala 3d 1");
     room3D1.setCinema(cinema3D);
     cinema3D.getRooms().add(room3D1);
-    cinemaRepository.save(cinema3D);
+    //cinemaRepository.save(cinema3D);
 
     
 
@@ -159,7 +159,7 @@ public class Proves implements CommandLineRunner {   // es per provar que tot es
                 seatCount++;
             }
         }
-roomRepository.save(room);
+//roomRepository.save(room);
     }
 
     

@@ -105,9 +105,28 @@ public class SeatController {
 
         
         @PostMapping("/seats/edit")
-        public String editCinema(@Valid @ModelAttribute("seat") Seat seat){
+        public String editSeat(@Valid @ModelAttribute("seat") Seat seat){
+
+            if (seat.getId() == null) {
+        System.out.println("DEBUG: L'ID ha arribat null des del formulari!");
+        return "redirect:/cinemes"; // Evitem l'error 500 tornant a l'inici
+    }
          
-            seatRepository.save(seat);  // serveix per desar un nou i desar un actualitzat, crea un nou si no posem identificador
+            Optional<Seat> seatOpt =seatRepository.findById(seat.getId());
+
+            if(seatOpt.isPresent()){
+                Seat seatToUpdate = seatOpt.get();
+
+                seatToUpdate.setSeatRow(seat.getSeatRow());
+                seatToUpdate.setNumber(seat.getNumber());
+                seatToUpdate.setPosX(seat.getPosX());
+                seatToUpdate.setPosY(seat.getPosY());
+                seatToUpdate.setSeatType(seat.getSeatType());
+
+                seatRepository.save(seatToUpdate);
+
+                return "redirect:/seats/room/" + seatToUpdate.getRoom().getId();
+            }
             return "redirect:/cinemes";
         }
 
