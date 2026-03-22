@@ -1,0 +1,34 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+
+<body>
+
+<div th:replace="~{layout :: layout(~{::content})}">
+
+    <div th:fragment="content">
+        <h2>Nova Projecció</h2>
+        <h3 th:text="|Pel·lícula: ${screening.movie.títol}|"></h3>
+        <form th:action="@{/screenings/save}" th:object="${screening}" method="post">
+            <input type="hidden" th:field="*{movie.id}"/>
+
+            <label>Data i Hora:</label><br>
+            <input type="datetime-local" th:field="*{screeningDateTime}" required/><br><br>
+
+            <label>Preu de l'entrada (€):</label><br>
+            <input type="number"  th:field="*{price}" required/><br><br> 
+
+            <label>Selecciona una sala:</label><br>
+            <select th:field="*{room}" required>
+                <option value="">-- Selecciona una sala --</option>
+                <option th:each="r : ${rooms}"
+                        th:value="${r.id}"
+                        th:text="${r.name} + ' (Capacitat: ' + ${r.capacity} + ')'">
+                    </option>
+            </select><br><br>
+
+           <button type="submit">
+                Guardar Projecció
+           </button>
+            </select>
+        </form>
+    </div>

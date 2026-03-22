@@ -10,17 +10,13 @@ import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 
-
 import com.daw.cinemadaw.domain.cinema.Movie;
-import com.daw.cinemadaw.domain.cinema.Room;
 import com.daw.cinemadaw.domain.cinema.Screening;
-
-
 import com.daw.cinemadaw.repository.MovieRepository;
 import com.daw.cinemadaw.repository.RoomRepository;
 import com.daw.cinemadaw.repository.ScreeningRepository;
 
-
+@Controller
 public class ScreeningController {
     
     @Autowired
@@ -32,8 +28,8 @@ public class ScreeningController {
     @Autowired
     private MovieRepository movieRepository;
 
-    @GetMapping("/screenings/new/{movieId}")
-    public String mostrarFormulari(@PathVariable Long movieId, Model model){
+    @GetMapping("/screenings/new/{id}")
+    public String mostrarFormulari(@PathVariable("id") Long movieId, Model model){
         Optional<Movie> movie =movieRepository.findById(movieId);
         if(movie.isPresent()){
             Screening screening = new Screening();
@@ -41,8 +37,15 @@ public class ScreeningController {
 
             model.addAttribute("screening",screening);
             model.addAttribute("rooms",roomRepository.findAll());
-            return 
+            return "formulari-screening";
         }
+        return "redirect:/movies";
+    }
+
+    @PostMapping("/screenings/save")
+    public String save(@ModelAttribute Screening screening){
+        screeningRepository.save(screening);
+        return "redirect:/movies";
     }
 
 
