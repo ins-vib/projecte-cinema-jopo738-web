@@ -1,0 +1,42 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+
+<body>
+
+<div th:replace="~{layout :: layout(~{::content})}">
+<div th:fragment="content">
+    <h2 th:text="|Projeccions de la pel·lícula: ${movie.títol} (ID: ${movie.id})|"></h2>
+
+    <a th:href="@{/screenings/new/{id}(id=${movie.id})}" class="btn">Afegir nova Projecció</a>
+
+    <table>
+        <thead>
+            <tr>
+                <th>Id pelicula</th><th>Id Sala</th><th>Nom sala</th>
+                <th>Data i hora</th>
+                <th>Preu</th>
+                <th>Accions</th>
+            </tr>
+        </thead>
+        <tbody>
+            <tr th:each="s : ${screenings}">
+                <td th:text="${s.movie.id}">1</td>
+                <td th:text="${s.room.id}">5</td>
+
+                <td th:text="${s.room.name}">Sala VIP</td>
+                <td th:text="${#temporals.format(s.screeningDateTime, 'dd/MM/yyyy HH:mm')}"></td>
+                <td th:text="${s.price} + '€'">7.50€</td>
+                <td>
+                    <a th:href="@{/screenings/edit/{id}(id=${s.id})}">Editar</a>
+                    <a th:href="@{/screenings/delete/{id}(id=${s.id})}">Eliminar</a>
+                </td>
+
+            </tr>
+            <tr th:if="${#lists.isEmpty(screenings)}">
+                <td colspan="6" >No hi ha projeccions per a aquesta pel·lícula.</td>
+            </tr>
+        </tbody>
+    </table>
+    <br>
+    <a th:href="@{/movies}">Tornar a la llista de pel·lícules</a>
+</div>

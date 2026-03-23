@@ -1,5 +1,6 @@
 package com.daw.cinemadaw.controller;
 
+import java.util.List;
 import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -42,11 +43,57 @@ public class ScreeningController {
         return "redirect:/movies";
     }
 
-    @PostMapping("/screenings/save")
-    public String save(@ModelAttribute Screening screening){
-        screeningRepository.save(screening);
+    // @PostMapping("/screenings/save")
+    // public String save(@ModelAttribute Screening screening){
+    //     screeningRepository.save(screening);
+    //     return "redirect:/movies";
+    // }
+
+
+    @GetMapping("/movies/{id}/screenings")
+    public String llistarProjeccionsPeli(@PathVariable("id")Long movieId, Model model ){
+        Optional<Movie>movieOpt=movieRepository.findById(movieId);
+        if(movieOpt.isPresent()){
+            Movie movie= movieOpt.get();
+            model.addAttribute("movie",movie);
+            List<Screening> llista = screeningRepository.findByMovieId(movieId);
+        model.addAttribute("screenings", llista);
+        
+        return "llistar-screenings";
+        }
         return "redirect:/movies";
     }
+
+    @GetMapping("/screenings/edit/{id}")
+    public String mostrarFormulariEditar(@PathVariable("id") Long id, Model model){
+        Optional<Screening>screenOpt=screeningRepository.findById(id);
+        if(screenOpt.isPresent()){
+            Screening screening= screenOpt.get();
+            model.addAttribute("screening",screening);
+            model.addAttribute("rooms",roomRepository.findAll());
+            return "formulari-screening";
+        }
+
+        return "redirect:/movies";
+    }
+
+    @PostMapping("/screenings/save")
+    public String guardar(@ModelAttribute Screening screening){
+        screeningRepository.save(screening);
+        return "redirect:/movies/" + screening.getMovie().getId() + "/screenings";
+    }
+
+    @GetMapping("/screenings/delete/{id}")
+    public String eliminar(@PathVariable("id") Long id){
+        Optional<Screening>screenOpt=screeningRepository.findById(id);
+        if(screenOpt.isPresent()){
+            Long movieId=screenOpt.get().getMovie().getId();
+            screeningRepository.deleteById(id);
+            return "redirect:/movies/" + movieId + "/screenings";
+        }
+        return "redirect:/movies";
+    }
+
 
 
 }

@@ -9,6 +9,8 @@
         <h2>Nova Projecció</h2>
         <h3 th:text="|Pel·lícula: ${screening.movie.títol}|"></h3>
         <form th:action="@{/screenings/save}" th:object="${screening}" method="post">
+
+            <input type="hidden" th:field="*{id}"/>
             <input type="hidden" th:field="*{movie.id}"/>
 
             <label>Data i Hora:</label><br>

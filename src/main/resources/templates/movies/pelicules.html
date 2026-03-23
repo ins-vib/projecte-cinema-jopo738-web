@@ -49,7 +49,7 @@
                 <a th:href="@{/pelicula/delete/{id}(id=${peli.id})}">
                 eliminar
                 </a>
-                <a th:href="@{/screenings/new/{id}(id=${peli.id})}">Afegir Projecció</a>
+                <a th:href="@{/movies/{id}/screenings(id=${peli.id})}">Projeccions</a>
     
             </td>
         </tr>
