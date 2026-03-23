@@ -4,15 +4,19 @@ import java.util.List;
 import java.util.Optional;
 
 import org.springframework.boot.CommandLineRunner;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Component;
 
 import com.daw.cinemadaw.domain.cinema.Cinema;
 import com.daw.cinemadaw.domain.cinema.Room;
 import com.daw.cinemadaw.domain.cinema.Seat;
 import com.daw.cinemadaw.domain.cinema.SeatType;
+import com.daw.cinemadaw.domain.user.Role;
+import com.daw.cinemadaw.domain.user.User;
 import com.daw.cinemadaw.repository.CinemaRepository;
 import com.daw.cinemadaw.repository.RoomRepository;
 import com.daw.cinemadaw.repository.SeatRepository;
+import com.daw.cinemadaw.repository.UserRepository;
 
 import jakarta.transaction.Transactional;
 
@@ -22,18 +26,44 @@ public class Proves implements CommandLineRunner {   // es per provar que tot es
     private CinemaRepository cinemaRepository; // la creem per poder treballar amb ella
     private RoomRepository roomRepository;
     private SeatRepository seatRepository;
+
+    private UserRepository userRepository;
+
+    BCryptPasswordEncoder encoder;
     
 
-    public Proves(CinemaRepository cinemaRepository,RoomRepository roomRepository, SeatRepository seatRepository) {
+    public Proves(CinemaRepository cinemaRepository,RoomRepository roomRepository, SeatRepository seatRepository, UserRepository userRepository, BCryptPasswordEncoder encoder) {
         this.cinemaRepository = cinemaRepository;
         this.roomRepository= roomRepository;
         this.seatRepository= seatRepository;
+        this.userRepository=userRepository;
+        this.encoder=encoder;
     }
 
 
     @Transactional
     @Override  // Indica que aquest mètode està sobrescrivint un mètode de la interfície pare (probablement CommandLineRunner). Serveix per assegurar-se que la signatura és correcta.
     public void run (String... args) throws Exception{  // Defineix el mètode que conté la lògica a executar. El paràmetre String... args permet rebre arguments des de la línia de comandes si fos necessari.
+
+
+        User admin= new User();
+        admin.setUsername("admin");
+        admin.setPassword(encoder.encode("1234"));
+        admin.setRole(Role.ADMIN);
+        userRepository.save(admin);
+
+        User client=new User();
+        client.setUsername("client");
+        client.setPassword(encoder.encode("1234"));
+        client.setRole(Role.CLIENT);
+        userRepository.save(client);
+
+
+
+
+
+
+
 
         Cinema cinema1 = new Cinema("Ocine", "Gavarres, 46", "Tarragona", "43122");
         //cinemaRepository.save(cinema1);
