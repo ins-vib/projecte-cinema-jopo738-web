@@ -1,4 +1,40 @@
-<h1>Panell d'Administració</h1>
+<h1>Panell d'Administració</h1>&nbsp;<h2><a href="/logout">Logout</a></h2>
 <p>Benvingut administrador</p>
 
-<a href="/logout">Logout</a>
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+
+<body>
+   
+
+<div th:replace="~{layout :: layout(~{::content})}">
+
+    <div th:fragment="content">
+        <header>
+           <h1>cinema</h1>
+           <nav>
+            <a href="/cinemes">cinemes</a>
+            <a href="#">contacte</a>
+            <a href="/movies">pelicules</a>
+           </nav> 
+        </header>
+        <section>
+            <h2> viu la magia del cinema</h2>
+            <p>les millors estrenes</p>
+
+        </section>
+
+        <section>
+        <h2> NOTÍCIES</h2>
+            <div th:each="noticia : ${llista}">
+                <h3 th:text="${noticia.headline}">Títol de la notícia</h3>
+                <p th:text="${noticia.body}">Contingut de la notícia</p>
+            </div>
+        </section>
+
+ 
+    </div>
+</div>
+    </body>
+</html>
+

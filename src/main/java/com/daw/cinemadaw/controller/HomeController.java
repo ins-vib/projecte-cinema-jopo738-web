@@ -3,23 +3,40 @@ package com.daw.cinemadaw.controller;
 import java.io.FileNotFoundException;
 import java.util.ArrayList;
 
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.ModelAttribute;
+import org.springframework.web.bind.annotation.PostMapping;
 
 import com.daw.cinemadaw.domain.New;
+import com.daw.cinemadaw.domain.user.User;
+import com.daw.cinemadaw.repository.UserRepository;
 import com.daw.cinemadaw.service.NewsService;
+
+
 
 @Controller
 public class HomeController {
+
+
+@Autowired
+private UserRepository userRepository;
+
+ 
+
+
+
     @GetMapping("/")
     public String home(Model model){
 
         NewsService newsService = new NewsService();
-        ArrayList<New> llista= new ArrayList<>();
+        ArrayList<New>llista= new ArrayList<>();
 
         try {
             newsService.getNews();
+            llista = newsService.getNews();
         } catch (FileNotFoundException e) {
             System.err.println("No he pogut obrir el fitxer");
            
@@ -27,7 +44,7 @@ public class HomeController {
         // Retorna el nom de la vista que s'ha de mostrar a l'usuari.
         // En aquest cas, Spring buscarà un fitxer anomenat "home.html"
         model.addAttribute("llista",llista);
-        return "home";
+        return "landing";
     }
 
      // Mostra la pàgina de login
@@ -50,4 +67,18 @@ public class HomeController {
        
         return "client/home";
     }
+
+    @GetMapping("/registrar")
+    public String mostrarRegistre(Model model){
+        model.addAttribute("user",new User());
+        return "registrar";
+    }
+
+    @PostMapping("/registrar/save")
+    public String guardarUsuari(@ModelAttribute User user){
+      userRepository.save(user);
+      return "redirect:/login";
+    }
+
+    
 }

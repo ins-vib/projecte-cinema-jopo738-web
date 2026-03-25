@@ -1,0 +1,23 @@
+<u><h1>BENVINGUT AL CINEMA</h1></u>
+
+
+<nav>
+        
+            <a th:href="@{/login}">INICIA SESSIÓ</a></li><br><br><br>
+            
+            <a th:href="@{/cinemes}">REGISTRAR-SE</a></li>
+        
+    </nav>
+    <section>
+            <h2> viu la magia del cinema</h2>
+            <p>les millors estrenes</p>
+
+        </section>
+
+        <section>
+        <u><h2> NOTÍCIES</h2></u>
+            <div th:each="noticia : ${llista}">
+                <h3 th:text="${noticia.headline}">Títol de la notícia</h3>
+                <p th:text="${noticia.body}">Contingut de la notícia</p>
+            </div>
+        </section>

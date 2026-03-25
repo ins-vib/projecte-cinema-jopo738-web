@@ -1,5 +1,22 @@
 <form th:action="@{/login}" method="post">
+    <u><h1>INICIA SESSIÓ:</h1></u>
+    
     <input type="text" name="username"/>
     <input type="password" name="password"/>
     <button>Entrar</button>
+
+    <nav>
+                 
+            <strong><p>si no tens un compte pots:</p><li><a th:href="@{/registrar}">REGISTRAR-SE</a></li>
+    <form th:action="@{/registrar/save}" th:object="${user}" method="post">
+        <button type="submit">Registrar</button>
+    </form>
+       
+    </nav><br>
+
+    <nav>
+                 
+            <strong><p>ves a la pantalla d'inici:</p></strong><a th:href="@{/}"> INICI</a>
+       
+    </nav>
 </form>
