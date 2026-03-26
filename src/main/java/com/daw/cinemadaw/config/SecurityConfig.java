@@ -26,7 +26,7 @@ public class SecurityConfig {
 
             // Accés públic
             .requestMatchers("/h2-console/**").permitAll()
-            .requestMatchers("/","/login", "/css/**").permitAll()   //posar carpetes imatges si en poso aqui per poder accedir
+            .requestMatchers("/","/login", "/css/**","/registrar","/registrar/save").permitAll()   //posar carpetes imatges si en poso aqui per poder accedir
 
             // Rutes protegides per rol
             .requestMatchers("/admin/**").hasRole("ADMIN")

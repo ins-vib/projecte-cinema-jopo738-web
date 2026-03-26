@@ -4,6 +4,7 @@ import java.io.FileNotFoundException;
 import java.util.ArrayList;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -11,6 +12,7 @@ import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PostMapping;
 
 import com.daw.cinemadaw.domain.New;
+import com.daw.cinemadaw.domain.user.Role;
 import com.daw.cinemadaw.domain.user.User;
 import com.daw.cinemadaw.repository.UserRepository;
 import com.daw.cinemadaw.service.NewsService;
@@ -23,6 +25,9 @@ public class HomeController {
 
 @Autowired
 private UserRepository userRepository;
+
+@Autowired
+private BCryptPasswordEncoder passwordEncoder;
 
  
 
@@ -68,16 +73,20 @@ private UserRepository userRepository;
         return "client/home";
     }
 
-    @GetMapping("/registrar")
-    public String mostrarRegistre(Model model){
-        model.addAttribute("user",new User());
+  @GetMapping("/registrar")
+    public String mostrarRegistre(Model model) {
+        model.addAttribute("user", new User());
         return "registrar";
     }
 
     @PostMapping("/registrar/save")
-    public String guardarUsuari(@ModelAttribute User user){
-      userRepository.save(user);
-      return "redirect:/login";
+    public String guardarUsuari(@ModelAttribute User user) {
+
+        String passwordEncriptada = passwordEncoder.encode(user.getPassword());
+        user.setPassword(passwordEncriptada);
+        user.setRole(Role.CLIENT);
+        userRepository.save(user);
+        return "redirect:/login";
     }
 
     

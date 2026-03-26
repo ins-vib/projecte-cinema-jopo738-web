@@ -1,8 +1,8 @@
 
 <h1>Pel·lícules disponibles</h1>
 
-<div th:each="movie : ${movies}">
-    <h3 th:text="${movie.títol}"></h3>
+<div th:each="movie : ${llista}">
+    <h3 th:text="${movie.titol}"></h3>
 </div>
 
 <a href="/logout">Logout</a>

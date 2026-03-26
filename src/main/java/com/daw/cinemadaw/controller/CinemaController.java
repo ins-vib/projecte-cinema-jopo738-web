@@ -12,6 +12,7 @@ import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 
+import com.daw.cinemadaw.DTO.ServicesListDTO;
 import com.daw.cinemadaw.domain.cinema.Cinema;
 import com.daw.cinemadaw.repository.CinemaRepository;
 
@@ -133,6 +134,40 @@ public class CinemaController {
             cinemaRepository.save(cinema);  // serveix per desar un nou i desar un actualitzat, crea un nou si no posem identificador
             return "redirect:/cinemes";
         }
+
+
+        @GetMapping("/services")
+public String showForm(Model model) {
+
+    // DTO buit per al formulari
+    model.addAttribute("servicesDTO", new ServicesListDTO());
+
+    // Llista de serveis disponibles
+    model.addAttribute("allServices", List.of(
+        "crispetes",
+        "parking",
+        "begudes",
+        "vip",
+        "imax"
+    ));
+
+    return "cinemas/services-form";
+}
+
+
+@PostMapping("/services")
+public String save(@ModelAttribute ServicesListDTO dto) {
+
+    // // Evitar null si no seleccionen res
+    // if (dto.getServices() == null) {
+    //     dto.setServices(List.of());
+    // }
+
+    // Mostrar resultats per consola
+    System.out.println(dto.getServices());
+
+    return "redirect:/"; 
+}
     }
 
 
