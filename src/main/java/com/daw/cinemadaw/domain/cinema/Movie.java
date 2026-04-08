@@ -23,7 +23,7 @@ public class Movie {
     @NotBlank(message="El títol és obligatori")
     @Size(min=5,max=150,message="El titol ha de tenir entre 2 i 100 caràcters")
      @Column(nullable=false, length=200)
-    private String títol;  
+    private String titol;  
 
     //@NotBlank(message="La durada és obligatoria")
    // @Size(min=5,max=150,message="La durada ha de tenir entre 2 i 100 caràcters")
@@ -49,12 +49,12 @@ public class Movie {
     public Movie() {
     }
 
-    public Movie(LocalDate data_estrena, String descripcio, int durada, String genere, String títol) {
+    public Movie(LocalDate data_estrena, String descripcio, int durada, String genere, String titol) {
         this.data_estrena = data_estrena;
         this.descripcio = descripcio;
         this.durada = durada;
         this.genere = genere;
-        this.títol = títol;
+        this.titol = titol;
     }
 
 
@@ -67,12 +67,12 @@ public class Movie {
         this.id = id;
     }
 
-    public String getTítol() {
-        return títol;
+    public String getTitol() {
+        return titol;
     }
 
-    public void setTítol(String títol) {
-        this.títol = títol;
+    public void setTitol(String titol) {
+        this.titol = titol;
     }
 
     public Integer getDurada() {
@@ -112,7 +112,7 @@ public class Movie {
         StringBuilder sb = new StringBuilder();
         sb.append("Movie{");
         sb.append("id=").append(id);
-        sb.append(", t\u00edtol=").append(títol);
+        sb.append(", t\u00edtol=").append(titol);
         sb.append(", durada=").append(durada);
         sb.append(", genere=").append(genere);
         sb.append(", descripcio=").append(descripcio);

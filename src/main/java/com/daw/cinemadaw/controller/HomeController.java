@@ -2,6 +2,7 @@ package com.daw.cinemadaw.controller;
 
 import java.io.FileNotFoundException;
 import java.util.ArrayList;
+import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
@@ -12,8 +13,10 @@ import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PostMapping;
 
 import com.daw.cinemadaw.domain.New;
+import com.daw.cinemadaw.domain.cinema.Movie;
 import com.daw.cinemadaw.domain.user.Role;
 import com.daw.cinemadaw.domain.user.User;
+import com.daw.cinemadaw.repository.MovieRepository;
 import com.daw.cinemadaw.repository.UserRepository;
 import com.daw.cinemadaw.service.NewsService;
 
@@ -28,6 +31,9 @@ private UserRepository userRepository;
 
 @Autowired
 private BCryptPasswordEncoder passwordEncoder;
+
+@Autowired
+private MovieRepository movieRepository;
 
  
 
@@ -69,6 +75,10 @@ private BCryptPasswordEncoder passwordEncoder;
     // Pàgina de client
     @GetMapping("/client")
     public String client(Model model) {
+        List<Movie> pelis = movieRepository.findAll();
+    
+    
+    model.addAttribute("llista", pelis);
        
         return "client/home";
     }

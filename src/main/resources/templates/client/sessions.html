@@ -1,0 +1,17 @@
+<h1 th:text="'Sessions per a: ' + ${movie.titol}">Sessions</h1>
+
+<div th:if="${#lists.isEmpty(sessions)}">
+    <p>No hi ha sessions disponibles per aquesta pel·lícula.</p>
+</div>
+
+<ul>
+    <li th:each="sessio : ${sessions}">
+        <span th:text="${#temporals.format(sessio.screeningDateTime, 'dd/MM/yyyy HH:mm')}"></span>
+        - Preu: <span th:text="${sessio.price} + '€'"></span>
+        - Sala: <span th:text="${sessio.room.name}"></span>
+        
+        <a th:href="@{/client/comprar/{id}(id=${sessio.id})}">Seleccionar butaques</a>
+    </li>
+</ul>
+
+<a href="/client">Tornar a la llista</a>

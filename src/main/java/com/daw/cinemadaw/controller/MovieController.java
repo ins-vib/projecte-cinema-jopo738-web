@@ -3,6 +3,7 @@ package com.daw.cinemadaw.controller;
 import java.util.List;
 import java.util.Optional;
 
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
@@ -12,12 +13,17 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 
 import com.daw.cinemadaw.domain.cinema.Movie;
+import com.daw.cinemadaw.domain.cinema.Screening;
 import com.daw.cinemadaw.repository.MovieRepository;
+import com.daw.cinemadaw.repository.ScreeningRepository;
 
 import jakarta.validation.Valid;
 
 @Controller
 public class MovieController {
+
+    @Autowired
+    private ScreeningRepository screeningRepository;
 
     private MovieRepository movieRepository;
 
@@ -113,6 +119,17 @@ public class MovieController {
             } 
 
             return "redirect:/movies";
+        }
+
+
+        @GetMapping("/client/pelicula/{id}")
+        public String veureSessions(@PathVariable Long id, Model model){
+            Movie movie = movieRepository.findById(id).orElse(null);
+            List<Screening>sessions= screeningRepository.findByMovieId(id);
+            model.addAttribute("movie",movie);
+            model.addAttribute("movie",sessions);
+
+            return "client/sessions";
         }
     
 }
