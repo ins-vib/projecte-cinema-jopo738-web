@@ -2,9 +2,11 @@
 <h1>Pel·lícules disponibles</h1>
 
 <div th:each="movie : ${llista}">
-    <a th:href="@{/client/sessions}">
     <p th:text="${movie.titol}"></p>
-</a>
+    
+    <a th:href="@{/client/pelicula/{id}(id=${movie.id})}">
+        <p>SESSIONS</p>
+    </a>
 </div>
 
 <a href="/logout">Logout</a>

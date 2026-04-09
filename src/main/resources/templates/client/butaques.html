@@ -1,0 +1,63 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <title>Selecció de seients</title>
+    <style>
+        .grid-container {
+            display: grid;
+            grid-template-columns: repeat(14, 2fr); 
+            gap: 10px;
+            max-width: 800px;
+            margin: 20px 0;
+            padding: 20px;
+            background-color: #f9f9f9;
+            border-radius: 8px;
+        }
+        .seat-item {
+            display: flex;
+            flex-direction: column; 
+            align-items: center;
+            font-size: 0.7em;
+        }
+        .screen {
+            width: 80%;
+            height: 20px;
+            background: #ccc;
+            margin: 0 auto 30px auto;
+            text-align: center;
+            font-weight: bold;
+            border-radius: 0 0 20px 20px;
+        }
+    </style>
+</head>
+<body>
+
+    <h1 th:text="${screening.movie.titol}">Títol Pel·lícula</h1>
+    
+    <p>Data i hora: <span th:text="${#temporals.format(screening.screeningDateTime, 'dd/MM/yyyy HH:mm')}"></span></p>
+    
+    <p>Sala: <span th:text="${screening.room.name}"></span></p>
+
+   
+
+    <h3>Selecciona les teves butaques:</h3>
+
+    <form th:action="@{/client/reserva/confirmar}" method="post">
+        <input type="hidden" name="screeningId" th:value="${screening.id}" />
+
+        <div class="grid-container">
+            <div th:each="seat : ${screening.room.seats}" class="seat-item">
+                <input type="checkbox" 
+                       name="seientsSeleccionats" 
+                       th:value="${seat.id}" 
+                       th:id="'seat-' + ${seat.id}"
+                       th:disabled="${!seat.active}" />
+                <label th:for="'seat-' + ${seat.id}" th:text="${seat.number}"></label>
+            </div>
+        </div>
+
+        <button type="submit" style="padding: 10px 20px; cursor: pointer;">Confirmar selecció</button>
+    </form>
+
+</body>
+</html>

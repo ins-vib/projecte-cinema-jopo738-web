@@ -127,9 +127,22 @@ public class MovieController {
             Movie movie = movieRepository.findById(id).orElse(null);
             List<Screening>sessions= screeningRepository.findByMovieId(id);
             model.addAttribute("movie",movie);
-            model.addAttribute("movie",sessions);
+            model.addAttribute("sessions",sessions);
 
             return "client/sessions";
+        }
+
+
+        @GetMapping("/client/comprar/{id}")
+        public String seleccionarSeients(@PathVariable Long id, Model model){
+            Screening sessio = screeningRepository.findById(id).orElse(null);
+
+            if(sessio==null){
+                return "redirect:/movies";
+            }
+            model.addAttribute("screening",sessio);
+
+            return "client/butaques";
         }
     
 }
