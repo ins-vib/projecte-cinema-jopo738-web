@@ -11,11 +11,14 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 
 import com.daw.cinemadaw.domain.cinema.Movie;
 import com.daw.cinemadaw.domain.cinema.Screening;
+import com.daw.cinemadaw.domain.cinema.Seat;
 import com.daw.cinemadaw.repository.MovieRepository;
 import com.daw.cinemadaw.repository.ScreeningRepository;
+import com.daw.cinemadaw.repository.SeatRepository;
 
 import jakarta.validation.Valid;
 
@@ -143,6 +146,17 @@ public class MovieController {
             model.addAttribute("screening",sessio);
 
             return "client/butaques";
+        }
+
+
+        @PostMapping("/client/reserva/confirmar")
+        public String confirmarReserva(@RequestParam Long screeningId, @RequestParam List<Long>seientsSeleccionats, Model model){
+            Screening screening=screeningRepository.findById(screeningId).orElse(null);
+            if(seientsSeleccionats!=null && !seientsSeleccionats.isEmpty()){
+                for(Long seatId: seientsSeleccionats){
+                    Seat seat=seat
+                }
+            }
         }
     
 }
