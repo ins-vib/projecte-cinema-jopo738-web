@@ -51,14 +51,23 @@
                        name="seientsSeleccionats" 
                        th:value="${seat.id}" 
                        th:id="'seat-' + ${seat.id}"
+                       th:checked="${selectedSeats.seats != null and selectedSeats.seats.contains(seat.id)}" 
                       
                        th:disabled="${!seat.active}" />
                        
                 <label th:for="'seat-' + ${seat.id}" th:text="${seat.id}"></label>
             </div>
         </div>
+        <button type="submit" 
+            th:formaction="@{/client/reserva/afegir}" 
+            style="background-color: #4CAF50; color: white; padding: 10px 20px; cursor: pointer;">
+        Afegir al carret
+    </button>
 
-        <button type="submit" style="padding: 10px 20px; cursor: pointer;">Confirmar selecció</button>
+    <button type="submit" 
+            style="padding: 10px 20px; cursor: pointer;">
+        Confirmar selecció
+    </button>
     </form>
 
 </body>

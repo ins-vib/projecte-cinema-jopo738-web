@@ -1,0 +1,55 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <title>El meu Carret</title>
+    <style>
+        table { width: 100%; border-collapse: collapse; margin-top: 20px; }
+        th, td { border: 1px solid #ddd; padding: 12px; text-align: left; }
+        th { background-color: #f2f2f2; }
+        .total-box { text-align: right; margin-top: 20px; font-size: 1.5em; font-weight: bold; }
+        .btn-comprar { background-color: #4CAF50; color: white; padding: 15px 25px; border: none; cursor: pointer; }
+    </style>
+</head>
+<body>
+
+    <h1>🛒 El meu carret de compra</h1>
+
+    <div th:if="${items.isEmpty()}">
+        <p>El teu carret està buit.</p>
+        <a th:href="@{/movies}">Tornar a la cartellera</a>
+    </div>
+
+    <div th:if="${!items.isEmpty()}">
+        <table>
+            <thead>
+                <tr>
+                    <th>Pel·lícula</th>
+                    <th>Data i Hora</th>
+                    <th>Butaques (IDs)</th>
+                    <th>Subtotal</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr th:each="item : ${items}">
+                    <td th:text="${item.pelicula}"></td>
+                    <td th:text="${#temporals.format(item.sessio, 'dd/MM/yyyy HH:mm')}"></td>
+                    <td>
+                        <span th:each="s : ${item.seients}" th:text="${s.id} + ' '"></span>
+                    </td>
+                    <td th:text="${item.subtotal} + ' €'"></td>
+                </tr>
+            </tbody>
+        </table>
+
+        <div class="total-box">
+            Total General: <span th:text="${total}"></span> €
+        </div>
+
+        <div style="margin-top: 30px; text-align: center;">
+            <a th:href="@{/movies}"><button>Seguir comprant</button></a>
+            <button class="btn-comprar">Finalitzar i Pagar</button>
+        </div>
+    </div>
+
+</body>
+</html>

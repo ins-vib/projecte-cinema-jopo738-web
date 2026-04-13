@@ -1,5 +1,6 @@
 package com.daw.cinemadaw.controller;
 
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -144,38 +145,63 @@ public class MovieController {
 
 
         @GetMapping("/client/comprar/{id}")
-        public String seleccionarSeients(@PathVariable Long id, Model model){
-            Screening sessio = screeningRepository.findById(id).orElse(null);
+        public String seleccionarSeients(@PathVariable Long id, Model model, HttpSession session){
+            // 1. Busquem la sessió de cinema
+    Optional<Screening> screening = screeningRepository.findById(id);
+    
+    if (screening.isEmpty()) {
+        return "redirect:/movies";
+    }
 
-            if(sessio==null){
-                return "redirect:/movies";
-            }
-            model.addAttribute("screening",sessio);
+    // 2. Intentem recuperar el "cart" (carret) de la sessió HTTP
+    Map<Long, List<Long>> cart = (Map<Long, List<Long>>) session.getAttribute("cart");
+    if (cart == null) {
+        cart = new HashMap<>();
+    }
 
-            return "client/butaques";
+    // 3. Creem un DTO per passar els seients ja seleccionats a la vista
+    // Nota: Assegura't de tenir creada la classe SeatsListDTO
+    SeatsListDTO seatsListDTO = new SeatsListDTO();
+    
+    // Si aquest ID de sessió ja existeix al mapa, n'agafem els seients
+    if (cart.containsKey(id)) {
+        seatsListDTO.setSeats(cart.get(id));
+    }
+
+    // 4. Afegim tot al model per a Thymeleaf
+    model.addAttribute("selectedSeats", seatsListDTO);
+    model.addAttribute("screening", screening.get());
+
+    return "client/butaques";
         }
 
 
         @PostMapping("/client/reserva/confirmar")
-        public String confirmarReserva(@RequestParam Long screeningId, @RequestParam List<Long>seientsSeleccionats, Model model){
-            Screening screening = screeningRepository.findById(screeningId).orElse(null);
-    
-    // Recuperem els objectes Seat de la base de dades per mostrar-los al resum
-    List<Seat> seientsObjectes = seatRepository.findAllById(seientsSeleccionats);
-
-    // Marquem com a ocupats    //ELIMINAR
-    for (Seat s : seientsObjectes) {
-        s.setActive(false);
-        seatRepository.save(s);
+        public String confirmarReserva(@RequestParam Long screeningId, @RequestParam List<Long>seientsSeleccionats, Model model, HttpSession session){
+            // 1. Obtenir el mapa "cart" de la sessió o crear-lo si no existeix
+    Map<Long, List<Long>> cart = (Map<Long, List<Long>>) session.getAttribute("cart");
+    if (cart == null) {
+        cart = new HashMap<>();
     }
 
-    //ELIMINAR
+    // 2. Guardem la selecció: la clau és l'ID de la sessió (screening), 
+    // i el valor és la llista d'IDs de seients seleccionats.
+    cart.put(screeningId, seientsSeleccionats);
 
-    // Passem les dades al resum
+    // 3. Tornem a guardar el mapa actualitzat a la sessió
+    session.setAttribute("cart", cart);
+
+    // OPCIONAL: Per depurar i veure que tot va bé per consola
+    System.out.println("Cart actualitzat: " + cart);
+
+    // 4. Per mostrar el resum, recuperem les dades com feies abans
+    Screening screening = screeningRepository.findById(screeningId).orElse(null);
+    List<Seat> seientsObjectes = seatRepository.findAllById(seientsSeleccionats);
+
     model.addAttribute("screening", screening);
     model.addAttribute("seients", seientsObjectes);
 
-    return "client/resum-compra"; 
+    return "client/resum-compra";
 }
 
 @GetMapping("/client/home")
@@ -184,45 +210,66 @@ public String home() {
     return "client/home";
 }
 
-// el que hi ha a la pissarra
- @GetMapping("/screenings/seats/{id}")
- public String selectSeats(@PathVariable Long id, Model model, HttpSession session){
-     Optional<Screening>screening=screeningRepository.findById(id);
-     if(screening.isEmpty()){
-         return "redirect:/client/movies";
+// // el que hi ha a la pissarra
+//  @GetMapping("/screenings/seats/{id}")
+//  public String selectSeats(@PathVariable Long id, Model model, HttpSession session){
+//      Optional<Screening>screening=screeningRepository.findById(id);
+//      if(screening.isEmpty()){
+//          return "redirect:/client/movies";
 
-     }
+//      }
 
-     Map<Long,List<Long>> cart=(Map<Long,List<Long>>)session.getAttribute("cart");
-     if(cart==null){
-        cart=new HashMap<>();
-     }
+//      Map<Long,List<Long>> cart=(Map<Long,List<Long>>)session.getAttribute("cart");
+//      if(cart==null){
+//         cart=new HashMap<>();
+//      }
 
-     SeatsListDTO seatsListDTO= new SeatsListDTO();
-     seatsListDTO.setSeats(cart.get(id));
-model.addAttribute("selectedSeats", seatsListDTO);
- model.addAttribute("screening",screening.get());
-return "client/movies/sets";
+//      SeatsListDTO seatsListDTO= new SeatsListDTO();
+//      seatsListDTO.setSeats(cart.get(id));
+// model.addAttribute("selectedSeats", seatsListDTO);
+//  model.addAttribute("screening",screening.get());
+// return "client/movies/sets";
 
- }
+//  }
 
 
-// el que hi ha a la pissarra
-@PostMapping("/screenings/seats/confirm/{id}")
-public String confirSeats(@PathVariable Long id, @ModelAttribute SeatsListDTO selectedSeats, Model model, HttpSession session){
-    // obtenir mapa de la sessio o crear-lo
+// // el que hi ha a la pissarra
+// @PostMapping("/screenings/seats/confirm/{id}")
+// public String confirSeats(@PathVariable Long id, @ModelAttribute SeatsListDTO selectedSeats, Model model, HttpSession session){
+//     // obtenir mapa de la sessio o crear-lo
 
-    Map<Long, List<Long>> cart=(Map<Long, List<Long>>) session.getAttribute("cart");
+//     Map<Long, List<Long>> cart=(Map<Long, List<Long>>) session.getAttribute("cart");
 
+//     if(cart==null){
+//         cart=new HashMap<>();
+//     }
+
+//     cart.put(id, selectedSeats.getSeats());
+//     session.setAttribute("cart",cart);
+//     System.out.println("cart actualitzat: "+cart);
+//     return "redirect:/client/movies/screenings/seats/"+id;
+// }
+
+
+
+@PostMapping("/client/reserva/afegir")
+public String afegirAlCarret(@RequestParam Long screeningId, @RequestParam(required=false)List<Long>seientsSeleccionats, HttpSession session){
+    Map<Long,List<Long>>cart=(Map<Long,List<Long>>)session.getAttribute("cart");
     if(cart==null){
         cart=new HashMap<>();
     }
 
-    cart.put(id, selectedSeats.getSeats());
-    session.setAttribute("cart",cart);
-    System.out.println("cart actualitzat: "+cart);
-    return "redirect:/client/movies/screenings/seats/"+id;
+    if(seientsSeleccionats==null){
+        seientsSeleccionats= new ArrayList<>();
+    }
+    cart.put(screeningId, seientsSeleccionats);
+    session.setAttribute("cart", cart);
+
+    return "redirect:/client/carret";
 }
+
+
+
 }
    
         

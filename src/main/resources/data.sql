@@ -17,7 +17,7 @@ INSERT INTO movie (titol, duration_minutes, genere, descripcio, release_date) VA
 -- 4. PASSIS 
 INSERT INTO screening (screening_date_time, price, movie_id, room_id) VALUES
 ('2026-04-20T18:00', 8.50, 1, 1),
-('2026-04-20T21:00', 9.50, 1, 1),
+('2026-04-20T21:00', 9.50, 1, 2),
 ('2026-04-20T18:00', 8.50, 2, 1),
 ('2026-04-20T21:00', 9.50, 2, 1),
 ('2026-04-20T18:00', 8.50, 3, 1);
