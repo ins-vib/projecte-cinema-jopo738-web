@@ -10,4 +10,9 @@ public class ServicesListDTO {
     public void setServices(List<String>services){
         this.services=services;
     }
+
 }
+
+
+
+

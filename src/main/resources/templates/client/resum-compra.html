@@ -1,0 +1,41 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <title>Resum de la reserva</title>
+    <!-- <style>
+        .ticket {
+            border: 2px dashed #333;
+            padding: 20px;
+            max-width: 400px;
+            margin: 20px auto;
+            background-color: #fff9c4;
+        }
+    </style> -->
+</head>
+<body>
+
+    <div class="ticket">
+        <h2>RESUM DE LA COMPRA</h2>
+        
+        <p><strong>Pel·lícula:</strong> <span th:text="${screening.movie.titol}"></span></p>
+        <p><strong>Sessió:</strong> <span th:text="${#temporals.format(screening.screeningDateTime, 'dd/MM/yyyy HH:mm')}"></span></p>
+        <p><strong>Sala:</strong> <span th:text="${screening.room.name}"></span></p>
+        
+        <h4>Seients seleccionats:</h4>
+        <ul>
+            <li th:each="s : ${seients}">
+                Butaca nº <span th:text="${s.id}"></span> 
+                (ID del sistema: <span th:text="${s.id}"></span>)
+            </li>
+        </ul>
+        
+        
+        
+    </div>
+
+    <div style="text-align: center;">
+        <a th:href="@{/client}"><button>Tornar a l'inici</button></a>
+    </div>
+
+</body>
+</html>

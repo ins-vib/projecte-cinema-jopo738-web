@@ -51,8 +51,10 @@
                        name="seientsSeleccionats" 
                        th:value="${seat.id}" 
                        th:id="'seat-' + ${seat.id}"
+                      
                        th:disabled="${!seat.active}" />
-                <label th:for="'seat-' + ${seat.id}" th:text="${seat.number}"></label>
+                       
+                <label th:for="'seat-' + ${seat.id}" th:text="${seat.id}"></label>
             </div>
         </div>
 

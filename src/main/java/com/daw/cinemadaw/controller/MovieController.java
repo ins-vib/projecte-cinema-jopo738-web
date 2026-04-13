@@ -1,6 +1,8 @@
 package com.daw.cinemadaw.controller;
 
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -13,6 +15,7 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 
+import com.daw.cinemadaw.DTO.SeatsListDTO;
 import com.daw.cinemadaw.domain.cinema.Movie;
 import com.daw.cinemadaw.domain.cinema.Screening;
 import com.daw.cinemadaw.domain.cinema.Seat;
@@ -20,6 +23,7 @@ import com.daw.cinemadaw.repository.MovieRepository;
 import com.daw.cinemadaw.repository.ScreeningRepository;
 import com.daw.cinemadaw.repository.SeatRepository;
 
+import jakarta.servlet.http.HttpSession;
 import jakarta.validation.Valid;
 
 @Controller
@@ -27,6 +31,9 @@ public class MovieController {
 
     @Autowired
     private ScreeningRepository screeningRepository;
+
+    @Autowired
+    private SeatRepository seatRepository;
 
     private MovieRepository movieRepository;
 
@@ -151,12 +158,72 @@ public class MovieController {
 
         @PostMapping("/client/reserva/confirmar")
         public String confirmarReserva(@RequestParam Long screeningId, @RequestParam List<Long>seientsSeleccionats, Model model){
-            Screening screening=screeningRepository.findById(screeningId).orElse(null);
-            if(seientsSeleccionats!=null && !seientsSeleccionats.isEmpty()){
-                for(Long seatId: seientsSeleccionats){
-                    Seat seat=seat
-                }
-            }
-        }
+            Screening screening = screeningRepository.findById(screeningId).orElse(null);
     
+    // Recuperem els objectes Seat de la base de dades per mostrar-los al resum
+    List<Seat> seientsObjectes = seatRepository.findAllById(seientsSeleccionats);
+
+    // Marquem com a ocupats    //ELIMINAR
+    for (Seat s : seientsObjectes) {
+        s.setActive(false);
+        seatRepository.save(s);
+    }
+
+    //ELIMINAR
+
+    // Passem les dades al resum
+    model.addAttribute("screening", screening);
+    model.addAttribute("seients", seientsObjectes);
+
+    return "client/resum-compra"; 
 }
+
+@GetMapping("/client/home")
+public String home() {
+    
+    return "client/home";
+}
+
+// el que hi ha a la pissarra
+ @GetMapping("/screenings/seats/{id}")
+ public String selectSeats(@PathVariable Long id, Model model, HttpSession session){
+     Optional<Screening>screening=screeningRepository.findById(id);
+     if(screening.isEmpty()){
+         return "redirect:/client/movies";
+
+     }
+
+     Map<Long,List<Long>> cart=(Map<Long,List<Long>>)session.getAttribute("cart");
+     if(cart==null){
+        cart=new HashMap<>();
+     }
+
+     SeatsListDTO seatsListDTO= new SeatsListDTO();
+     seatsListDTO.setSeats(cart.get(id));
+model.addAttribute("selectedSeats", seatsListDTO);
+ model.addAttribute("screening",screening.get());
+return "client/movies/sets";
+
+ }
+
+
+// el que hi ha a la pissarra
+@PostMapping("/screenings/seats/confirm/{id}")
+public String confirSeats(@PathVariable Long id, @ModelAttribute SeatsListDTO selectedSeats, Model model, HttpSession session){
+    // obtenir mapa de la sessio o crear-lo
+
+    Map<Long, List<Long>> cart=(Map<Long, List<Long>>) session.getAttribute("cart");
+
+    if(cart==null){
+        cart=new HashMap<>();
+    }
+
+    cart.put(id, selectedSeats.getSeats());
+    session.setAttribute("cart",cart);
+    System.out.println("cart actualitzat: "+cart);
+    return "redirect:/client/movies/screenings/seats/"+id;
+}
+}
+   
+        
+    
