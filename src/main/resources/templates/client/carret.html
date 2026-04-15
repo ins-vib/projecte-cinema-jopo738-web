@@ -12,7 +12,7 @@
 </head>
 <body>
 
-    <h1>🛒 El meu carret de compra</h1>
+    <h1>El meu carret de compra</h1>
 
     <div th:if="${items.isEmpty()}">
         <p>El teu carret està buit.</p>
@@ -46,7 +46,11 @@
         </div>
 
         <div style="margin-top: 30px; text-align: center;">
-            <a th:href="@{/movies}"><button>Seguir comprant</button></a>
+            <a th:href="@{/client}"><button>Seguir comprant</button></a>
+            
+        </div>
+        <div style="margin-top: 30px; text-align: center;">
+            
             <button class="btn-comprar">Finalitzar i Pagar</button>
         </div>
     </div>

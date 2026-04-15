@@ -254,18 +254,47 @@ public String home() {
 
 @PostMapping("/client/reserva/afegir")
 public String afegirAlCarret(@RequestParam Long screeningId, @RequestParam(required=false)List<Long>seientsSeleccionats, HttpSession session){
-    Map<Long,List<Long>>cart=(Map<Long,List<Long>>)session.getAttribute("cart");
-    if(cart==null){
-        cart=new HashMap<>();
-    }
+    Map<Long, List<Long>> cart = (Map<Long, List<Long>>) session.getAttribute("cart");
+    if (cart == null) cart = new HashMap<>();
 
-    if(seientsSeleccionats==null){
-        seientsSeleccionats= new ArrayList<>();
-    }
+    if (seientsSeleccionats == null) seientsSeleccionats = new ArrayList<>();
+    
     cart.put(screeningId, seientsSeleccionats);
     session.setAttribute("cart", cart);
 
-    return "redirect:/client/carret";
+    // IMPORTANT: Redirigim al GET per evitar l'error de "null"
+    return "redirect:/client/carret"; 
+}
+
+@GetMapping("/client/carret")
+public String veureCarret(HttpSession session, Model model) {
+    Map<Long, List<Long>> cart = (Map<Long, List<Long>>) session.getAttribute("cart");
+    List<Map<String, Object>> detallsCarret = new ArrayList<>();
+    double totalGeneral = 0;
+
+    if (cart != null) {
+        for (Map.Entry<Long, List<Long>> entry : cart.entrySet()) {
+            Screening screening = screeningRepository.findById(entry.getKey()).orElse(null);
+            List<Seat> seients = seatRepository.findAllById(entry.getValue());
+
+            if (screening != null && !seients.isEmpty()) {
+                Map<String, Object> item = new HashMap<>();
+                item.put("pelicula", screening.getMovie().getTitol());
+                item.put("sessio", screening.getScreeningDateTime());
+                item.put("seients", seients);
+                double subtotal = seients.size() * screening.getPrice();
+                item.put("subtotal", subtotal);
+                detallsCarret.add(item);
+                totalGeneral += subtotal;
+            }
+        }
+    }
+
+    // Aquí és on creem la variable "items" que Thymeleaf busca!
+    model.addAttribute("items", detallsCarret);
+    model.addAttribute("total", totalGeneral);
+    
+    return "client/carret";
 }
 
 
