@@ -194,7 +194,7 @@ public class MovieController {
     // OPCIONAL: Per depurar i veure que tot va bé per consola
     System.out.println("Cart actualitzat: " + cart);
 
-    // 4. Per mostrar el resum, recuperem les dades com feies abans
+    // 4. Per mostrar el resum, recuperem les dades 
     Screening screening = screeningRepository.findById(screeningId).orElse(null);
     List<Seat> seientsObjectes = seatRepository.findAllById(seientsSeleccionats);
 
@@ -290,7 +290,7 @@ public String veureCarret(HttpSession session, Model model) {
         }
     }
 
-    // Aquí és on creem la variable "items" que Thymeleaf busca!
+    // Aquí és on creem la variable "items" que Thymeleaf busca
     model.addAttribute("items", detallsCarret);
     model.addAttribute("total", totalGeneral);
     

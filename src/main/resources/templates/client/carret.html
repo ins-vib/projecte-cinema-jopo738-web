@@ -51,7 +51,9 @@
         </div>
         <div style="margin-top: 30px; text-align: center;">
             
-            <button class="btn-comprar">Finalitzar i Pagar</button>
+            <form th:action="@{/client/confirmacio-order}" method="post">
+    <button type="submit" class="btn-comprar">Finalitzar i Pagar</button>
+</form>
         </div>
     </div>
 

@@ -1,0 +1,22 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <title>Compra Finalitzada</title>
+</head>
+<body>
+    <h1> Compra realitzada amb èxit!</h1>
+    <p>Gràcies, <span th:text="${order.user.username}"></span>.</p>
+    <p>El número de la teva comanda és: <strong th:text="${order.id}"></strong></p>
+    <p>Import total: <span th:text="${order.importTotal}"></span> €</p>
+    
+    <h3>Les teves entrades:</h3>
+    <ul>
+        <li th:each="t : ${order.tickets}">
+            <span th:text="${t.screening.movie.titol}"></span> - 
+            Butaca: <span th:text="${t.seat.id}"></span>
+        </li>
+    </ul>
+
+    <a th:href="@{/movies}">Tornar a la cartellera</a>
+</body>
+</html>
