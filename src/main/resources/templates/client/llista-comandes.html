@@ -1,0 +1,161 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <title>Les meves Comandes</title>
+    <link rel="stylesheet" th:href="@{/css/styles.css}">
+</head>
+
+<style>
+    :root {
+        --primary: #e50914;
+        --dark-bg: #141414;
+        --card-bg: #1f1f1f;
+        --text-light: #ffffff;
+        --text-gray: #b3b3b3;
+    }
+
+    body {
+        font-family: 'Helvetica Neue', Helvetica, Arial, sans-serif;
+        background-color: var(--dark-bg);
+        color: var(--text-light);
+        margin: 0;
+        padding: 100px 40px;
+    }
+
+    /* NAV BAR FIXA */
+    .nav-bar {
+        position: fixed;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 70px;
+        display: flex;
+        justify-content: flex-end;
+        align-items: center;
+        padding: 0 50px;
+        background-color: #000;
+        box-sizing: border-box;
+        z-index: 1000;
+    }
+
+    .btn-nav {
+        text-decoration: none;
+        padding: 10px 20px;
+        border-radius: 4px;
+        font-weight: bold;
+        color: white;
+        background-color: var(--primary);
+        border: none;
+        font-size: 0.9rem;
+    }
+
+    h1 {
+        font-size: 2rem;
+        margin-bottom: 30px;
+        border-left: 5px solid var(--primary);
+        padding-left: 15px;
+    }
+
+    /* CONTENIDOR DE LA TAULA */
+    .table-container {
+        background-color: var(--card-bg);
+        border-radius: 8px;
+        overflow: hidden;
+        box-shadow: 0 10px 30px rgba(0,0,0,0.5);
+    }
+
+    table {
+        width: 100%;
+        border-collapse: collapse;
+        text-align: left;
+    }
+
+    thead {
+        background-color: #2a2a2a;
+    }
+
+    th {
+        padding: 20px;
+        color: var(--text-light);
+        text-transform: uppercase;
+        font-size: 0.85rem;
+        letter-spacing: 1px;
+    }
+
+    td {
+        padding: 15px 20px;
+        border-bottom: 1px solid #333;
+        font-size: 1rem;
+    }
+
+    tr:hover {
+        background-color: #252525;
+    }
+
+    /* ESTAT FINALITZADA EN VERD */
+    .status-badge {
+        background-color: #2e7d32;
+        color: #e8f5e9;
+        padding: 4px 10px;
+        border-radius: 4px;
+        font-size: 0.8rem;
+        font-weight: bold;
+    }
+
+    .total-amount {
+        font-weight: bold;
+        color: var(--text-light);
+    }
+
+    .btn-back-container {
+        margin-top: 30px;
+    }
+
+    .btn-back {
+        color: var(--text-gray);
+        text-decoration: none;
+        font-weight: bold;
+        transition: 0.3s;
+    }
+
+    .btn-back:hover {
+        color: var(--text-light);
+    }
+</style>
+<body>
+
+    <nav class="nav-bar">
+        <a th:href="@{/client}" class="btn-nav">TORNAR A LA CARTELLERA</a>
+    </nav>
+
+    <h1>Historial de Comandes</h1>
+    
+    <div class="table-container">
+        <table>
+            <thead>
+                <tr>
+                    <th>ID</th>
+                    <th>Data i Hora</th>
+                    <th>Estat</th>
+                    <th>Total</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr th:each="c : ${comandes}">
+                    <td th:text=" ${c.id}" style="color: var(--text-gray); font-family: monospace;"></td>
+                    <td th:text="${#temporals.format(c.dataHora, 'dd/MM/yyyy HH:mm')}"></td>
+                    <td>
+                        <span class="status-badge" th:text="${c.estat}"></span>
+                    </td>
+                    <td class="total-amount" th:text="${c.importTotal} + ' €'"></td>
+                </tr>
+            </tbody>
+        </table>
+    </div>
+
+    <div class="btn-back-container">
+        <a th:href="@{/client}" class="btn-back"> Tornar a la Cartellera</a>
+    </div>
+
+</body>
+</html>

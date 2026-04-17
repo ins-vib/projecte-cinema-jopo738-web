@@ -137,7 +137,7 @@ private OrderRepository orderRepository;
         Map<Long, List<Long>> cart= (Map<Long,List<Long>>) session.getAttribute("cart");
 
         if(cart==null || cart.isEmpty()){
-            return redirect:/client/movies/;     // "redirect:/client/movies/";
+            return "redirect:/client/home/";     // "redirect:/client/movies/";
         }
 
         Order order=new Order();
@@ -174,7 +174,22 @@ private OrderRepository orderRepository;
 
         
 
-        return "client/cart/checkout";       // "client/cart/checkout"
+        model.addAttribute("order", order); // Afegim l'ordre al model per veure les dades
+        return "client/confirmacio-order";      // "client/cart/checkout"
+    }
+
+
+    @GetMapping("/client/llista-comandes")
+    public String llistarComandes(Model model, @AuthenticationPrincipal UserDetails userDetails){
+        String username=userDetails.getUsername();
+        User user= userRepository.findByUsername(username).orElse(null);
+
+        if(user != null){
+            List<Order>comandes=orderRepository.findAll();
+            model.addAttribute("comandes",comandes);
+        }
+
+        return "client/llista-comandes";
     }
 
     
