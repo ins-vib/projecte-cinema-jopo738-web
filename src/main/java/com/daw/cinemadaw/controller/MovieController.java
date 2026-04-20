@@ -5,6 +5,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Optional;
+import java.util.stream.Collectors;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -23,6 +24,7 @@ import com.daw.cinemadaw.domain.cinema.Seat;
 import com.daw.cinemadaw.repository.MovieRepository;
 import com.daw.cinemadaw.repository.ScreeningRepository;
 import com.daw.cinemadaw.repository.SeatRepository;
+import com.daw.cinemadaw.repository.TicketRepository;
 
 import jakarta.servlet.http.HttpSession;
 import jakarta.validation.Valid;
@@ -35,6 +37,9 @@ public class MovieController {
 
     @Autowired
     private SeatRepository seatRepository;
+
+    @Autowired
+private TicketRepository ticketRepository;
 
     private MovieRepository movieRepository;
 
@@ -153,6 +158,18 @@ public class MovieController {
         return "redirect:/movies";
     }
 
+    // Screening screening = screeningOpt.get();
+
+    // LÒGICA NOVA: Buscar seients ja ocupats en aquesta sessió (evita error 500)
+    // Suposant que Screening té una llista de Tickets o que pots buscar-los al TicketRepository
+    // Si no tens el TicketRepository injectat aquí, afegeix-lo a dalt amb @Autowired
+    List<Long> occupiedSeatIds = ticketRepository.findByScreeningId(id) // Crea aquest mètode al repo
+            .stream()
+            .map(t -> t.getSeat().getId())
+            .collect(Collectors.toList());
+
+    if (occupiedSeatIds == null) occupiedSeatIds = new ArrayList<>();
+
     // 2. Intentem recuperar el "cart" (carret) de la sessió HTTP
     Map<Long, List<Long>> cart = (Map<Long, List<Long>>) session.getAttribute("cart");
     if (cart == null) {
@@ -171,6 +188,8 @@ public class MovieController {
     // 4. Afegim tot al model per a Thymeleaf
     model.addAttribute("selectedSeats", seatsListDTO);
     model.addAttribute("screening", screening.get());
+    model.addAttribute("occupiedSeatIds", occupiedSeatIds); 
+    //model.addAttribute("screening", screeningOpt.get());
 
     return "client/butaques";
         }

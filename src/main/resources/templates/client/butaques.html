@@ -2,7 +2,7 @@
 <html xmlns:th="http://www.thymeleaf.org">
 <head>
     <title>Selecció de seients</title>
-    <style>
+    <!-- <style>
         .grid-container {
             display: grid;
             grid-template-columns: repeat(14, 2fr); 
@@ -28,47 +28,211 @@
             font-weight: bold;
             border-radius: 0 0 20px 20px;
         }
-    </style>
+    </style> -->
+
+        <style>
+    :root {
+        --primary: #e50914;
+        --dark-bg: #141414;
+        --card-bg: #222222;
+        --text-light: #ffffff;
+        --text-gray: #b3b3b3;
+        --occupied: #444444;
+        --selected: #4CAF50;
+    }
+
+    body {
+        font-family: 'Helvetica Neue', Helvetica, Arial, sans-serif;
+        background-color: var(--dark-bg);
+        color: var(--text-light);
+        margin: 0;
+        padding: 100px 20px 40px 20px;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+    }
+
+    /* NAV BAR FIXA */
+    .nav-bar {
+        position: fixed;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 70px;
+        display: flex;
+        justify-content: flex-end;
+        align-items: center;
+        padding: 0 50px;
+        background-color: #000;
+        box-sizing: border-box;
+        z-index: 1000;
+        gap: 20px;
+    }
+
+    .btn-nav {
+        text-decoration: none;
+        padding: 8px 16px;
+        border-radius: 4px;
+        font-weight: bold;
+        color: white;
+        background-color: var(--primary);
+        font-size: 0.8rem;
+    }
+
+    /* PANTALLA DEL CINEMA */
+    .screen {
+        width: 70%;
+        height: 8px;
+        background: var(--text-light);
+        margin: 20px auto 50px auto;
+        box-shadow: 0 10px 20px rgba(255, 255, 255, 0.3);
+        border-radius: 50%;
+    }
+    .screen-text {
+        text-align: center;
+        color: var(--text-gray);
+        font-size: 0.7rem;
+        text-transform: uppercase;
+        margin-bottom: 10px;
+    }
+
+    /* CONTENIDOR DE BUTAQUES */
+    .grid-container {
+        display: grid;
+        grid-template-columns: repeat(14, 1fr); 
+        gap: 8px;
+        background-color: var(--card-bg);
+        padding: 30px;
+        border-radius: 10px;
+        box-shadow: 0 10px 30px rgba(0,0,0,0.5);
+    }
+
+    .seat-item {
+        position: relative;
+    }
+
+    /* Amaguem el checkbox real */
+    .seat-item input[type="checkbox"] {
+        display: none;
+    }
+
+    /* Dibuixem la butaca amb el label */
+    .seat-item label {
+        display: block;
+        width: 30px;
+        height: 30px;
+        background-color: var(--text-gray);
+        border-radius: 6px 6px 2px 2px;
+        cursor: pointer;
+        transition: 0.3s;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        font-size: 0.6rem;
+        color: #000;
+        font-weight: bold;
+    }
+
+    /* Quan passes el ratolí */
+    .seat-item label:hover {
+        background-color: #eee;
+        transform: scale(1.1);
+    }
+
+    /* Estil quan la butaca està SELECCIONADA */
+    .seat-item input[type="checkbox"]:checked + label {
+        background-color: var(--selected);
+        color: white;
+        box-shadow: 0 0 10px var(--selected);
+    }
+
+    /* Estil quan la butaca està OCUPADA (disabled) */
+    .seat-item input[type="checkbox"]:disabled + label {
+        background-color: var(--occupied);
+        color: #666;
+        cursor: not-allowed;
+        transform: none;
+    }
+
+    /* BOTONS D'ACCIÓ */
+    .action-buttons {
+        margin-top: 40px;
+        display: flex;
+        gap: 20px;
+    }
+
+    .btn {
+        padding: 12px 25px;
+        border-radius: 5px;
+        font-weight: bold;
+        text-transform: uppercase;
+        cursor: pointer;
+        border: none;
+        transition: 0.3s;
+    }
+
+    .btn-cart {
+        background-color: var(--success);
+        color: white;
+    }
+
+    .btn-confirm {
+        background-color: var(--primary);
+        color: white;
+    }
+
+    .btn:hover {
+        transform: translateY(-2px);
+        filter: brightness(1.2);
+    }
+</style>
+    
 </head>
 <body>
 
+    <nav class="nav-bar">
+        <a th:href="@{/client}" class="btn-nav">TORNA A PEL·LÍCULES</a>
+        <a href="/logout" class="btn-nav">LOGOUT</a>
+    </nav>
+
     <h1 th:text="${screening.movie.titol}">Títol Pel·lícula</h1>
-    
-    <p>Data i hora: <span th:text="${#temporals.format(screening.screeningDateTime, 'dd/MM/yyyy HH:mm')}"></span></p>
-    
-    <p>Sala: <span th:text="${screening.room.name}"></span></p>
+    <p style="color: var(--text-gray)">
+         <span th:text="${screening.room.name}"></span> | 
+         <span th:text="${#temporals.format(screening.screeningDateTime, 'dd/MM/yyyy HH:mm')}"></span>
+    </p>
 
-   
+    <div style="width: 100%; max-width: 800px; margin-top: 30px;">
+        <div class="screen-text">PANTALLA</div>
+        <div class="screen"></div>
 
-    <h3>Selecciona les teves butaques:</h3>
+        <form th:action="@{/client/reserva/confirmar}" method="post">
+            <input type="hidden" name="screeningId" th:value="${screening.id}" />
 
-    <form th:action="@{/client/reserva/confirmar}" method="post">
-        <input type="hidden" name="screeningId" th:value="${screening.id}" />
-
-        <div class="grid-container">
-            <div th:each="seat : ${screening.room.seats}" class="seat-item">
-                <input type="checkbox" 
-                       name="seientsSeleccionats" 
-                       th:value="${seat.id}" 
-                       th:id="'seat-' + ${seat.id}"
-                       th:checked="${selectedSeats.seats != null and selectedSeats.seats.contains(seat.id)}" 
-                      
-                       th:disabled="${!seat.active}" />
-                       
-                <label th:for="'seat-' + ${seat.id}" th:text="${seat.id}"></label>
+            <div class="grid-container">
+                <div th:each="seat : ${screening.room.seats}" class="seat-item">
+                    <input type="checkbox" 
+                           name="seientsSeleccionats" 
+                           th:value="${seat.id}" 
+                           th:id="'seat-' + ${seat.id}"
+                           th:checked="${selectedSeats != null and selectedSeats.seats != null and selectedSeats.seats.contains(seat.id)}" 
+                           
+                           th:disabled="${occupiedSeatIds.contains(seat.id) || !seat.active}" />
+                           
+                    <label th:for="'seat-' + ${seat.id}" th:text="${seat.id}"></label>
+                </div>
             </div>
-        </div>
-        <button type="submit" 
-            th:formaction="@{/client/reserva/afegir}" 
-            style="background-color: #4CAF50; color: white; padding: 10px 20px; cursor: pointer;">
-        Afegir al carret
-    </button>
 
-    <button type="submit" 
-            style="padding: 10px 20px; cursor: pointer;">
-        Confirmar selecció
-    </button>
-    </form>
+            <div class="action-buttons">
+                <button type="submit" th:formaction="@{/client/reserva/afegir}" class="btn btn-cart">
+                     Afegir al carret
+                </button>
+
+                <button type="submit" class="btn btn-confirm">
+                     Confirmar selecció
+                </button>
+            </div>
+        </form>
+    </div>
 
 </body>
 </html>

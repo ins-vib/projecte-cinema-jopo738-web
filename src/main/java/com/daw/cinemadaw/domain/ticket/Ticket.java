@@ -3,28 +3,37 @@ package com.daw.cinemadaw.domain.ticket;
 import com.daw.cinemadaw.domain.cinema.Screening;
 import com.daw.cinemadaw.domain.cinema.Seat;
 
+import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
+import jakarta.persistence.JoinColumn;
 import jakarta.persistence.ManyToOne;
 import jakarta.persistence.Table;
+import jakarta.persistence.UniqueConstraint;
 
 @Entity
-@Table(name="tickets")
+@Table(name="tickets",
+        uniqueConstraints=@UniqueConstraint(columnNames={"screening_id","seat_id"}))
 public class Ticket {
     @Id
     @GeneratedValue(strategy=GenerationType.IDENTITY)
     private Long id;
+
+    @Column(nullable=true)
     private Double preu;
 
     @ManyToOne
+    @JoinColumn(name="order_id",nullable=false)
     private Order order;
 
     @ManyToOne
+    @JoinColumn(name="screening_id",nullable=false)
     private Screening screening;
 
     @ManyToOne
+    @JoinColumn(name="seat_id",nullable=false)
     private Seat seat;
 
     public Long getId() {
