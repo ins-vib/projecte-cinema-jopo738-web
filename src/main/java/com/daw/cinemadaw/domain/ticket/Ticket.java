@@ -2,6 +2,7 @@ package com.daw.cinemadaw.domain.ticket;
 
 import com.daw.cinemadaw.domain.cinema.Screening;
 import com.daw.cinemadaw.domain.cinema.Seat;
+import com.daw.cinemadaw.domain.user.User;
 
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
@@ -21,6 +22,10 @@ public class Ticket {
     @GeneratedValue(strategy=GenerationType.IDENTITY)
     private Long id;
 
+
+    @ManyToOne
+    private User user; // Aquest camp ha d'existir i tenir el nom "user"
+    
     @Column(nullable=true)
     private Double preu;
 

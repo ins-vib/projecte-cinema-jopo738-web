@@ -8,4 +8,6 @@ import com.daw.cinemadaw.domain.ticket.Ticket;
 
 public interface TicketRepository extends JpaRepository<Ticket,Long> {
     List<Ticket>findByScreeningId(Long screeningId);
+
+    List<Ticket> findByUserId(Long userId);
 }

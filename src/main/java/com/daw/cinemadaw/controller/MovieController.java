@@ -21,6 +21,8 @@ import com.daw.cinemadaw.DTO.SeatsListDTO;
 import com.daw.cinemadaw.domain.cinema.Movie;
 import com.daw.cinemadaw.domain.cinema.Screening;
 import com.daw.cinemadaw.domain.cinema.Seat;
+import com.daw.cinemadaw.domain.ticket.Ticket;
+import com.daw.cinemadaw.domain.user.User;
 import com.daw.cinemadaw.repository.MovieRepository;
 import com.daw.cinemadaw.repository.ScreeningRepository;
 import com.daw.cinemadaw.repository.SeatRepository;
@@ -314,6 +316,24 @@ public String veureCarret(HttpSession session, Model model) {
     model.addAttribute("total", totalGeneral);
     
     return "client/carret";
+}
+
+
+@GetMapping("/client/les-meves-comandes")
+public String veureComandesPropies(Model model, java.security.Principal principal) {
+    String username = principal.getName();
+    
+    // 2. Busquem l'objecte usuari complet per saber el seu ID
+    // Necessitaràs tenir injectat el UserRepository
+    User usuari = userRepository.findByUsername(username); 
+    
+    // 3. Cridem al repositori fent servir l'ID de l'usuari trobat
+    List<Ticket> comandesPropies = ticketRepository.findByUserId(usuari.getId());
+    
+    // 4. Ho passem a la vista
+    model.addAttribute("comandes", comandesPropies);
+    
+    return "client/llista-comandes";
 }
 
 
