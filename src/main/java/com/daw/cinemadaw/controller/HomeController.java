@@ -185,7 +185,7 @@ private OrderRepository orderRepository;
         User user= userRepository.findByUsername(username).orElse(null);
 
         if(user != null){
-            List<Order>comandes=orderRepository.findAll();
+            List<Order>comandes=orderRepository.findByUserId(user.getId());
             model.addAttribute("comandes",comandes);
         }
 
