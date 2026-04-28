@@ -1,36 +1,132 @@
 <!DOCTYPE html>
 <html xmlns:th="http://www.thymeleaf.org">
-
 <body>
 
 <div th:replace="~{layout :: layout(~{::content})}">
-
     <div th:fragment="content">
 
-        <h2><strong>CREAR CINEMA:</strong></h2>
-        <form th:action="@{/cinema/create}" th:object="${cinema}" method="post">
-            
-            <label>Nom:</label><br>
-            <input type="text" th:field="*{name}"/><br><br>
-            <div th:if="${#fields.hasErrors('name')}" th:errors="*{name}"></div>
+        <style>
+            /* Centrat de la caixa de formulari */
+            .form-container {
+                display: flex;
+                justify-content: center;
+                align-items: flex-start;
+                min-height: 80vh;
+                padding-top: 40px;
+            }
 
-            <label>Adreça:</label><br>
-            <input type="text" th:field="*{address}"/><br><br>
-            <div th:if="${#fields.hasErrors('address')}" th:errors="*{address}"></div>
+            .form-box {
+                background-color: #1a1a1a;
+                padding: 40px;
+                border-radius: 12px;
+                width: 100%;
+                max-width: 450px;
+                border: 1px solid #333;
+                color: white;
+                box-shadow: 0 10px 30px rgba(0,0,0,0.8);
+            }
 
-            <label>Ciutat:</label><br>
-            <input type="text"th:field="*{city}"/><br><br>
-            <div th:if="${#fields.hasErrors('city')}" th:errors="*{city}"></div>
+            h2 { 
+                color: #e50914; 
+                text-transform: uppercase; 
+                margin-bottom: 30px; 
+                border-bottom: 2px solid #e50914; 
+                padding-bottom: 10px;
+                font-size: 1.5rem;
+                letter-spacing: 1px;
+            }
 
-            <label>Codi Postal:</label><br>
-            <input type="text"th:field="*{postalCode}"/><br><br>
-            <div th:if="${#fields.hasErrors('postalCode')}" th:errors="*{postalCode}"></div>
+            label { 
+                color: #999; 
+                font-weight: bold; 
+                text-transform: uppercase; 
+                font-size: 0.75rem; 
+                display: block; 
+                margin-bottom: 8px; 
+            }
 
-            <button type="submit">Guardar</button>
+            input[type="text"] { 
+                width: 100%; 
+                background-color: #2b2b2b; 
+                border: 1px solid #444; 
+                color: white; 
+                padding: 12px 15px; 
+                margin-bottom: 5px; 
+                border-radius: 6px; 
+                box-sizing: border-box; 
+                font-size: 1rem;
+                transition: all 0.3s ease;
+            }
 
-        </form>
+            input[type="text"]:focus { 
+                border-color: #e50914; 
+                outline: none; 
+                background-color: #333;
+                box-shadow: 0 0 8px rgba(229, 9, 20, 0.2);
+            }
+
+            button { 
+                background-color: #e50914; 
+                color: white; 
+                border: none; 
+                padding: 15px; 
+                width: 100%; 
+                font-weight: bold; 
+                text-transform: uppercase; 
+                cursor: pointer; 
+                border-radius: 6px; 
+                margin-top: 20px;
+                font-size: 1rem;
+                transition: background 0.3s, transform 0.2s;
+            }
+
+            button:hover { 
+                background-color: #b20710; 
+                transform: translateY(-2px);
+            }
+
+            button:active {
+                transform: translateY(0);
+            }
+
+            .error-msg {
+                color: #ff4d4d;
+                font-size: 0.8rem;
+                font-weight: normal;
+                display: block;
+                margin-bottom: 15px;
+                margin-top: 4px;
+                font-style: italic;
+            }
+        </style>
+
+        <div class="form-container">
+            <div class="form-box">
+                <h2>CREAR CINEMA:</h2>
+                <form th:action="@{/cinema/create}" th:object="${cinema}" method="post">
+                    
+                    <label>Nom:</label>
+                    <input type="text" th:field="*{name}"/>
+                    <div class="error-msg" th:if="${#fields.hasErrors('name')}" th:errors="*{name}"></div>
+
+                    <label>Adreça:</label>
+                    <input type="text" th:field="*{address}"/>
+                    <div class="error-msg" th:if="${#fields.hasErrors('address')}" th:errors="*{address}"></div>
+
+                    <label>Ciutat:</label>
+                    <input type="text" th:field="*{city}" />
+                    <div class="error-msg" th:if="${#fields.hasErrors('city')}" th:errors="*{city}"></div>
+
+                    <label>Codi Postal:</label>
+                    <input type="text" th:field="*{postalCode}" />
+                    <div class="error-msg" th:if="${#fields.hasErrors('postalCode')}" th:errors="*{postalCode}"></div>
+
+                    <button type="submit">Guardar Cinema</button>
+                </form>
+            </div>
+        </div>
 
     </div>
 </div>
-    </body>
+</body>
 </html>

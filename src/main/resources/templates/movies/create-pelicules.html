@@ -1,48 +1,143 @@
 <!DOCTYPE html>
 <html xmlns:th="http://www.thymeleaf.org">
-
 <body>
 
 <div th:replace="~{layout :: layout(~{::content})}">
-
     <div th:fragment="content">
 
-        <h2><strong>CREAR CINEMA:</strong></h2>
-        <form th:action="@{/pelicula/create}" th:object="${pelicula}" method="post">
-            
-            <label>Títol:</label><br>
-            <input type="text" th:field="*{títol}"/><br><br>
-            <div th:if="${#fields.hasErrors('títol')}" th:errors="*{títol}"></div>
+        <style>
+            .form-box {
+                background-color: #1a1a1a;
+                padding: 30px;
+                border-radius: 8px;
+                max-width: 500px;
+                border: 1px solid #333;
+                color: white;
+                box-shadow: 0 4px 15px rgba(0,0,0,0.5);
+                margin-top: 20px;
+            }
 
+            h2 { 
+                color: #e50914; 
+                text-transform: uppercase; 
+                margin-bottom: 25px; 
+                border-bottom: 2px solid #333; 
+                padding-bottom: 10px; 
+            }
 
-            <label>Durada (minuts):</label><br>
-            <input type="text" th:field="*{durada}"/><br><br>
-            <!-- <div th:if="${#fields.hasErrors('durada')}" th:errors="*{durada}"></div> -->
+            label { 
+                color: #e50914; 
+                font-weight: bold; 
+                text-transform: uppercase; 
+                font-size: 0.85rem; 
+                display: block; 
+                margin-bottom: 5px; 
+            }
 
+            input[type="text"], 
+            input[type="number"],
+            input[type="date"],
+            textarea { 
+                width: 100%; 
+                background-color: #333; 
+                border: 1px solid #444; 
+                color: white; 
+                padding: 12px; 
+                border-radius: 4px; 
+                box-sizing: border-box; 
+                font-size: 1rem;
+                font-family: inherit;
+            }
 
-            <label>Gènere:</label><br>
-            <input type="text"th:field="*{genere}"/><br><br>
-            <div th:if="${#fields.hasErrors('genere')}" th:errors="*{genere}"></div>
+            textarea {
+                min-height: 100px;
+                resize: vertical;
+            }
 
+            input:focus, textarea:focus { 
+                border-color: #e50914; 
+                outline: none; 
+                background-color: #3d3d3d;
+            }
 
-            <label>Descripció / sinopsi:</label><br>
-            <input type="text"th:field="*{descripcio}"/><br><br>
-            <div th:if="${#fields.hasErrors('descripcio')}" th:errors="*{descripcio}"></div>
+            button { 
+                background-color: #e50914; 
+                color: white; 
+                border: none; 
+                padding: 14px; 
+                width: 100%; 
+                font-weight: bold; 
+                text-transform: uppercase; 
+                cursor: pointer; 
+                border-radius: 4px; 
+                margin-top: 20px;
+                transition: background 0.3s;
+            }
 
+            button:hover { 
+                background-color: #b20710; 
+            }
 
-            <label>Data d'estrena:</label><br>
-            <input type="date"th:field="*{data_estrena}"/><br><br>
-            <!-- <div th:if="${#fields.hasErrors('data_estrena')}" th:errors="*{data_estrena}"></div> -->
+            .error-text {
+                color: #ff4d4d;
+                font-size: 0.8rem;
+                margin-top: 5px;
+                margin-bottom: 15px;
+                font-weight: bold;
+                display: block;
+            }
 
+            .spacer {
+                margin-bottom: 20px;
+            }
 
+            /* Ajust per a la icona del calendari en Chrome/Edge */
+            input[type="date"]::-webkit-calendar-picker-indicator {
+                filter: invert(1);
+                cursor: pointer;
+            }
+        </style>
 
-            <button type="submit">Guardar</button>
+        <div class="form-box">
+            <h2>CREAR PEL·LÍCULA:</h2>
+            <form th:action="@{/pelicula/create}" th:object="${pelicula}" method="post">
+                
+                <div class="spacer">
+                    <label>Títol:</label>
+                    <input type="text" th:field="*{titol}" />
+                    <span class="error-text" th:if="${#fields.hasErrors('titol')}" th:errors="*{titol}"></span>
+                </div>
 
-        </form>
+                <div class="spacer">
+                    <label>Durada (minuts):</label>
+                    <input type="number" th:field="*{durada}" required/>
+                    <span class="error-text" th:if="${#fields.hasErrors('durada')}" th:errors="*{durada}"></span>
+                </div>
+
+                <div class="spacer">
+                    <label>Gènere:</label>
+                    <input type="text" th:field="*{genere}" />
+                    <span class="error-text" th:if="${#fields.hasErrors('genere')}" th:errors="*{genere}"></span>
+                </div>
+
+                <div class="spacer">
+                    <label>Descripció / sinopsi:</label>
+                    <textarea th:field="*{descripcio}" ></textarea>
+                    <span class="error-text" th:if="${#fields.hasErrors('descripcio')}" th:errors="*{descripcio}"></span>
+                </div>
+
+                <div class="spacer">
+                    <label>Data d'estrena:</label>
+                    <input type="date" th:field="*{data_estrena}" required/>
+                    <span class="error-text" th:if="${#fields.hasErrors('data_estrena')}" th:errors="*{data_estrena}"></span>
+                </div>
+
+                <button type="submit">Guardar Pel·lícula</button>
+            </form>
+        </div>
 
     </div>
 </div>
 
-    </body>
-    
+</body>
 </html>

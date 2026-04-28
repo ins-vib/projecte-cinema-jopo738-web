@@ -1,21 +1,152 @@
-<form th:action="@{/login}" method="post">
-    <u><h1>INICIA SESSIÓ:</h1></u>
-    
-    <input type="text" name="username"/>
-    <input type="password" name="password"/>
-    <button>Entrar</button>
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Inicia Sessió - CineApp</title>
+    <style>
+        :root {
+            --primary: #e50914;
+            --dark-bg: #141414;
+            --card-bg: #222222;
+            --text-light: #ffffff;
+            --text-gray: #b3b3b3;
+            --input-bg: #333333;
+        }
 
-    <nav>
-                 
-            <strong><p>si no tens un compte pots:</p><a th:href="@{/registrar}">REGISTRAR-SE</a>
-    
-    </form>
-       
-    </nav>
+        body {
+            font-family: 'Helvetica Neue', Helvetica, Arial, sans-serif;
+            background-color: var(--dark-bg);
+            color: var(--text-light);
+            margin: 0;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+        }
 
-    <nav>
-                 
-            <strong><p>ves a la pantalla d'inici:</p></strong><a th:href="@{/}"> INICI</a>
-       
-    </nav>
-</form>
+        /* CONTENIDOR DEL FORMULARI */
+        .login-card {
+            background-color: rgba(0, 0, 0, 0.75);
+            padding: 60px;
+            border-radius: 8px;
+            width: 100%;
+            max-width: 450px;
+            box-sizing: border-box;
+            box-shadow: 0 10px 25px rgba(0,0,0,0.5);
+        }
+
+        h1 {
+            font-size: 2rem;
+            margin-bottom: 28px;
+            font-weight: bold;
+        }
+
+        /* ESTILS DELS INPUTS */
+        .form-group {
+            margin-bottom: 20px;
+        }
+
+        input[type="text"], 
+        input[type="password"] {
+            width: 100%;
+            padding: 14px;
+            border: none;
+            border-radius: 4px;
+            background-color: var(--input-bg);
+            color: white;
+            font-size: 1rem;
+            box-sizing: border-box;
+            outline: none;
+            transition: background 0.2s;
+        }
+
+        input:focus {
+            background-color: #454545;
+        }
+
+        /* BOTÓ ENTRAR */
+        .btn-login {
+            width: 100%;
+            padding: 16px;
+            background-color: var(--primary);
+            color: white;
+            border: none;
+            border-radius: 4px;
+            font-size: 1rem;
+            font-weight: bold;
+            cursor: pointer;
+            margin-top: 24px;
+            transition: 0.3s;
+        }
+
+        .btn-login:hover {
+            filter: brightness(1.2);
+        }
+
+        /* SECCIÓ DE REGISTRE I NAVEGACIÓ */
+        .footer-links {
+            margin-top: 30px;
+            color: var(--text-gray);
+            font-size: 0.9rem;
+        }
+
+        .footer-links p {
+            margin: 5px 0;
+        }
+
+        .footer-links a {
+            color: white;
+            text-decoration: none;
+            font-weight: bold;
+        }
+
+        .footer-links a:hover {
+            text-decoration: underline;
+        }
+
+        .home-link {
+            display: block;
+            margin-top: 20px;
+            text-align: center;
+            font-size: 0.8rem;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            color: var(--text-gray);
+            text-decoration: none;
+        }
+        
+        .home-link:hover {
+            color: var(--primary);
+        }
+    </style>
+</head>
+<body>
+
+    <div class="login-card">
+        <h1>Inicia sessió</h1>
+
+        <form th:action="@{/login}" method="post">
+            <div class="form-group">
+                <input type="text" name="username" placeholder="Nom d'usuari" required/>
+            </div>
+            <div class="form-group">
+                <input type="password" name="password" placeholder="Contrasenya" required/>
+            </div>
+            
+            <button type="submit" class="btn-login">Entrar</button>
+        </form>
+
+        <div class="footer-links">
+            <p>Si no tens un compte, pots:</p>
+            <a th:href="@{/registrar}">REGISTRAR-SE ARA</a>
+        </div>
+
+        <a th:href="@{/}" class="home-link">Tornar a l'inici</a>
+    </div>
+
+</body>
+</html>
+
+     
+
+        

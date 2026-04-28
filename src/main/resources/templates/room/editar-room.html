@@ -7,28 +7,103 @@
 
     <div th:fragment="content">
 
-        <h2>EDITAR SALA:</h2>
-        <form th:action="@{/room/edit}" th:object="${sala}" method="post">
+        <style>
+            .form-box {
+                background-color: #1a1a1a;
+                padding: 30px;
+                border-radius: 8px;
+                max-width: 500px;
+                border: 1px solid #333;
+                color: white;
+                box-shadow: 0 4px 15px rgba(0,0,0,0.5);
+                margin-top: 20px;
+            }
 
-            <input type="hidden" th:field="*{id}"/><br><br>
-            
-            <label>Nom:</label><br>
-            <input type="text" th:field="*{name}"/><br><br>
-            
+            h2 { 
+                color: #e50914; 
+                text-transform: uppercase; 
+                margin-bottom: 25px; 
+                border-bottom: 2px solid #333; 
+                padding-bottom: 10px; 
+            }
 
-            <label>Capacitat:</label><br>
-            <input type="number" th:field="*{capacity}"/><br><br>
+            label { 
+                color: #e50914; 
+                font-weight: bold; 
+                text-transform: uppercase; 
+                font-size: 0.85rem; 
+                display: block; 
+                margin-bottom: 5px; 
+            }
 
-            
-            
+            /* Estil per a inputs de text i número */
+            input[type="text"], 
+            input[type="number"] { 
+                width: 100%; 
+                background-color: #333; 
+                border: 1px solid #444; 
+                color: white; 
+                padding: 12px; 
+                margin-bottom: 20px; 
+                border-radius: 4px; 
+                box-sizing: border-box; 
+            }
 
-            
+            input:focus { 
+                border-color: #e50914; 
+                outline: none; 
+                background-color: #3d3d3d;
+            }
 
-            <button type="submit">Guardar</button>
+            button { 
+                background-color: #e50914; 
+                color: white; 
+                border: none; 
+                padding: 14px; 
+                width: 100%; 
+                font-weight: bold; 
+                text-transform: uppercase; 
+                cursor: pointer; 
+                border-radius: 4px; 
+                margin-top: 10px;
+                transition: background 0.3s;
+            }
 
-        </form>
+            button:hover { 
+                background-color: #b20710; 
+            }
+
+            /* Estil per als missatges d'error (per si n'afegeixes més tard) */
+            .error-msg {
+                color: #ff4d4d;
+                font-size: 0.85rem;
+                font-weight: bold;
+                display: block;
+                margin-top: -15px;
+                margin-bottom: 15px;
+            }
+        </style>
+
+        <div class="form-box">
+            <h2>EDITAR SALA:</h2>
+            <form th:action="@{/room/edit}" th:object="${sala}" method="post">
+
+                <input type="hidden" th:field="*{id}"/>
+                
+                <label>Nom de la Sala:</label>
+                <input type="text" th:field="*{name}" placeholder="Ex: Sala 1, Sala IMAX..."/>
+                <div class="error-msg" th:if="${#fields.hasErrors('name')}" th:errors="*{name}"></div>
+
+                <label>Capacitat (Butaques):</label>
+                <input type="number" th:field="*{capacity}" min="1"/>
+                <div class="error-msg" th:if="${#fields.hasErrors('capacity')}" th:errors="*{capacity}"></div>
+
+                <button type="submit">Guardar Canvis</button>
+
+            </form>
+        </div>
 
     </div>
 </div>
-    </body>
+</body>
 </html>

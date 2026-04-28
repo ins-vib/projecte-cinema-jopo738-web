@@ -1,16 +1,44 @@
+
 @startuml
+skinparam actorStyle awesome
 left to right direction
 
-actor Admin
-actor Gestor
 actor Client
+actor Gestor
+actor Admin
 
-rectangle "Cinema App"{
-  Admin -- (Gestionar Cinemes)
-  Admin -- (Gestionar Sales)
-  Admin -- (Gestionar Seients)
+' Relacions d'herència: L'Admin pot fer el mateix que el Gestor,
+' i el Gestor el mateix que el Client (per provar el sistema).
+Admin --|> Gestor
+Gestor --|> Client
 
-  Gestor -- (Gestionar Screenings)
-  Gestor -- (Gestionar Pel·licules)
+rectangle "Cinema App" {
+
+    package "Gestió (Back-Office)" {
+        ' Casos d'ús exclusius d'Admin
+        Admin -- (Gestionar Cinemes)
+        Admin -- (Gestionar Sales)
+        Admin -- (Gestionar Seients)
+
+        ' Casos d'ús del Gestor (i Admin per herència)
+        Gestor -- (Gestionar Pel·lícules)
+        Gestor -- (Gestionar Screenings \n/ Projeccions)
+        
+    }
+
+    package "Client / Públic (Front-Office)" {
+        ' Casos d'ús de Client (Gestor i Admin per herència)
+        Client -- (Consultar Cartellera / Pel·lícules)
+        Client -- (Consultar Horaris i Disponibilitat)
+        Client -- (Seleccionar Seients)
+        Client -- (Comprar Entrades / Tiquets)
+        Client -- (Registrar-se / Gestionar Perfil)
+
+        ' Relacions d'inclusió i extensió per a la compra
+        
+        (Comprar Entrades / Tiquets) <.. (Aplicar Codi de Descompte) : <<extend>>
+        (Comprar Entrades / Tiquets) <.. (Pagar amb Targeta) : <<extend>>
+    }
+
 }
 @enduml

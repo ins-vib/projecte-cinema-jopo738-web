@@ -21,7 +21,7 @@ public class Movie {
     private Long id; 
     
     @NotBlank(message="El títol és obligatori")
-    @Size(min=5,max=150,message="El titol ha de tenir entre 2 i 100 caràcters")
+    @Size(min=5,max=150,message="El titol ha de tenir entre 5 i 150 caràcters")
      @Column(nullable=false, length=200)
     private String titol;  
 
@@ -31,12 +31,12 @@ public class Movie {
     private Integer durada; 
     
     @NotBlank(message="El gènere és obligatori")
-    @Size(min=5,max=150,message="El gènere ha de tenir entre 2 i 100 caràcters")
+    @Size(min=5,max=150,message="El gènere ha de tenir entre 5 i 150 caràcters")
      @Column (length=50)
     private String genere; 
     
     @NotBlank(message="La descripció és obligatoria")
-    @Size(min=5,max=150,message="La descripció ha de tenir entre 2 i 100 caràcters")
+    @Size(min=5,max=150,message="La descripció ha de tenir entre 5 i 150 caràcters")
      @Column (columnDefinition="TEXT")
     private String descripcio;  
 

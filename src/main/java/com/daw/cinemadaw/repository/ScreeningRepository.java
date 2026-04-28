@@ -17,5 +17,9 @@ List<Screening>findByMovieAndScreeningDateTimeGreaterThanEqualOrderByScreeningDa
     Movie movie,
     LocalDateTime dateTime
 );
+
+
+    void deleteByMovieId(Long movieId);
+
     }
 

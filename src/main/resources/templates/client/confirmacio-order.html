@@ -1,7 +1,99 @@
 <!DOCTYPE html>
 <html xmlns:th="http://www.thymeleaf.org">
 <head>
+    <meta charset="UTF-8">
     <title>Compra Finalitzada</title>
+    <style>
+        :root {
+            --primary: #e50914;
+            --dark-bg: #141414;
+            --card-bg: #222222;
+            --text-light: #ffffff;
+            --text-gray: #b3b3b3;
+            --success: #46d369;
+        }
+
+        body {
+            font-family: 'Helvetica Neue', Helvetica, Arial, sans-serif;
+            background-color: var(--dark-bg);
+            color: var(--text-light);
+            margin: 0;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            min-height: 100vh;
+            padding: 20px;
+        }
+
+        /* TÍTOL PRINCIPAL */
+        h1 {
+            color: var(--success);
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            margin-bottom: 20px;
+        }
+
+        /* TEXTOS DE GRÀCIES I COMANDA */
+        p {
+            font-size: 1.1rem;
+            margin: 8px 0;
+            color: var(--text-gray);
+        }
+
+        span[th\:text*="username"], 
+        strong[th\:text*="order.id"],
+        span[th\:text*="importTotal"] {
+            color: var(--text-light);
+            font-weight: bold;
+        }
+
+        /* SECCIÓ D'ENTRADES */
+        h3 {
+            margin-top: 40px;
+            border-bottom: 2px solid var(--primary);
+            padding-bottom: 10px;
+            width: 100%;
+            max-width: 400px;
+            text-align: center;
+        }
+
+        ul {
+            list-style: none;
+            padding: 0;
+            width: 100%;
+            max-width: 400px;
+        }
+
+        li {
+            background-color: var(--card-bg);
+            margin-bottom: 10px;
+            padding: 15px;
+            border-radius: 4px;
+            display: flex;
+            justify-content: space-between;
+            border-left: 5px solid var(--primary);
+        }
+
+        /* ENLLAÇ TORNAR */
+        a {
+            display: inline-block;
+            margin-top: 30px;
+            padding: 12px 25px;
+            background-color: var(--primary);
+            color: white;
+            text-decoration: none;
+            font-weight: bold;
+            border-radius: 4px;
+            transition: 0.3s;
+            text-transform: uppercase;
+        }
+
+        a:hover {
+            filter: brightness(1.2);
+            transform: scale(1.05);
+        }
+    </style>
 </head>
 <body>
     <h1> Compra realitzada amb èxit!</h1>

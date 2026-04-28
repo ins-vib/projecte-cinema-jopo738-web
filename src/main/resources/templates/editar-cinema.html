@@ -1,39 +1,69 @@
 <!DOCTYPE html>
 <html xmlns:th="http://www.thymeleaf.org">
-
 <body>
 
 <div th:replace="~{layout :: layout(~{::content})}">
-
     <div th:fragment="content">
 
-        <h2>EDITAR EL CINEMA:</h2>
-        <form th:action="@{/cinema/edit}" th:object="${cinema}" method="post">
-
-            <input type="text" th:field="*{id}" hidden/><br><br>
+        <style>
+            .form-box {
+                background-color: #1a1a1a;
+                padding: 30px;
+                border-radius: 8px;
+                max-width: 500px;
+                border: 1px solid #333;
+                color: white;
+            }
+            h2 { color: #e50914; text-transform: uppercase; margin-bottom: 20px; border-bottom: 2px solid #333; padding-bottom: 10px; }
+            label { color: #e50914; font-weight: bold; text-transform: uppercase; font-size: 0.9rem; display: block; margin-bottom: 5px; }
+            input { 
+                width: 100%; background-color: #333; border: 1px solid #444; color: white; 
+                padding: 10px; margin-bottom: 5px; border-radius: 4px; box-sizing: border-box; 
+            }
+            input:focus { border-color: #e50914; outline: none; }
+            button { 
+                background-color: #e50914; color: white; border: none; padding: 12px; 
+                width: 100%; font-weight: bold; text-transform: uppercase; cursor: pointer; border-radius: 4px; 
+            }
+            button:hover { background-color: #b20710; }
             
-            <label>Nom:</label><br>
-            <input type="text" th:field="*{name}"/><br><br>
-            <p th:if="${#fields.hasErrors('name')}" th:errors="*{name}" style="color: red;"></p>
+            .error-msg {
+                color: #ff4d4d;
+                font-size: 0.85rem;
+                font-weight: bold;
+                display: block;
+                margin-bottom: 15px;
+            }
+        </style>
 
+        <div class="form-box">
+            <h2>EDITAR EL CINEMA:</h2>
+            <form th:action="@{/cinema/edit}" th:object="${cinema}" method="post">
 
-            <label>Adreça:</label><br>
-            <input type="text" th:field="*{address}"/><br><br>
-            <p th:if="${#fields.hasErrors('address')}" th:errors="*{address}" ></p>
+                <input type="hidden" th:field="*{id}" />
+                
+                <label>Nom:</label>
+                
+                <input type="text" th:field="*{name}"/> 
+                
+                <div class="error-msg" th:if="${#fields.hasErrors('name')}" th:errors="*{name}"></div> 
 
-            <label>Ciutat:</label><br>
-            <input type="text"th:field="*{city}"/><br><br>
-            <p th:if="${#fields.hasErrors('city')}" th:errors="*{city}" ></p>
+                <label>Adreça:</label>
+                <input type="text" th:field="*{address}"/>
+                <div class="error-msg" th:if="${#fields.hasErrors('address')}" th:errors="*{address}"></div>
 
-            <label>Codi Postal:</label><br>
-            <input type="text"th:field="*{postalCode}"/><br><br>
-            <p th:if="${#fields.hasErrors('postalCode')}" th:errors="*{postalCode}" ></p>
+                <label>Ciutat:</label>
+                <input type="text" th:field="*{city}"/>
+                <div class="error-msg" th:if="${#fields.hasErrors('city')}" th:errors="*{city}"></div>
 
-            <button type="submit">Guardar</button>
+                <label>Codi Postal:</label>
+                <input type="text" th:field="*{postalCode}"/>
+                <div class="error-msg" th:if="${#fields.hasErrors('postalCode')}" th:errors="*{postalCode}"></div>
 
-        </form>
-
+                <button type="submit">Guardar</button>
+            </form>
+        </div>
     </div>
 </div>
-    </body>
+</body>
 </html>

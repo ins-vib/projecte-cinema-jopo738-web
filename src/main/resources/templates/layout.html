@@ -1,28 +1,88 @@
 <!DOCTYPE html>
 <html xmlns:th="http://www.thymeleaf.org">
-<!-- posar css -->
 <body>
 
 <div th:fragment="layout(content)">
+    <style>
+        /* Fons de la pàgina */
+        body {
+            margin: 0;
+            padding: 0;
+            background-color: #111111 !important;
+            color: #ffffff !important;
+            font-family: Arial, sans-serif;
+        }
+
+        /* Estil del Header */
+        header {
+            background-color: #000000;
+            padding: 15px 40px;
+            display: flex !important; /* Força el mode flex */
+            justify-content: space-between !important; /* Separa títol de botons */
+            align-items: center;
+            border-bottom: 2px solid #e50914; /* La teva línia vermella */
+        }
+
+        header h1 {
+            margin: 0;
+            font-size: 1.4rem;
+            color: #ffffff;
+        }
+
+        /* Estil dels Botons a la dreta */
+        nav {
+            display: flex !important;
+            gap: 20px;
+        }
+
+        nav a {
+            color: #ffffff !important;
+            text-decoration: none !important; /* Treu el subratllat */
+            font-weight: bold;
+            font-size: 0.85rem;
+            text-transform: uppercase;
+            padding: 8px 12px;
+            border-radius: 4px;
+            transition: 0.3s;
+        }
+
+        /* Color vermell quan passes el ratolí */
+        nav a:hover {
+            background-color: #e50914;
+        }
+
+        main {
+            padding: 30px;
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+
+        footer {
+            text-align: center;
+            padding: 20px;
+            border-top: 1px solid #333;
+            color: #666;
+        }
+
+        /* Amaguem els HR lletjos */
+        hr { display: none; }
+    </style>
 
     <header>
         <h1>Aplicació Cinema</h1>
         <nav>
-            <a href="/">Home</a>
-            <a href="/movies">Movies</a>
+            <a href="/">HOME</a>
+            <a href="/movies">PEL·LICULES</a>
+            <a href="/admin">INICI</a>
         </nav>
-        <hr>
     </header>
 
     <main th:replace="${content}">
-        <!-- aquí es col·locarà el contingut de cada pàgina -->
-    </main>
+        </main>
 
     <footer>
-        <hr>
         <p>DAW1 2026</p>
     </footer>
-
 </div>
 
 </body>

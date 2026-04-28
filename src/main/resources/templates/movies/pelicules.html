@@ -7,66 +7,119 @@
 
     <div th:fragment="content">
 
-<h1>Llista Pelicules</h1>
-<a th:href="@{/pelicula/create}">Afegeix nova pelicula</a>
+        <style>
+            h1 {
+                color: #e50914;
+                text-transform: uppercase;
+                letter-spacing: 2px;
+                border-bottom: 2px solid #333;
+                padding-bottom: 10px;
+                margin-bottom: 20px;
+            }
 
-<!-- per mostrar en fomrat taula -->
+            /* Botó Afegeix Pel·lícula */
+            .btn-create {
+                display: inline-block;
+                background-color: #e50914;
+                color: white;
+                padding: 10px 20px;
+                text-decoration: none;
+                font-weight: bold;
+                border-radius: 4px;
+                text-transform: uppercase;
+                font-size: 0.8rem;
+                margin-bottom: 25px;
+                transition: background 0.3s;
+            }
+            .btn-create:hover { background-color: #b20710; }
 
-<table>
-    <thead>
-        <tr>
-            <th>
-                Títol
-            </th>
-            <th>
-                Gènere
-            </th>
-            <th>
-                Durada
-            </th>
-            <th>
-                Data d'estrena
-            </th>
-            <th>
-                Accions
-            </th>
-        </tr>
-    </thead>
-    <tbody>
-        <tr th:each="peli : ${llista}">
-            <td th:text="${peli.títol}">Títol de la peli</td>
-            <td th:text="${peli.genere}">Acció</td>
-            <td th:text="${peli.durada}">120 min</td>
-            <td th:text="${peli.data_estrena}">2026-03-05</td>
+            /* Estils de la Taula */
+            table {
+                width: 100%;
+                border-collapse: collapse;
+                background-color: #1a1a1a;
+                color: white;
+                border-radius: 8px;
+                overflow: hidden; /* Perquè es vegin les puntes arrodonides */
+                box-shadow: 0 4px 15px rgba(0,0,0,0.5);
+            }
 
-            <td>
-                <a th:href="@{/pelicula/{id}(id=${peli.id})}">
-                veure detall
-                </a>
-                <a th:href="@{/pelicula/update/{id}(id=${peli.id})}">
-                editar
-                </a>
-                <a th:href="@{/pelicula/delete/{id}(id=${peli.id})}">
-                eliminar
-                </a>
-                <a th:href="@{/movies/{id}/screenings(id=${peli.id})}">Projeccions</a>
-    
-            </td>
-        </tr>
-    </tbody>
-</table>
+            th {
+                background-color: #2b2b2b;
+                color: #e50914;
+                text-transform: uppercase;
+                font-size: 0.85rem;
+                padding: 15px;
+                text-align: left;
+                border-bottom: 2px solid #333;
+            }
+
+            td {
+                padding: 12px 15px;
+                border-bottom: 1px solid #333;
+                font-size: 0.9rem;
+            }
+
+            /* Efecte en passar el ratolí per la fila */
+            tr:hover {
+                background-color: #252525;
+            }
+
+            /* Estils dels enllaços d'accions */
+            .actions a {
+                text-decoration: none;
+                font-size: 0.75rem;
+                font-weight: bold;
+                text-transform: uppercase;
+                margin-right: 10px;
+                padding: 5px 8px;
+                border-radius: 3px;
+                transition: all 0.2s;
+            }
+
+            .btn-view { color: #5bc0de; border: 1px solid #5bc0de; }
+            .btn-view:hover { background: #5bc0de; color: black; }
+
+            .btn-edit { color: #f0ad4e; border: 1px solid #f0ad4e; }
+            .btn-edit:hover { background: #f0ad4e; color: black; }
+
+            .btn-delete { color: #e50914; border: 1px solid #e50914; }
+            .btn-delete:hover { background: #e50914; color: white; }
+
+            .btn-screen { color: #ffffff; border: 1px solid #ffffff; opacity: 0.7; }
+            .btn-screen:hover { background: #ffffff; color: black; opacity: 1; }
+        </style>
+
+        <h1>Llista Pelicules</h1>
+        <a th:href="@{/pelicula/create}" class="btn-create">Afegeix nova pelicula</a>
+
+        <table>
+            <thead>
+                <tr>
+                    <th>Títol</th>
+                    <th>Gènere</th>
+                    <th>Durada</th>
+                    <th>Data d'estrena</th>
+                    <th>Accions</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr th:each="peli : ${llista}">
+                    <td th:text="${peli.titol}">Títol de la peli</td>
+                    <td th:text="${peli.genere}">Acció</td>
+                    <td th:text="${peli.durada + ' min'}">120 min</td>
+                    <td th:text="${peli.data_estrena}">2026-03-05</td>
+
+                    <td class="actions">
+                        <a th:href="@{/pelicula/{id}(id=${peli.id})}" class="btn-view">veure</a>
+                        <a th:href="@{/pelicula/update/{id}(id=${peli.id})}" class="btn-edit">editar</a>
+                        <a th:href="@{/pelicula/delete/{id}(id=${peli.id})}" class="btn-delete">eliminar</a>
+                        <a th:href="@{/movies/{id}/screenings(id=${peli.id})}" class="btn-screen">Projeccions</a>
+                    </td>
+                </tr>
+            </tbody>
+        </table>
     </div>
 </div>
 </body>
 </html>
-
-
-
-
-
-
-<!-- L'Iterador (th:each): Si a la teva base de dades tens 3 cinemes, Thymeleaf crearà tres blocs <div> sencers.
-
-L'Accés a Dades: Quan escrius ${cinema.name}, Thymeleaf crida internament al mètode getName() de la teva classe Java Cinema.
-
-El Resultat Final: El navegador no veurà mai el codi th:text. Rebrà un HTML pur amb els noms i ciutats ja escrits, com per exemple: <h3>Cines Full</h3> <p>Cornellà</p>. -->

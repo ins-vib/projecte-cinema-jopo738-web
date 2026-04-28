@@ -7,41 +7,101 @@
 
     <div th:fragment="content">
 
-        <h2><strong>DETALLS SALA:</strong></h2>
-        <!-- <header>
-           <h1>cinema</h1>
-           <nav>
-            <a href="/cinemes">cinemes</a>
-            <a href="#">contacte</a>
-           </nav> 
-        </header> -->
-        <section>
-            <strong>Nom:</strong><p th:text="${room.name}">Nom:</p>
-            <strong>Capacitat:</strong><p th:text="${room.capacity}">Capacitat:</p>
-            <a th:href="@{/cinema/{id}(id=${room.cinema.id})}">Back</a>
+        <style>
+            .room-detail-card {
+                background-color: #1a1a1a;
+                padding: 40px;
+                border-radius: 12px;
+                max-width: 600px;
+                border: 1px solid #333;
+                box-shadow: 0 8px 30px rgba(0,0,0,0.7);
+                margin: 20px auto; /* Centrat a la pantalla */
+            }
+
+            h2 {
+                color: #e50914;
+                text-transform: uppercase;
+                letter-spacing: 2px;
+                margin-bottom: 30px;
+                border-bottom: 2px solid #e50914;
+                display: inline-block;
+                padding-bottom: 5px;
+            }
+
+            .detail-row {
+                margin-bottom: 25px;
+                display: flex;
+                align-items: center;
+                border-bottom: 1px solid #252525;
+                padding-bottom: 15px;
+            }
+
+            .detail-row strong {
+                color: #e50914;
+                text-transform: uppercase;
+                font-size: 0.9rem;
+                width: 150px;
+                display: inline-block;
+            }
+
+            .detail-row p {
+                color: #ffffff;
+                margin: 0;
+                font-size: 1.2rem;
+                font-weight: bold;
+            }
+
+            /* Icona decorativa per a la capacitat */
+            .capacity-badge {
+                background-color: #333;
+                color: #e50914;
+                padding: 5px 15px;
+                border-radius: 20px;
+                font-size: 1rem;
+                border: 1px solid #444;
+            }
+
+            .btn-back {
+                display: inline-block;
+                margin-top: 20px;
+                color: #888;
+                text-decoration: none;
+                font-size: 0.9rem;
+                text-transform: uppercase;
+                transition: color 0.3s, transform 0.2s;
+            }
+
+            .btn-back:hover {
+                color: #e50914;
+                transform: translateX(-5px);
+            }
+        </style>
+
+        <div class="room-detail-card">
+            <h2>DETALLS SALA:</h2>
             
+            <section>
+                <div class="detail-row">
+                    <strong>Nom:</strong>
+                    <p th:text="${room.name}">Nom de la sala</p>
+                </div>
 
-        </section>
-        <!-- <section>
-            <h2><strong>SALES</strong></h2>
-            <ul>
-                <li th:each="sala: ${cinema.rooms}">
-                    <strong>Nom de la sala:</strong><p th:text="${sala.name}"></p>   
-                     
-                </li>
-                <li th:each="sala: ${cinema.rooms}">
-                     
-                    <strong>Capacitat:</strong> <p th:text="${sala.capacity}">Capacitat</p> 
-                </li>
-                <li th:each="sala: ${cinema.rooms}">
-                     
-                    <strong>ID:</strong> <p th:text="${sala.id}">ID</p> 
-                </li>
-            </ul>
+                <div class="detail-row">
+                    <strong>Capacitat:</strong>
+                    <p>
+                        <span class="capacity-badge">
+                            <span th:text="${room.capacity}">0</span> butaques
+                        </span>
+                    </p>
+                </div>
 
-        </section> -->
+                <a th:href="@{/cinema/{id}(id=${room.cinema.id})}" class="btn-back">
+                    Tornar al Cinema
+                </a>
+            </section>
+        </div>
 
     </div>
 </div>
-    </body>
+</body>
 </html>

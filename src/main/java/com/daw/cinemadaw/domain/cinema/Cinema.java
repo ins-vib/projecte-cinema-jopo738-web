@@ -22,22 +22,26 @@ public class Cinema {
     @GeneratedValue(strategy=GenerationType.IDENTITY) // Genera automàticament l'ID al inserir un nou registre
     private Long id; // el Long permet guardar registres molts llargs
     
-    @NotBlank(message="La ciutat és obligatoria")
+    @NotBlank(message="El nom és obligatori")
     @Size(min=2,max=100,message="El cinema ha de tenir entre 2 i 100 caràcters")
     @Column // si només posem column vol dir que aquest atribut (el de sota) és una columna, al costat del column podem posar el nom que volem per aquella columna
     private String name;  // nom del cinema
 
-    @NotBlank(message="La ciutat és obligatoria")
-    @Size(min=5,max=150,message="L'adreça ha de tenir entre 2 i 100 caràcters")
+    @NotBlank(message="adreça és obligatoria")
+    @Size(min=5,max=150,message="adreça ha de tenir entre 2 i 100 caràcters")
     @Column
     private String address;  // adreça
+
+//     @NotBlank(message = "L'adreça és obligatòria") 
+// @Size(min = 2, max = 100, message = "L'adreça ha de tenir entre 2 i 100 caràcters")
+// private String address;
 
     @NotBlank(message="La ciutat és obligatoria")
     @Size(min=2,max=80,message="La ciutat ha de tenir entre 2 i 100 caràcters")
     @Column
     private String city; //ciutat
 
-    @NotBlank(message="La ciutat és obligatoria")  
+    @NotBlank(message="El codi postal és obligatori")  
     @Pattern(regexp="\\d{5}",message="El codi postal del cinema ha de ser un número de 5 digits") 
     @Column
     private String postalCode;  // codi postal 

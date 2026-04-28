@@ -7,43 +7,123 @@
 
     <div th:fragment="content">
 
-        <h2>CREAR SEAT:</h2>
-        <form th:action="@{/seats/room/{id}/save(id=${roomId})}" th:object="${seat}" method="post">
+        <style>
+            .form-box {
+                background-color: #1a1a1a;
+                padding: 30px;
+                border-radius: 8px;
+                max-width: 500px;
+                border: 1px solid #333;
+                color: white;
+                box-shadow: 0 4px 15px rgba(0,0,0,0.5);
+                margin-top: 20px;
+            }
 
-           
+            h2 { 
+                color: #e50914; 
+                text-transform: uppercase; 
+                margin-bottom: 25px; 
+                border-bottom: 2px solid #333; 
+                padding-bottom: 10px; 
+            }
 
-            
-            
-            <label>Fila:</label><br>
-            <input type="number" th:field="*{seatRow}"/><br><br>
-           
+            label { 
+                color: #e50914; 
+                font-weight: bold; 
+                text-transform: uppercase; 
+                font-size: 0.85rem; 
+                display: block; 
+                margin-bottom: 5px; 
+            }
 
+            /* Estil per a inputs i select */
+            input[type="number"], 
+            select { 
+                width: 100%; 
+                background-color: #333; 
+                border: 1px solid #444; 
+                color: white; 
+                padding: 12px; 
+                margin-bottom: 20px; 
+                border-radius: 4px; 
+                box-sizing: border-box; 
+                font-size: 1rem;
+            }
 
-            <label>Posició x:</label><br>
-            <input type="number" th:field="*{posX}"/><br><br>
-            
+            input:focus, select:focus { 
+                border-color: #e50914; 
+                outline: none; 
+                background-color: #3d3d3d;
+            }
 
-            <label>Posició y:</label><br>
-            <input type="number" th:field="*{posY}"/><br><br>
-            
+            /* Estil específic per a les opcions del select */
+            select option {
+                background-color: #1a1a1a;
+                color: white;
+            }
 
-            <label>Numero:</label><br>
-            <input type="number" th:field="*{number}"/><br><br>
+            button { 
+                background-color: #e50914; 
+                color: white; 
+                border: none; 
+                padding: 14px; 
+                width: 100%; 
+                font-weight: bold; 
+                text-transform: uppercase; 
+                cursor: pointer; 
+                border-radius: 4px; 
+                margin-top: 10px;
+                transition: background 0.3s;
+            }
 
-            <label>Tipus:</label>
-            <select th:field="*{seatType}">
-                <option th:each="t : ${types}"
-                        th:value="${t}"
-                        th:text="${t}">
-                </option>
-            </select><br><br>
-          
+            button:hover { 
+                background-color: #b20710; 
+            }
 
-            <button type="submit">Guardar</button>
+            .error-msg {
+                color: #ff4d4d;
+                font-size: 0.85rem;
+                font-weight: bold;
+                display: block;
+                margin-top: -15px;
+                margin-bottom: 15px;
+            }
+        </style>
 
-        </form>
+        <div class="form-box">
+            <h2>CREAR SEAT:</h2>
+            <form th:action="@{/seats/room/{id}/save(id=${roomId})}" th:object="${seat}" method="post">
+
+                <label>Fila:</label>
+                <input type="number" th:field="*{seatRow}"/>
+                <div class="error-msg" th:if="${#fields.hasErrors('seatRow')}" th:errors="*{seatRow}"></div>
+
+                <label>Posició X (Coordenada):</label>
+                <input type="number" th:field="*{posX}"/>
+                <div class="error-msg" th:if="${#fields.hasErrors('posX')}" th:errors="*{posX}"></div>
+
+                <label>Posició Y (Coordenada):</label>
+                <input type="number" th:field="*{posY}"/>
+                <div class="error-msg" th:if="${#fields.hasErrors('posY')}" th:errors="*{posY}"></div>
+
+                <label>Número de Cadira:</label>
+                <input type="number" th:field="*{number}"/>
+                <div class="error-msg" th:if="${#fields.hasErrors('number')}" th:errors="*{number}"></div>
+
+                <label>Tipus de Seient:</label>
+                <select th:field="*{seatType}">
+                    <option th:each="t : ${types}"
+                            th:value="${t}"
+                            th:text="${t}">
+                    </option>
+                </select>
+
+                <button type="submit">Guardar</button>
+
+            </form>
+        </div>
 
     </div>
 </div>
-    </body>
+</body>
 </html>

@@ -1,110 +1,85 @@
 <!DOCTYPE html>
 <html xmlns:th="http://www.thymeleaf.org">
-
 <body>
 
 <div th:replace="~{layout :: layout(~{::content})}">
-
     <div th:fragment="content">
-        <!-- <header>
-           <h1>cinema</h1>
-           <nav>
-            <a href="/cinemes">cinemes</a>
-            <a href="#">contacte</a>
-           </nav> 
-        </header> -->
-        <!-- <section>
-            <h2><strong>DETALLS CINEMA:</strong></h2>
-            <strong>Nom ciutat:</strong><p th:text="${cinema.name}"></p>
-            <strong>Ciutat:</strong><p th:text="${cinema.city}">Ciutat:</p>
-            <strong>Adreça:</strong><p th:text="${cinema.address}">Adreça:</p>
-
-        </section>
-        <section>
-            <h2><strong>SALES:</strong></h2>
-            <a th:href="@{/room/create}">Afegeix nova sala</a>
-            <ul>
-                <li th:each="sala: ${cinema.rooms}">
-                    <strong>Nom de la sala:</strong><p th:text="${sala.name}"></p>   
-                     
-                </li>
-                <li th:each="sala: ${cinema.rooms}">
-                     
-                    <strong>Capacitat:</strong> <p th:text="${sala.capacity}">Capacitat</p> 
-                </li>
-                <li th:each="sala: ${cinema.rooms}">
-                     
-                    <strong>ID:</strong> <p th:text="${sala.id}">ID</p> 
-                </li>
-                <td>
-                <a th:href="@{/room/{id}(id=${sala.id})}">Veure detall </a>
-                <a th:href="@{/cinema/delete/{id}(id=${cinema.id})}">
-                eliminar
-                </a>
-                <a th:href="@{/cinema/update/{id}(id=${cinema.id})}">
-                editar
-                </a>
-            </td>
-            <button type="submit">Guardar</button>
-                
-            </ul>
-
-        </section> -->
-
-        <section>
-            <h2><strong>DETALLS CINEMA:</strong></h2>
-            <p><strong>Nom:</strong> <span th:text="${cinema.name}">Nom del Cinema</span></p>
-            <p><strong>Ciutat:</strong> <span th:text="${cinema.city}">Ciutat</span></p>
-            <p><strong>Adreça:</strong> <span th:text="${cinema.address}">Adreça</span></p>
-            
-            <!-- <div class="cinema-actions">
-                <a th:href="@{/cinema/update/{id}(id=${cinema.id})}">Editar Cinema</a> | 
-                <a th:href="@{/cinema/delete/{id}(id=${cinema.id})}">Eliminar Cinema</a>
-              
-            </div> -->
-        </section>
-
-        <hr>
-
-        <section>
-            <h2><strong>SALES D'AQUEST CINEMA:</strong></h2>
-            <a th:href="@{/room/create/{id}(id=${cinema.id})}">Afegeix nova sala</a>
-            
-            <ul style="margin-top: 20px;">
-                <li th:each="sala : ${cinema.rooms}">
-                    <strong>ID:</strong> <span th:text="${sala.id}">ID</span><br>
-                    <strong>Nom de la sala:</strong> <span th:text="${sala.name}">Nom Sala</span><br>
-                    <strong>Capacitat:</strong> <span th:text="${sala.capacity}">0</span> persones<br>
-                    
-                    <div style="margin-top: 8px;">
-                        <a th:href="@{/room/{id}(id=${sala.id})}">
-                            Veure detall de la sala
-                        </a>
-                    </div>
-                    <div style="margin-top: 8px;">
-                        <a th:href="@{/room/{id}/edit(id=${sala.id})}">
-                            Editar sala
-                        </a>
-                    </div>
-                    <div style="margin-top: 8px;">
-                        <a th:href="@{/room/{id}/delete(id=${sala.id})}">
-                            Eliminar sala
-                        </a>
-                    </div>
-                    <div style="margin-top: 8px;">
-                        <a th:href="@{/seats/room/{id}(id=${sala.id})}">
-                            Seats
-                        </a>
-                    </div>
-                </li>
-                <li th:if="${#lists.isEmpty(cinema.rooms)}">Aquest cinema encara no té sales.</li>
-            </ul>
-        </section>
-
-
         
+        <style>
+            .container-detall { padding: 20px; color: white; }
+            .titol-seccio { 
+                color: #e50914; 
+                text-transform: uppercase; 
+                border-bottom: 1px solid #333; 
+                padding-bottom: 10px;
+                margin-top: 30px;
+            }
+            body { background-color: #111 !important; color: white !important; }
+        h2 { color: #e50914 !important; text-transform: uppercase; }
+        header { background: black; border-bottom: 2px solid #e50914; }
+            .info-text { margin-bottom: 10px; font-size: 1.1rem; }
+            .info-text strong { color: #e50914; width: 100px; display: inline-block; }
+            
+            /* Les cards de les sales */
+            .grid-sales { 
+                display: grid; 
+                grid-template-columns: repeat(auto-fill, minmax(250px, 1fr)); 
+                gap: 20px; 
+                margin-top: 20px;
+                padding: 0;
+            }
+            .sala-card { 
+                background: #1a1a1a; 
+                border: 1px solid #333; 
+                padding: 20px; 
+                list-style: none;
+                border-left: 4px solid #e50914;
+            }
+            .btn-link { 
+                color: #ffffff; 
+                text-decoration: none; 
+                font-size: 0.8rem; 
+                background: #333; 
+                padding: 5px 10px; 
+                margin-top: 10px; 
+                display: inline-block;
+                text-transform: uppercase;
+            }
+            .btn-link:hover { background: #e50914; }
+            .btn-nou { 
+                background: #e50914; 
+                color: white; 
+                padding: 10px 15px; 
+                text-decoration: none; 
+                font-weight: bold; 
+                display: inline-block;
+            }
+        </style>
+
+        <div class="container-detall">
+            <h2 class="titol-seccio">Detalls del Cinema</h2>
+            <div class="info-text"><strong>Nom:</strong> <span th:text="${cinema.name}">Nom</span></div>
+            <div class="info-text"><strong>Ciutat:</strong> <span th:text="${cinema.city}">Ciutat</span></div>
+            <div class="info-text"><strong>Adreça:</strong> <span th:text="${cinema.address}">Adreça</span></div>
+
+            <h2 class="titol-seccio">Sales d'aquest Cinema</h2>
+            <a th:href="@{/room/create/{id}(id=${cinema.id})}" class="btn-nou">AFEGEIX NOVA SALA</a>
+            
+            <ul class="grid-sales">
+                <li class="sala-card" th:each="sala : ${cinema.rooms}">
+                    <strong style="color:white; display:block; font-size:1.2rem; margin-bottom:10px;" th:text="${sala.name}">Nom Sala</strong>
+                    <div>Capacitat: <span th:text="${sala.capacity}">0</span></div>
+                    <div style="margin-top:15px;">
+                        <a th:href="@{/room/{id}(id=${sala.id})}" class="btn-link">Detall</a>
+                        <a th:href="@{/room/{id}/edit(id=${sala.id})}" class="btn-link">Editar</a>
+                        <a th:href="@{/seats/room/{id}(id=${sala.id})}" class="btn-link" style="color:#46d369">Butaques</a>
+                    </div>
+                </li>
+                <li th:if="${#lists.isEmpty(cinema.rooms)}">No hi ha sales en aquest cinema.</li>
+            </ul>
+        </div>
 
     </div>
 </div>
-    </body>
+</body>
 </html>

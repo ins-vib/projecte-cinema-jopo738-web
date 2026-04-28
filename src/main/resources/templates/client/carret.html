@@ -1,59 +1,229 @@
 <!DOCTYPE html>
 <html xmlns:th="http://www.thymeleaf.org">
 <head>
-    <title>El meu Carret</title>
+    <meta charset="UTF-8">
+    <title>El meu Carret - CineApp</title>
     <style>
-        table { width: 100%; border-collapse: collapse; margin-top: 20px; }
-        th, td { border: 1px solid #ddd; padding: 12px; text-align: left; }
-        th { background-color: #f2f2f2; }
-        .total-box { text-align: right; margin-top: 20px; font-size: 1.5em; font-weight: bold; }
-        .btn-comprar { background-color: #4CAF50; color: white; padding: 15px 25px; border: none; cursor: pointer; }
+        :root {
+            --primary: #e50914;
+            --dark-bg: #141414;
+            --card-bg: #222222;
+            --text-light: #ffffff;
+            --text-gray: #b3b3b3;
+            --success: #4CAF50;
+        }
+
+        body {
+            font-family: 'Helvetica Neue', Helvetica, Arial, sans-serif;
+            background-color: var(--dark-bg);
+            color: var(--text-light);
+            margin: 0;
+            padding: 100px 20px 40px 20px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+        }
+
+        /* NAV BAR FIXA */
+        .nav-bar {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 70px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 0 50px;
+            background-color: #000;
+            box-sizing: border-box;
+            z-index: 1000;
+        }
+
+        .logo {
+            color: var(--primary);
+            font-size: 1.5rem;
+            font-weight: bold;
+            text-decoration: none;
+            text-transform: uppercase;
+            letter-spacing: 2px;
+        }
+
+        .btn-nav {
+            text-decoration: none;
+            padding: 8px 16px;
+            border-radius: 4px;
+            font-weight: bold;
+            color: white;
+            background-color: var(--primary);
+            font-size: 0.8rem;
+        }
+
+        h1 {
+            font-size: 2.5rem;
+            margin-bottom: 30px;
+            text-align: center;
+        }
+
+        /* CONTENIDOR PRINCIPAL */
+        .cart-container {
+            width: 100%;
+            max-width: 900px;
+            background-color: var(--card-bg);
+            padding: 40px;
+            border-radius: 10px;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.5);
+        }
+
+        /* ESTILS DE LA TAULA */
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-bottom: 30px;
+        }
+
+        th {
+            text-align: left;
+            border-bottom: 2px solid var(--primary);
+            padding: 15px;
+            color: var(--text-gray);
+            text-transform: uppercase;
+            font-size: 0.8rem;
+            letter-spacing: 1px;
+        }
+
+        td {
+            padding: 15px;
+            border-bottom: 1px solid #333;
+            font-size: 1rem;
+        }
+
+        tr:last-child td {
+            border-bottom: none;
+        }
+
+        .seat-badge {
+            background-color: #444;
+            padding: 2px 8px;
+            border-radius: 4px;
+            margin-right: 5px;
+            font-size: 0.8rem;
+        }
+
+        /* BOX FINAL */
+        .total-box {
+            text-align: right;
+            padding: 20px;
+            background-color: #2a2a2a;
+            border-radius: 5px;
+            margin-top: 20px;
+        }
+
+        .total-label {
+            color: var(--text-gray);
+            font-size: 1.2rem;
+            margin-right: 15px;
+        }
+
+        .total-amount {
+            color: var(--text-light);
+            font-size: 2rem;
+            font-weight: bold;
+        }
+
+        /* BOTONS */
+        .action-buttons {
+            margin-top: 40px;
+            display: flex;
+            justify-content: center;
+            gap: 20px;
+        }
+
+        .btn {
+            padding: 15px 30px;
+            border-radius: 5px;
+            font-weight: bold;
+            text-transform: uppercase;
+            cursor: pointer;
+            border: none;
+            transition: 0.3s;
+            text-decoration: none;
+            display: inline-block;
+            font-size: 0.9rem;
+        }
+
+        .btn-secondary {
+            background-color: transparent;
+            color: var(--text-light);
+            border: 1px solid var(--text-gray);
+        }
+
+        .btn-comprar {
+            background-color: var(--success);
+            color: white;
+        }
+
+        .btn:hover {
+            transform: translateY(-2px);
+            filter: brightness(1.2);
+        }
+
+        .empty-message {
+            text-align: center;
+            padding: 50px 0;
+            color: var(--text-gray);
+        }
     </style>
 </head>
 <body>
 
-    <h1>El meu carret de compra</h1>
+    <nav class="nav-bar">
+        
+        <a th:href="@{/client}" class="btn-nav">Tornar a Cartellera</a>
+    </nav>
 
-    <div th:if="${items.isEmpty()}">
-        <p>El teu carret està buit.</p>
-        <a th:href="@{/movies}">Tornar a la cartellera</a>
-    </div>
+    <h1>El meu carret</h1>
 
-    <div th:if="${!items.isEmpty()}">
-        <table>
-            <thead>
-                <tr>
-                    <th>Pel·lícula</th>
-                    <th>Data i Hora</th>
-                    <th>Butaques (IDs)</th>
-                    <th>Subtotal</th>
-                </tr>
-            </thead>
-            <tbody>
-                <tr th:each="item : ${items}">
-                    <td th:text="${item.pelicula}"></td>
-                    <td th:text="${#temporals.format(item.sessio, 'dd/MM/yyyy HH:mm')}"></td>
-                    <td>
-                        <span th:each="s : ${item.seients}" th:text="${s.id} + ' '"></span>
-                    </td>
-                    <td th:text="${item.subtotal} + ' €'"></td>
-                </tr>
-            </tbody>
-        </table>
-
-        <div class="total-box">
-            Total General: <span th:text="${total}"></span> €
+    <div class="cart-container">
+        <div th:if="${items.isEmpty()}" class="empty-message">
+            <p>El teu carret està buit actualment.</p>
+            <a th:href="@{/client}" class="btn btn-secondary" style="margin-top: 20px;">Explorar pel·lícules</a>
         </div>
 
-        <div style="margin-top: 30px; text-align: center;">
-            <a th:href="@{/client}"><button>Seguir comprant</button></a>
-            
-        </div>
-        <div style="margin-top: 30px; text-align: center;">
-            
-            <form th:action="@{/cart/checkout}" method="get">
-    <button type="submit" class="btn-comprar">Finalitzar i Pagar</button>
-</form>
+        <div th:if="${!items.isEmpty()}">
+            <table>
+                <thead>
+                    <tr>
+                        <th>Pel·lícula</th>
+                        <th>Data i Hora</th>
+                        <th>Butaques</th>
+                        <th>Subtotal</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr th:each="item : ${items}">
+                        <td style="font-weight: bold;" th:text="${item.pelicula}"></td>
+                        <td th:text="${#temporals.format(item.sessio, 'dd/MM/yyyy HH:mm')}"></td>
+                        <td>
+                            <span class="seat-badge" th:each="s : ${item.seients}" th:text="${s.id}"></span>
+                        </td>
+                        <td style="color: var(--primary); font-weight: bold;" th:text="${item.subtotal} + ' €'"></td>
+                    </tr>
+                </tbody>
+            </table>
+
+            <div class="total-box">
+                <span class="total-label">Total General:</span>
+                <span class="total-amount"><span th:text="${total}"></span> €</span>
+            </div>
+
+            <div class="action-buttons">
+                <a th:href="@{/client}" class="btn btn-secondary">Seguir comprant</a>
+                <a th:href="@{/client/complements}" class="btn btn-secondary">Afegir menjar</a>
+                <form th:action="@{/cart/checkout}" method="get">
+                    <button type="submit" class="btn btn-comprar">Finalitzar i Pagar</button>
+                </form>
+            </div>
         </div>
     </div>
 

@@ -13,8 +13,10 @@ import org.springframework.web.bind.annotation.PostMapping;
 
 import com.daw.cinemadaw.domain.cinema.Cinema;
 import com.daw.cinemadaw.domain.cinema.Room;
+import com.daw.cinemadaw.domain.cinema.Seat;
 import com.daw.cinemadaw.repository.CinemaRepository;
 import com.daw.cinemadaw.repository.RoomRepository;
+import com.daw.cinemadaw.repository.SeatRepository;
 
 import jakarta.validation.Valid;
 
@@ -24,6 +26,9 @@ public class RoomController {
 
     @Autowired
     private RoomRepository roomRepository;
+
+    @Autowired
+    private SeatRepository seatRepository;
 
     @Autowired
     private CinemaRepository cinemaRepository;
@@ -47,24 +52,24 @@ public class RoomController {
         return "room/create-room";
     }
 
-    @PostMapping("/room/create/{cinemaId}")
-    public String guardarroom(@PathVariable Long cinemaId,@Valid @ModelAttribute("room") Room room, BindingResult result, Model model){
+    // @PostMapping("/room/create/{cinemaId}")
+    // public String guardarroom(@PathVariable Long cinemaId,@Valid @ModelAttribute("room") Room room, BindingResult result, Model model){
 
-        if(result.hasErrors()){
-            model.addAttribute("cinemaId",cinemaId);
-            return "room/create-room";
-        }
-        Optional<Cinema> cinemaOpt=cinemaRepository.findById(cinemaId);
-        if(cinemaOpt.isEmpty()){
-            return"redirect:/cinema/";
-        }
+    //     if(result.hasErrors()){
+    //         model.addAttribute("cinemaId",cinemaId);
+    //         return "room/create-room";
+    //     }
+    //     Optional<Cinema> cinemaOpt=cinemaRepository.findById(cinemaId);
+    //     if(cinemaOpt.isEmpty()){
+    //         return"redirect:/cinema/";
+    //     }
 
-        Cinema cinema=(Cinema)cinemaOpt.get();
-        room.setCinema(cinema);
-        roomRepository.save(room);
+    //     Cinema cinema=(Cinema)cinemaOpt.get();
+    //     room.setCinema(cinema);
+    //     roomRepository.save(room);
         
-        return "redirect:/cinema/" + cinemaId;
-    }
+    //     return "redirect:/cinema/" + cinemaId;
+    // }
 
     //detall 
     @GetMapping("/room/{id}")
@@ -78,20 +83,83 @@ public class RoomController {
         return "room/detall-room";
     }
 
-    // delete
+    // // delete
+    // @GetMapping("/room/{id}/delete")
+    // public String delete(@PathVariable Long id){
+    //     Optional<Room>optional =roomRepository.findById(id);
+    //     Long cinemaId=null;
+    //     Room room =null;
+
+    //     if(optional.isPresent()){
+    //         room= optional.get();
+    //         cinemaId=room.getCinema().getId();
+    //         roomRepository.delete(room);
+
+    //     }
+    //     return "redirect:/cinema/"+cinemaId;
+    // }
+
     @GetMapping("/room/{id}/delete")
-    public String delete(@PathVariable Long id){
-        Optional<Room>optional =roomRepository.findById(id);
-        Long cinemaId=null;
-        Room room =null;
+public String delete(@PathVariable Long id){
+    Optional<Room> optional = roomRepository.findById(id);
+    Long cinemaId = null;
 
-        if(optional.isPresent()){
-            room= optional.get();
-            cinemaId=room.getCinema().getId();
-            roomRepository.delete(room);
+    if(optional.isPresent()){
+        Room room = optional.get();
+        cinemaId = room.getCinema().getId();
+        
+        // PRIMER: Esborrem les cadires d'aquesta sala
+        seatRepository.deleteByRoomId(id); 
+        
+        // SEGON: Esborrem la sala
+        roomRepository.delete(room);
+    }
+    
+    return "redirect:/cinema/" + cinemaId;
+}
 
+    @PostMapping("/room/create/{cinemaId}")
+    public String guardarroom(@PathVariable Long cinemaId, @Valid @ModelAttribute("room") Room room, BindingResult result, Model model) {
+
+        if (result.hasErrors()) {
+            model.addAttribute("cinemaId", cinemaId);
+            return "room/create-room";
         }
-        return "redirect:/cinema/"+cinemaId;
+        
+        Optional<Cinema> cinemaOpt = cinemaRepository.findById(cinemaId);
+        if (cinemaOpt.isEmpty()) {
+            return "redirect:/cinema/";
+        }
+
+        Cinema cinema = cinemaOpt.get();
+        room.setCinema(cinema);
+        
+        // 1. Guardem la sala primer per obtenir el seu ID
+        Room salaGuardada = roomRepository.save(room);
+
+        // 2. CREACIÓ AUTOMÀTICA DE CADIRES
+        // Definim una amplada de fila (per exemple, 10 butaques per fila)
+        int columnesMax = 10;
+        int capacitatTotal = salaGuardada.getCapacity();
+
+        for (int i = 0; i < capacitatTotal; i++) {
+            com.daw.cinemadaw.domain.cinema.Seat seat = new com.daw.cinemadaw.domain.cinema.Seat();
+            
+            // Calculem les coordenades X i Y per a la graella
+            // i % 10 ens dona la columna (0-9)
+            // i / 10 ens dona la fila
+            seat.setPosX(i % columnesMax);
+            seat.setPosY(i / columnesMax);
+            
+            // Assignem la sala a la cadira
+            seat.setActive(true);
+            seat.setRoom(salaGuardada);
+            
+            // Guardem la cadira a la base de dades
+            seatRepository.save(seat);
+        }
+
+        return "redirect:/cinema/" + cinemaId;
     }
 
     //editar
@@ -106,37 +174,67 @@ public class RoomController {
         return "redirect:/cinemes";
     }
 
-    @PostMapping("/room/edit")
-    public String actualitzarsala(@Valid @ModelAttribute("sala") Room room, BindingResult result, Model model){
+    // @PostMapping("/room/edit")
+    // public String actualitzarsala(@Valid @ModelAttribute("sala") Room room, BindingResult result, Model model){
 
-        if (result.hasErrors()) {
-        return "room/editar-room";
-        }
+    //     if (result.hasErrors()) {
+    //     return "room/editar-room";
+    //     }
 
     
 
-        Optional<Room>existingRoom=roomRepository.findById(room.getId());
-        if(existingRoom.isEmpty()){
-            return "redirect:/cinemes";
-        }
-        if (existingRoom.isPresent()) {
-        Room oldRoom = existingRoom.get();
-        oldRoom.setName(room.getName());
-        oldRoom.setCapacity(room.getCapacity());
+    //     Optional<Room>existingRoom=roomRepository.findById(room.getId());
+    //     if(existingRoom.isEmpty()){
+    //         return "redirect:/cinemes";
+    //     }
+    //     if (existingRoom.isPresent()) {
+    //     Room oldRoom = existingRoom.get();
+    //     oldRoom.setName(room.getName());
+    //     oldRoom.setCapacity(room.getCapacity());
         
-        roomRepository.save(oldRoom); 
-        return "redirect:/cinema/" + oldRoom.getCinema().getId();
-    }
-        Room oldRoom = existingRoom.get();
-        oldRoom.setName(room.getName());
-        oldRoom.setCapacity(room.getCapacity());
-        roomRepository.save(oldRoom);
-        if (oldRoom.getCinema() != null) {
-            return "redirect:/cinema/" + oldRoom.getCinema().getId();
-        }
-        return "redirect:/cinema/" + oldRoom.getCinema().getId();
+    //     roomRepository.save(oldRoom); 
+    //     return "redirect:/cinema/" + oldRoom.getCinema().getId();
+    // }
+    //     Room oldRoom = existingRoom.get();
+    //     oldRoom.setName(room.getName());
+    //     oldRoom.setCapacity(room.getCapacity());
+    //     roomRepository.save(oldRoom);
+    //     if (oldRoom.getCinema() != null) {
+    //         return "redirect:/cinema/" + oldRoom.getCinema().getId();
+    //     }
+    //     return "redirect:/cinema/" + oldRoom.getCinema().getId();
     
+    // }
+
+    @PostMapping("/room/edit")
+public String actualitzarsala(@Valid @ModelAttribute("sala") Room room, BindingResult result, Model model) {
+    if (result.hasErrors()) return "room/editar-room";
+
+    Room oldRoom = roomRepository.findById(room.getId()).orElse(null);
+    if (oldRoom == null) return "redirect:/cinemes";
+
+    // SI LA CAPACITAT HA CANVIAT, REGENEREM BUTAQUES
+    if (oldRoom.getCapacity() != room.getCapacity()) {
+        // A. Esborrem les antigues
+        seatRepository.deleteByRoomId(oldRoom.getId());
+
+        // B. Creem les noves segons la nova capacitat
+        int columnesMax = 10;
+        for (int i = 0; i < room.getCapacity(); i++) {
+            Seat seat = new Seat();
+            seat.setPosX(i % columnesMax);
+            seat.setPosY(i / columnesMax);
+            seat.setRoom(oldRoom);
+            seatRepository.save(seat);
+        }
     }
+
+    oldRoom.setName(room.getName());
+    oldRoom.setCapacity(room.getCapacity());
+    roomRepository.save(oldRoom);
+
+    return "redirect:/cinema/" + oldRoom.getCinema().getId();
+}
 
 
 

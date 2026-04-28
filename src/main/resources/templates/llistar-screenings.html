@@ -6,14 +6,110 @@
 <div th:replace="~{layout :: layout(~{::content})}">
     
 <div th:fragment="content">
-    <h2 th:text="|Projeccions de la pel·lícula: ${movie.títol} (ID: ${movie.id})|"></h2>
+
+    <style>
+        h2 {
+            color: #e50914;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            border-bottom: 2px solid #333;
+            padding-bottom: 10px;
+            margin-bottom: 20px;
+        }
+
+        /* Botó Afegir nova Projecció */
+        .btn {
+            display: inline-block;
+            background-color: #e50914;
+            color: white;
+            padding: 10px 20px;
+            text-decoration: none;
+            font-weight: bold;
+            border-radius: 4px;
+            text-transform: uppercase;
+            font-size: 0.8rem;
+            margin-bottom: 20px;
+            transition: background 0.3s;
+        }
+        .btn:hover { background-color: #b20710; }
+
+        /* Estils de la Taula */
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            background-color: #1a1a1a;
+            color: white;
+            border-radius: 8px;
+            overflow: hidden;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.5);
+            margin-bottom: 20px;
+        }
+
+        th {
+            background-color: #2b2b2b;
+            color: #e50914;
+            text-transform: uppercase;
+            font-size: 0.8rem;
+            padding: 15px;
+            text-align: left;
+            border-bottom: 2px solid #333;
+        }
+
+        td {
+            padding: 12px 15px;
+            border-bottom: 1px solid #333;
+            font-size: 0.9rem;
+        }
+
+        tr:hover {
+            background-color: #252525;
+        }
+
+        /* Missatge buit */
+        .empty-row {
+            text-align: center;
+            padding: 30px !important;
+            color: #888;
+            font-style: italic;
+        }
+
+        /* Accions */
+        .actions-links a {
+            text-decoration: none;
+            font-weight: bold;
+            font-size: 0.75rem;
+            text-transform: uppercase;
+            margin-right: 15px;
+            padding: 5px 10px;
+            border-radius: 4px;
+            transition: 0.3s;
+        }
+
+        .edit-link { color: #f0ad4e; border: 1px solid #f0ad4e; }
+        .edit-link:hover { background: #f0ad4e; color: black; }
+
+        .delete-link { color: #e50914; border: 1px solid #e50914; }
+        .delete-link:hover { background: #e50914; color: white; }
+
+        .back-link {
+            color: #888;
+            text-decoration: none;
+            font-size: 0.9rem;
+            transition: color 0.3s;
+        }
+        .back-link:hover { color: #e50914; }
+    </style>
+
+    <h2 th:text="|Projeccions de la pel·lícula: ${movie.titol} (ID: ${movie.id})|"></h2>
 
     <a th:href="@{/screenings/new/{id}(id=${movie.id})}" class="btn">Afegir nova Projecció</a>
 
     <table>
         <thead>
             <tr>
-                <th>Id pelicula</th><th>Id Sala</th><th>Nom sala</th>
+                <th>ID Peli</th>
+                <th>ID Sala</th>
+                <th>Nom sala</th>
                 <th>Data i hora</th>
                 <th>Preu</th>
                 <th>Accions</th>
@@ -23,21 +119,22 @@
             <tr th:each="s : ${screenings}">
                 <td th:text="${s.movie.id}">1</td>
                 <td th:text="${s.room.id}">5</td>
-
                 <td th:text="${s.room.name}">Sala VIP</td>
                 <td th:text="${#temporals.format(s.screeningDateTime, 'dd/MM/yyyy HH:mm')}"></td>
                 <td th:text="${s.price} + '€'">7.50€</td>
-                <td>
-                    <a th:href="@{/screenings/edit/{id}(id=${s.id})}">Editar</a>
-                    <a th:href="@{/screenings/delete/{id}(id=${s.id})}">Eliminar</a>
+                <td class="actions-links">
+                    <a th:href="@{/screenings/edit/{id}(id=${s.id})}" class="edit-link">Editar</a>
+                    <a th:href="@{/screenings/delete/{id}(id=${s.id})}" class="delete-link">Eliminar</a>
                 </td>
-
             </tr>
             <tr th:if="${#lists.isEmpty(screenings)}">
-                <td colspan="6" >No hi ha projeccions per a aquesta pel·lícula.</td>
+                <td colspan="6" class="empty-row">No hi ha projeccions per a aquesta pel·lícula.</td>
             </tr>
         </tbody>
     </table>
-    <br>
-    <a th:href="@{/movies}">Tornar a la llista de pel·lícules</a>
+    
+    <a th:href="@{/movies}" class="back-link">Tornar a la llista de pel·lícules</a>
 </div>
+</div>
+</body>
+</html>

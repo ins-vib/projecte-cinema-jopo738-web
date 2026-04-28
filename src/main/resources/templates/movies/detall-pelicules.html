@@ -7,42 +7,110 @@
 
     <div th:fragment="content">
 
-        <h2><strong>DETALLS PELICULA:</strong></h2>
-        <!-- <header>
-           <h1>cinema</h1>
-           <nav>
-            <a href="/cinemes">cinemes</a>
-            <a href="#">contacte</a>
-           </nav> 
-        </header> -->
-        <section>
-            <strong>Títol:</strong><p th:text="${pelicula.títol}">Títol:</p>
-            <strong>Durada:</strong><p th:text="${pelicula.durada}">Durada:</p>
-            <strong>Gènere:</strong><p th:text="${pelicula.genere}">Gènere:</p>
-            <strong>Descripció:</strong><p th:text="${pelicula.descripcio}">Descripció:</p>
-            <strong>Data estrena:</strong><p th:text="${pelicula.data_estrena}">Data estrena:</p>
+        <style>
+            .detail-container {
+                background-color: #1a1a1a;
+                padding: 40px;
+                border-radius: 12px;
+                max-width: 700px;
+                border: 1px solid #333;
+                box-shadow: 0 8px 30px rgba(0,0,0,0.7);
+                margin-top: 20px;
+            }
 
-        </section>
-        <!-- <section>
-            <h2><strong>SALES</strong></h2>
-            <ul>
-                <li th:each="sala: ${cinema.rooms}">
-                    <strong>Nom de la sala:</strong><p th:text="${sala.name}"></p>   
-                     
-                </li>
-                <li th:each="sala: ${cinema.rooms}">
-                     
-                    <strong>Capacitat:</strong> <p th:text="${sala.capacity}">Capacitat</p> 
-                </li>
-                <li th:each="sala: ${cinema.rooms}">
-                     
-                    <strong>ID:</strong> <p th:text="${sala.id}">ID</p> 
-                </li>
-            </ul>
+            h2 {
+                color: #e50914;
+                text-transform: uppercase;
+                letter-spacing: 2px;
+                margin-bottom: 30px;
+                border-bottom: 2px solid #e50914;
+                display: inline-block;
+                padding-bottom: 5px;
+            }
 
-        </section> -->
+            .info-group {
+                margin-bottom: 20px;
+                display: flex;
+                align-items: baseline;
+                border-bottom: 1px solid #252525;
+                padding-bottom: 10px;
+            }
+
+            .info-group strong {
+                color: #e50914;
+                text-transform: uppercase;
+                font-size: 0.9rem;
+                min-width: 150px;
+                display: inline-block;
+            }
+
+            .info-group p {
+                color: #ffffff;
+                margin: 0;
+                font-size: 1.1rem;
+                font-weight: 300;
+            }
+
+            .description-box {
+                margin-top: 25px;
+                padding: 15px;
+                background-color: #222;
+                border-radius: 6px;
+                border-left: 4px solid #e50914;
+            }
+
+            .description-box strong {
+                display: block;
+                margin-bottom: 10px;
+                color: #e50914;
+            }
+
+            .btn-back {
+                display: inline-block;
+                margin-top: 30px;
+                color: #888;
+                text-decoration: none;
+                font-size: 0.9rem;
+                transition: color 0.3s;
+            }
+
+            .btn-back:hover {
+                color: #e50914;
+            }
+        </style>
+
+        <div class="detail-container">
+            <h2>DETALLS PELICULA:</h2>
+            
+            <div class="info-group">
+                <strong>Títol:</strong>
+                <p th:text="${pelicula.titol}">Títol:</p>
+            </div>
+
+            <div class="info-group">
+                <strong>Durada:</strong>
+                <p th:text="${pelicula.durada + ' minuts'}">Durada:</p>
+            </div>
+
+            <div class="info-group">
+                <strong>Gènere:</strong>
+                <p th:text="${pelicula.genere}">Gènere:</p>
+            </div>
+
+            <div class="info-group">
+                <strong>Data estrena:</strong>
+                <p th:text="${pelicula.data_estrena}">Data estrena:</p>
+            </div>
+
+            <div class="description-box">
+                <strong>Descripció:</strong>
+                <p th:text="${pelicula.descripcio}">Descripció:</p>
+            </div>
+
+            <a th:href="@{/movies}" class="btn-back">Tornar a la llista</a>
+        </div>
 
     </div>
 </div>
-    </body>
+</body>
 </html>

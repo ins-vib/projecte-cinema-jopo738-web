@@ -1,0 +1,120 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css">
+    <style>
+        body {
+            background-color: #141414;
+            color: #ffffff;
+            font-family: 'Helvetica Neue', Arial, sans-serif;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
+            margin: 0;
+        }
+
+        form {
+            background-color: #222222;
+            padding: 40px;
+            border-radius: 12px;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.5);
+            width: 100%;
+            max-width: 500px;
+        }
+
+        h3 {
+            color: #e50914; /* Vermell Cinema */
+            text-transform: uppercase;
+            font-weight: bold;
+            margin-bottom: 25px;
+            text-align: center;
+            letter-spacing: 1px;
+        }
+
+        .form-group {
+            margin-bottom: 20px;
+        }
+
+        label {
+            color: #b3b3b3;
+            margin-bottom: 8px;
+            display: block;
+            font-size: 0.9rem;
+        }
+
+        /* Estilitzat dels inputs i select */
+        .form-control {
+            background-color: #333333 !important;
+            border: 1px solid #444444 !important;
+            color: white !important;
+            transition: 0.3s;
+        }
+
+        .form-control:focus {
+            background-color: #444444 !important;
+            border-color: #e50914 !important;
+            box-shadow: 0 0 0 0.25 remote rgba(229, 9, 20, 0.25) !important;
+        }
+
+        /* Botons */
+        .btn-success {
+            background-color: #e50914 !important; /* Vermell en comptes de verd per coherència */
+            border: none !important;
+            padding: 12px;
+            font-weight: bold;
+            width: 100%;
+            margin-top: 10px;
+            text-transform: uppercase;
+        }
+
+        .btn-success:hover {
+            background-color: #b20710 !important;
+            transform: translateY(-2px);
+        }
+
+        .btn-secondary {
+            background-color: transparent !important;
+            border: 1px solid #b3b3b3 !important;
+            color: #b3b3b3 !important;
+            width: 100%;
+            margin-bottom: 10px;
+            padding: 10px;
+        }
+
+        .btn-secondary:hover {
+            color: white !important;
+            border-color: white !important;
+        }
+    </style>
+</head>
+<body>
+
+<form th:action="@{/client/reserva/finalitzar}" method="post">
+    <h3>Vols afegir menjar?</h3>
+    
+    <div class="form-group">
+        <label for="foodId">Tria el teu menú:</label>
+        <select name="foodId" id="foodId" class="form-control">
+            <option value="">Cap (només entrades)</option>
+            <option th:each="f : ${productesMenjar}" 
+                    th:value="${f.id}" 
+                    th:text="${f.nom} + ' - ' + ${f.preu} + '€'">
+            </option>
+        </select>
+    </div>
+
+    <div class="form-group">
+        <label for="quantitat">Quantitat:</label>
+        <input type="number" name="quantitat" value="1" min="1" class="form-control">
+    </div>
+
+    <div class="d-flex flex-column">
+        <a th:href="@{/client/carret}" class="btn btn-secondary">Tornar al carret</a>
+        <button type="submit" class="btn btn-success">Finalitzar i pagar</button>
+    </div>
+</form>
+
+</body>
+</html>

@@ -1,15 +1,20 @@
 package com.daw.cinemadaw.domain.cinema;
 
 import java.time.LocalDateTime;
+import java.util.List;
 
 import org.springframework.format.annotation.DateTimeFormat;
 
+import com.daw.cinemadaw.domain.ticket.Ticket;
+
+import jakarta.persistence.CascadeType;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.ManyToOne;
+import jakarta.persistence.OneToMany;
 
 @Entity
 public class Screening {
@@ -31,6 +36,9 @@ public class Screening {
     @ManyToOne
     private Room room;
 
+    @OneToMany(mappedBy = "screening", cascade = CascadeType.ALL, orphanRemoval = true)
+    private List<Ticket> tickets
+    ;
     public Screening() {
     }
 

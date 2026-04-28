@@ -21,3 +21,10 @@ INSERT INTO screening (screening_date_time, price, movie_id, room_id) VALUES
 ('2026-04-20T18:00', 8.50, 2, 1),
 ('2026-04-20T21:00', 9.50, 2, 1),
 ('2026-04-20T18:00', 8.50, 3, 1);
+
+INSERT INTO MENJAR (NOM, PREU) VALUES ('Crispetes Petites', 5.00);
+INSERT INTO MENJAR (NOM, PREU) VALUES ('Crispetes Grans', 7.50);
+INSERT INTO MENJAR (NOM, PREU) VALUES ('Refresc Mitjà', 3.50);
+INSERT INTO MENJAR (NOM, PREU) VALUES ('Refresc Gran', 4.50);
+INSERT INTO MENJAR (NOM, PREU) VALUES ('MENÚ INDIVIDUAL (Crispetes P + Refresc)', 8.00);
+INSERT INTO MENJAR (NOM, PREU) VALUES ('MENÚ DUO (2 Crispetes M + 2 Refrescs)', 15.00);

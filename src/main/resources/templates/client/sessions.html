@@ -137,6 +137,11 @@
             <div class="session-room">
                  Sala: <span th:text="${sessio.room.name}"></span>
             </div>
+            <div class="session-price">
+    <span class="price-value" 
+          th:text="${#numbers.formatDecimal(sessio.price, 1, 2, 'COMMA')} + '€'">
+    </span>
+</div>
             
             <a th:href="@{/client/comprar/{id}(id=${sessio.id})}" class="btn-select">
                 Seleccionar butaques

@@ -1,39 +1,72 @@
 <!DOCTYPE html>
 <html xmlns:th="http://www.thymeleaf.org">
-
 <body>
 
 <div th:replace="~{layout :: layout(~{::content})}">
-
     <div th:fragment="content">
 
-        <h2>EDITAR LA PELICULA:</h2>
-        <form th:action="@{/pelicula/edit}" th:object="${pelicula}" method="post">
-
+        <style>
+            .form-box {
+                background-color: #1a1a1a;
+                padding: 30px;
+                border-radius: 8px;
+                max-width: 500px;
+                border: 1px solid #333;
+                color: white;
+            }
+            h2 { color: #e50914; text-transform: uppercase; margin-bottom: 20px; border-bottom: 2px solid #333; padding-bottom: 10px; }
+            label { color: #e50914; font-weight: bold; text-transform: uppercase; font-size: 0.9rem; display: block; margin-bottom: 5px; }
+            input { 
+                width: 100%; background-color: #333; border: 1px solid #444; color: white; 
+                padding: 10px; margin-bottom: 5px; border-radius: 4px; box-sizing: border-box; 
+            }
+            input:focus { border-color: #e50914; outline: none; }
+            button { 
+                background-color: #e50914; color: white; border: none; padding: 12px; 
+                width: 100%; font-weight: bold; text-transform: uppercase; cursor: pointer; border-radius: 4px; 
+            }
+            button:hover { background-color: #b20710; }
             
+            /* AIXÒ ÉS EL QUE FA QUE SURTIN LES LLETRES D'ERROR */
+            .error-msg {
+                color: #ff4d4d;
+                font-size: 0.85rem;
+                font-weight: bold;
+                display: block;
+                margin-bottom: 15px;
+            }
+        </style>
 
-            <input type="hidden" th:field="*{id}" />
-            
-            <label>Títol:</label><br>
-            <input type="text" th:field="*{títol}"/><br><br>
+        <div class="form-box">
+            <h2>EDITAR LA PELICULA:</h2>
+            <form th:action="@{/pelicula/edit}" th:object="${pelicula}" method="post">
 
-            <label>Durada:</label><br>
-            <input type="number" th:field="*{durada}"/><br><br>
+                <input type="hidden" th:field="*{id}" />
+                
+                <label>Títol:</label>
+                <input type="text" th:field="*{titol}"/>
+                <div class="error-msg" th:if="${#fields.hasErrors('titol')}" th:errors="*{titol}"></div>
 
-            <label>Gènere:</label><br>
-           <input type="text"th:field="*{genere}"/><br><br>
+                <label>Durada (minuts):</label>
+                <input type="number" th:field="*{durada}" required/>
+                <div class="error-msg" th:if="${#fields.hasErrors('durada')}" th:errors="*{durada}"></div>
+                <label>Gènere:</label>
+                <input type="text" th:field="*{genere}"/>
+                <div class="error-msg" th:if="${#fields.hasErrors('genere')}" th:errors="*{genere}"></div>
 
-            <label>Descripció:</label><br>
-            <input type="text"th:field="*{descripcio}"/><br><br>
+                <label>Descripció:</label>
+                <input type="text" th:field="*{descripcio}"/>
+                <div class="error-msg" th:if="${#fields.hasErrors('descripcio')}" th:errors="*{descripcio}"></div>
 
-            <label>Data estrena:</label><br>
-            <input type="date"th:field="*{data_estrena}"/><br><br>
+                <label>Data estrena:</label>
+                <input type="date" th:field="*{data_estrena}" required/>
+                <div class="error-msg" th:if="${#fields.hasErrors('data_estrena')}" th:errors="*{data_estrena}"></div>
+                <br><br>
 
-            <button type="submit">Guardar</button>
-
-        </form>
-
+                <button type="submit">Guardar</button>
+            </form>
+        </div>
     </div>
 </div>
-    </body>
+</body>
 </html>

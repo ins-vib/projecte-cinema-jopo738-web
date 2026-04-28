@@ -21,13 +21,18 @@ import com.daw.cinemadaw.DTO.SeatsListDTO;
 import com.daw.cinemadaw.domain.cinema.Movie;
 import com.daw.cinemadaw.domain.cinema.Screening;
 import com.daw.cinemadaw.domain.cinema.Seat;
+import com.daw.cinemadaw.domain.menjar.Menjar;
+import com.daw.cinemadaw.domain.ticket.Ticket;
+import com.daw.cinemadaw.repository.MenjarRepository;
 import com.daw.cinemadaw.repository.MovieRepository;
+import com.daw.cinemadaw.repository.OrderRepository;
 import com.daw.cinemadaw.repository.ScreeningRepository;
 import com.daw.cinemadaw.repository.SeatRepository;
 import com.daw.cinemadaw.repository.TicketRepository;
 import com.daw.cinemadaw.repository.UserRepository;
 
 import jakarta.servlet.http.HttpSession;
+import jakarta.transaction.Transactional;
 import jakarta.validation.Valid;
 
 @Controller
@@ -44,6 +49,12 @@ private UserRepository userRepository; // Necessari per buscar l'usuari per nom
 
     @Autowired
 private TicketRepository ticketRepository;
+
+@Autowired
+private OrderRepository orderRepository;
+
+@Autowired
+private MenjarRepository menjarRepository; // La variable comença en minúscula
 
     private MovieRepository movieRepository;
 
@@ -128,19 +139,38 @@ private TicketRepository ticketRepository;
             return "redirect:/movies";
         }
 
-        //delete
-        @GetMapping("/pelicula/delete/{id}")
-        public String delete(@PathVariable Long id){
 
-            Optional<Movie> optional=movieRepository.findById(id);
-            if(optional.isPresent()){
-                Movie pelicula= optional.get();
-                movieRepository.deleteById(id);     
-            } 
+       
 
-            return "redirect:/movies";
-        }
+        // //delete
+        // @GetMapping("/pelicula/delete/{id}")
+        // public String delete(@PathVariable Long id){
 
+        //     Optional<Movie> optional=movieRepository.findById(id);
+        //     if(optional.isPresent()){
+        //         Movie pelicula= optional.get();
+        //         movieRepository.deleteById(id);     
+        //     } 
+
+        //     return "redirect:/movies";
+        // }
+@GetMapping("/pelicula/delete/{id}")
+@Transactional // IMPORTANT: Afegeix això perquè s'executin les dues operacions com una sola
+public String delete(@PathVariable Long id){
+
+    Optional<Movie> optional = movieRepository.findById(id);
+    
+    if(optional.isPresent()){
+        // 1. Busquem i eliminem totes les projeccions associades a aquesta pel·lícula
+        // Això evita l'error de "Referential integrity constraint violation"
+        screeningRepository.deleteByMovieId(id); 
+
+        // 2. Ara que ja no hi ha "fills" (projeccions), podem eliminar el "pare" (pel·lícula)
+        movieRepository.deleteById(id);    
+    } 
+
+    return "redirect:/movies";
+}
 
         @GetMapping("/client/pelicula/{id}")
         public String veureSessions(@PathVariable Long id, Model model){
@@ -233,48 +263,6 @@ public String home() {
     return "client/home";
 }
 
-// // el que hi ha a la pissarra
-//  @GetMapping("/screenings/seats/{id}")
-//  public String selectSeats(@PathVariable Long id, Model model, HttpSession session){
-//      Optional<Screening>screening=screeningRepository.findById(id);
-//      if(screening.isEmpty()){
-//          return "redirect:/client/movies";
-
-//      }
-
-//      Map<Long,List<Long>> cart=(Map<Long,List<Long>>)session.getAttribute("cart");
-//      if(cart==null){
-//         cart=new HashMap<>();
-//      }
-
-//      SeatsListDTO seatsListDTO= new SeatsListDTO();
-//      seatsListDTO.setSeats(cart.get(id));
-// model.addAttribute("selectedSeats", seatsListDTO);
-//  model.addAttribute("screening",screening.get());
-// return "client/movies/sets";
-
-//  }
-
-
-// // el que hi ha a la pissarra
-// @PostMapping("/screenings/seats/confirm/{id}")
-// public String confirSeats(@PathVariable Long id, @ModelAttribute SeatsListDTO selectedSeats, Model model, HttpSession session){
-//     // obtenir mapa de la sessio o crear-lo
-
-//     Map<Long, List<Long>> cart=(Map<Long, List<Long>>) session.getAttribute("cart");
-
-//     if(cart==null){
-//         cart=new HashMap<>();
-//     }
-
-//     cart.put(id, selectedSeats.getSeats());
-//     session.setAttribute("cart",cart);
-//     System.out.println("cart actualitzat: "+cart);
-//     return "redirect:/client/movies/screenings/seats/"+id;
-// }
-
-
-
 @PostMapping("/client/reserva/afegir")
 public String afegirAlCarret(@RequestParam Long screeningId, @RequestParam(required=false)List<Long>seientsSeleccionats, HttpSession session){
     Map<Long, List<Long>> cart = (Map<Long, List<Long>>) session.getAttribute("cart");
@@ -316,33 +304,89 @@ public String veureCarret(HttpSession session, Model model) {
     // Aquí és on creem la variable "items" que Thymeleaf busca
     model.addAttribute("items", detallsCarret);
     model.addAttribute("total", totalGeneral);
+
+    
     
     return "client/carret";
 }
 
-
-// @GetMapping("/client/les-meves-comandes")
-// public String veureComandesPropies(Model model, java.security.Principal principal) {
-//     String username = principal.getName();
-    
-//     // 2. Busquem l'objecte usuari complet per saber el seu ID
-//     // Necessitaràs tenir injectat el UserRepository
-//     //User usuari = userRepository.findByUsername(username); 
-    
-//     // 3. Cridem al repositori fent servir l'ID de l'usuari trobat
-//     //List<Ticket> comandesPropies = ticketRepository.findByUserId(usuari.getId());
-    
-//     // 4. Ho passem a la vista
-//     //model.addAttribute("comandes", comandesPropies);
-    
-//     //return "client/llista-comandes";
-// }
-
-
-
-
-
+@GetMapping("/client/complements")
+public String mostrarComplements(Model model){
+    List<Menjar>llistaMenjar=menjarRepository.findAll();
+    model.addAttribute("productesMenjar",llistaMenjar);
+    return "client/complements";
 }
-   
-        
+
+
+@PostMapping("/client/reserva/finalitzar")
+public String finalitzarCompra(
+        @RequestParam(required = false) Long foodId, 
+        @RequestParam(defaultValue = "1") int quantitat, 
+        HttpSession session, 
+        java.security.Principal principal, 
+        Model model) {
+
+    // 1. Recuperem el carret i l'usuari
+    Map<Long, List<Long>> cart = (Map<Long, List<Long>>) session.getAttribute("cart");
+    com.daw.cinemadaw.domain.user.User usuariActual = userRepository.findByUsername(principal.getName()).orElse(null);
+
+    if (cart == null || cart.isEmpty()) {
+        return "redirect:/client/carret";
+    }
+
+    // 2. CREEM L'ORDRE AMB ELS TEUS CAMPS REALS
+    com.daw.cinemadaw.domain.ticket.Order novaOrdre = new com.daw.cinemadaw.domain.ticket.Order();
+    novaOrdre.setUser(usuariActual);
+    novaOrdre.setDataHora(java.time.LocalDateTime.now()); // Per a la columna DATA I HORA
+    novaOrdre.setEstat("PAGAT"); // Perquè no surti buit el quadrat de l'estat
     
+    
+
+    // Guardem l'ordre inicial (necessari per tenir ID per als tickets)
+    orderRepository.save(novaOrdre); 
+
+    double totalAcumulat = 0;
+
+    // 3. BUCLE PER GUARDAR ELS TICKETS
+    for (Map.Entry<Long, List<Long>> entry : cart.entrySet()) {
+        Long screeningId = entry.getKey();
+        List<Long> seientsIds = entry.getValue();
+
+        Screening screening = screeningRepository.findById(screeningId).orElse(null);
+        if (screening != null) {
+            totalAcumulat += (screening.getPrice() * seientsIds.size());
+
+            for (Long seatId : seientsIds) {
+                Seat seat = seatRepository.findById(seatId).orElse(null);
+                if (seat != null) {
+                    Ticket t = new Ticket();
+                    t.setScreening(screening);
+                    t.setSeat(seat);
+                    t.setUser(usuariActual);
+                    t.setOrder(novaOrdre); 
+                    ticketRepository.save(t);
+                }
+            }
+        }
+    }
+
+    // 4. GESTIONEM EL MENJAR
+    if (foodId != null) {
+        Menjar menjarSeleccionat = menjarRepository.findById(foodId).orElse(null);
+        if (menjarSeleccionat != null) {
+            double preuMenjar = menjarSeleccionat.getPreu() * quantitat;
+            totalAcumulat += preuMenjar;
+        }
+    }
+
+    // 5. ACTUALITZEM L'IMPORT TOTAL 
+    novaOrdre.setImportTotal(totalAcumulat); 
+    orderRepository.save(novaOrdre); 
+
+    // 6. FINALITZEM
+    model.addAttribute("totalFinal", totalAcumulat);
+    session.removeAttribute("cart");
+
+    return "client/confirmacio-exit"; 
+}
+}

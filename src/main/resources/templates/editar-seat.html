@@ -7,48 +7,136 @@
 
     <div th:fragment="content">
 
-        <h2>EDITAR SEAT:</h2>
-        <a th:href="@{/seats/delete/{id}(id=${seat.id})}" 
-                class="boto-eliminar"
-                th:id="'btn-delete-' + ${seat.id}">
-                Eliminar
-            </a>
-        <form th:action="@{/seats/edit}" th:object="${seat}" method="post">
+        <style>
+            .form-box {
+                background-color: #1a1a1a;
+                padding: 30px;
+                border-radius: 8px;
+                max-width: 500px;
+                border: 1px solid #333;
+                color: white;
+                box-shadow: 0 4px 15px rgba(0,0,0,0.5);
+                margin-top: 20px;
+                position: relative;
+            }
 
-           
+            .header-container {
+                display: flex;
+                justify-content: space-between;
+                align-items: center;
+                border-bottom: 2px solid #333;
+                margin-bottom: 25px;
+                padding-bottom: 10px;
+            }
 
-            <input type="hidden" th:field="*{id}" /><br><br>
-            
-            <label>Fila:</label><br>
-            <input type="number" th:field="*{seatRow}"/><br><br>
-           
+            h2 { 
+                color: #e50914; 
+                text-transform: uppercase; 
+                margin: 0;
+            }
 
+            .boto-eliminar {
+                background-color: transparent;
+                color: #ff4d4d;
+                border: 1px solid #ff4d4d;
+                padding: 5px 12px;
+                text-decoration: none;
+                text-transform: uppercase;
+                font-size: 0.75rem;
+                font-weight: bold;
+                border-radius: 4px;
+                transition: all 0.3s;
+            }
 
-            <label>Posició x:</label><br>
-            <input type="number" th:field="*{posX}"/><br><br>
-            
+            .boto-eliminar:hover {
+                background-color: #ff4d4d;
+                color: white;
+            }
 
-            <label>Posició y:</label><br>
-            <input type="number" th:field="*{posY}"/><br><br>
-            
+            label { 
+                color: #e50914; 
+                font-weight: bold; 
+                text-transform: uppercase; 
+                font-size: 0.85rem; 
+                display: block; 
+                margin-bottom: 5px; 
+            }
 
-            <label>Numero:</label><br>
-            <input type="number" th:field="*{number}"/><br><br>
+            input[type="number"], 
+            select { 
+                width: 100%; 
+                background-color: #333; 
+                border: 1px solid #444; 
+                color: white; 
+                padding: 12px; 
+                margin-bottom: 20px; 
+                border-radius: 4px; 
+                box-sizing: border-box; 
+            }
 
-            <label>Tipus:</label>
-            <select th:field="*{seatType}">
-                <option th:each="t : ${types}"
-                        th:value="${t}"
-                        th:text="${t}">
-                </option>
-            </select><br><br>
-          
+            input:focus, select:focus { 
+                border-color: #e50914; 
+                outline: none; 
+                background-color: #3d3d3d;
+            }
 
-            <button type="submit">Guardar</button>
+            button[type="submit"] { 
+                background-color: #e50914; 
+                color: white; 
+                border: none; 
+                padding: 14px; 
+                width: 100%; 
+                font-weight: bold; 
+                text-transform: uppercase; 
+                cursor: pointer; 
+                border-radius: 4px; 
+                transition: background 0.3s;
+            }
 
-        </form>
+            button[type="submit"]:hover { 
+                background-color: #b20710; 
+            }
+        </style>
+
+        <div class="form-box">
+            <div class="header-container">
+                <h2>EDITAR SEAT:</h2>
+                <a th:href="@{/seats/delete/{id}(id=${seat.id})}" 
+                   class="boto-eliminar"
+                   th:id="'btn-delete-' + ${seat.id}">
+                   Eliminar
+                </a>
+            </div>
+
+            <form th:action="@{/seats/edit}" th:object="${seat}" method="post">
+
+                <input type="hidden" th:field="*{id}" />
+                
+                <label>Fila:</label>
+                <input type="number" th:field="*{seatRow}"/>
+
+                <label>Posició X (Horitzontal):</label>
+                <input type="number" th:field="*{posX}"/>
+
+                <label>Posició Y (Vertical):</label>
+                <input type="number" th:field="*{posY}"/>
+
+                <label>Número de cadira:</label>
+                <input type="number" th:field="*{number}"/>
+
+                <label>Tipus de seient:</label>
+                <select th:field="*{seatType}">
+                    <option th:each="t : ${types}"
+                            th:value="${t}"
+                            th:text="${t}">
+                    </option>
+                </select>
+
+                <button type="submit">Guardar Canvis</button>
+            </form>
+        </div>
 
     </div>
 </div>
-    </body>
+</body>
 </html>

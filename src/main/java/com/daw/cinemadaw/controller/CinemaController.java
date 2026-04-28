@@ -92,7 +92,7 @@ public class CinemaController {
         @GetMapping("/cinema/create")
         public String mostrarFormulariAlta(Model model){
             Cinema cinema = new Cinema();    // Tots els valors del formulari sorten amb blanc perque hem creat un nou cinema
-            cinema.setCity("Tarragona");   // amb aixo posem el valor per fefecte de Tarragona a la ciutat al formulari de crear cinema
+            //cinema.setCity("Tarragona");   // amb aixo posem el valor per fefecte de Tarragona a la ciutat al formulari de crear cinema
             model.addAttribute("cinema", cinema);
             return "create-cinema";
         }
@@ -125,15 +125,76 @@ public class CinemaController {
 
 
         
-        @PostMapping("/cinema/edit")
-        public String editCinema(@Valid @ModelAttribute("cinema") Cinema cinema, BindingResult result){
-            if (result.hasErrors()) {
+    //     @PostMapping("/cinema/edit")
+    //     public String editCinema(@Valid @ModelAttribute("cinema") Cinema cinema, BindingResult result){
+    //         if (result.hasErrors()) {
        
+    //     return "editar-cinema"; 
+    // }
+    //         cinemaRepository.save(cinema);  // serveix per desar un nou i desar un actualitzat, crea un nou si no posem identificador
+    //         return "redirect:/cinemes";
+    //     }
+
+//         @PostMapping("/cinema/edit")
+// public String editCinema(@ModelAttribute("cinema") Cinema cinemaEditat) {
+//     Cinema cinemaBD = cinemaRepository.findById(cinemaEditat.getId()).orElse(null);
+//     if (cinemaBD != null) {
+//         cinemaBD.setName(cinemaEditat.getName());
+//         cinemaBD.setAddress(cinemaEditat.getAddress());
+//         cinemaBD.setCity(cinemaEditat.getCity());
+//         cinemaBD.setPostalCode(cinemaEditat.getPostalCode());
+//         // NO toquem la llista de sales, així no intentara esborrar-les
+//         cinemaRepository.save(cinemaBD);
+//     }
+//     return "redirect:/cinemes";
+// }
+
+@PostMapping("/cinema/edit")
+public String editCinema(@Valid @ModelAttribute("cinema") Cinema cinemaEditat, BindingResult result) {
+    
+    // 1. Si hi ha errors, tornem a la vista del formulari immediatament
+    if (result.hasErrors()) {
+        // ATENCIÓ: Posa aquí el nom exactament igual al que tens al @GetMapping. 
+        // Si el fitxer es diu editar-cinema.html, posa:
         return "editar-cinema"; 
     }
-            cinemaRepository.save(cinema);  // serveix per desar un nou i desar un actualitzat, crea un nou si no posem identificador
-            return "redirect:/cinemes";
-        }
+
+    // 2. Si NO hi ha errors, busquem a la base de dades i guardem
+    Cinema cinemaBD = cinemaRepository.findById(cinemaEditat.getId()).orElse(null);
+    if (cinemaBD != null) {
+        cinemaBD.setName(cinemaEditat.getName());
+        cinemaBD.setAddress(cinemaEditat.getAddress());
+        cinemaBD.setCity(cinemaEditat.getCity());
+        cinemaBD.setPostalCode(cinemaEditat.getPostalCode());
+        
+        cinemaRepository.save(cinemaBD);
+    }
+    
+    return "redirect:/cinemes";
+}
+
+// @PostMapping("/cinema/edit")
+// // 1. Afegim @Valid per activar la revisió i BindingResult per recollir els errors
+// public String editCinema(@Valid @ModelAttribute("cinema") Cinema cinemaEditat, BindingResult result) {
+    
+//     // 2. Si hi ha errors de validació (com el de l'adreça massa curta)...
+//     if (result.hasErrors()) {
+//         // Tornem a la vista del formulari per mostrar els missatges (sense fer redirect!)
+//         // Posa aquí el nom exacte del teu fitxer HTML d'edició (p.ex. "cinema/edit")
+//         return "cinema/edit"; 
+//     }
+
+//     Cinema cinemaBD = cinemaRepository.findById(cinemaEditat.getId()).orElse(null);
+//     if (cinemaBD != null) {
+//         cinemaBD.setName(cinemaEditat.getName());
+//         cinemaBD.setAddress(cinemaEditat.getAddress());
+//         cinemaBD.setCity(cinemaEditat.getCity());
+//         cinemaBD.setPostalCode(cinemaEditat.getPostalCode());
+        
+//         cinemaRepository.save(cinemaBD);
+//     }
+//     return "redirect:/cinemes";
+// }
 
 
         @GetMapping("/services")
