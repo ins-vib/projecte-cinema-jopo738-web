@@ -1,5 +1,8 @@
 package com.daw.cinemadaw.domain.ticket;
 
+import org.hibernate.annotations.OnDelete;
+import org.hibernate.annotations.OnDeleteAction;
+
 import com.daw.cinemadaw.domain.cinema.Screening;
 import com.daw.cinemadaw.domain.cinema.Seat;
 import com.daw.cinemadaw.domain.user.User;
@@ -39,6 +42,7 @@ public class Ticket {
 
     @ManyToOne
     @JoinColumn(name="seat_id",nullable=false)
+    @OnDelete(action = OnDeleteAction.CASCADE)
     private Seat seat;
 
     public Long getId() {

@@ -51,6 +51,9 @@ public class Room {
     @OneToMany(mappedBy="room",cascade=CascadeType.ALL, orphanRemoval=true)
     private List<Seat> seats= new ArrayList<>();
 
+    @OneToMany(mappedBy = "room", cascade = CascadeType.REMOVE, orphanRemoval = true)
+private List<Screening> screenings;
+
     public List<Seat> getSeats(){
         return seats;
     }
