@@ -23,6 +23,7 @@ import com.daw.cinemadaw.domain.cinema.Screening;
 import com.daw.cinemadaw.domain.cinema.Seat;
 import com.daw.cinemadaw.domain.menjar.Menjar;
 import com.daw.cinemadaw.domain.ticket.Ticket;
+import com.daw.cinemadaw.repository.GenereRepository;
 import com.daw.cinemadaw.repository.MenjarRepository;
 import com.daw.cinemadaw.repository.MovieRepository;
 import com.daw.cinemadaw.repository.OrderRepository;
@@ -56,13 +57,19 @@ private OrderRepository orderRepository;
 @Autowired
 private MenjarRepository menjarRepository; // La variable comença en minúscula
 
+@Autowired
     private MovieRepository movieRepository;
+
+    @Autowired
+    private GenereRepository genereRepository;
+
+    //private MovieRepository movieRepository;
 
     public MovieController(MovieRepository movieRepository) {
         this.movieRepository = movieRepository;
     }
 
-    @GetMapping("/movies")
+    //@GetMapping("/movies")
     public String movies(Model model){
 
         // 1. Recuperem la llista de tots els cinemes de la base de dades
@@ -80,14 +87,17 @@ private MenjarRepository menjarRepository; // La variable comença en minúscula
     }
 
     @GetMapping("/pelicula/create")
-    public String create_movies(Model model){
+public String create_movies(Model model) {
 
-       Movie movie = new Movie();    // Tots els valors del formulari sorten amb blanc perque hem creat un nou cinema
+    Movie movie = new Movie(); 
+    model.addAttribute("pelicula", movie);
+
+    // AQUESTA ÉS LA LÍNIA QUE ET FALTA:
+    // Agafem els gèneres de la BD i els enviem a l'HTML amb el nom "totsElsGeneres"
+    model.addAttribute("totsElsGeneres", genereRepository.findAll()); 
             
-            model.addAttribute("pelicula", movie);
-            
-        return "movies/create-pelicules";
-    }
+    return "movies/create-pelicules";
+}
 
     @PostMapping("/pelicula/create")
     public String guardarpelicula(@Valid @ModelAttribute("pelicula") Movie movie,BindingResult result, Model model){
@@ -114,19 +124,16 @@ private MenjarRepository menjarRepository; // La variable comença en minúscula
         }
 
         @GetMapping("/pelicula/update/{id}")
-        public String mostrarFormulariEditar(@PathVariable Long id, Model model){
-
-            Optional<Movie> optional = movieRepository.findById(id);
-            if(optional.isPresent()){
-                Movie pelicula = optional.get();
-                model.addAttribute("pelicula",pelicula);
-                 return "movies/editar-pelicules";
-            }
-            return "redirect:/movies";
-
-            
-           
-        }
+public String mostrarFormulariEditar(@PathVariable Long id, Model model) {
+    // 1. Busquem la pel·lícula per ID
+    Movie movie = movieRepository.findById(id).orElseThrow();
+    model.addAttribute("pelicula", movie);
+    
+    // 2. CARREGUEM ELS GÈNERES (Això és el que et falta perquè surtin!)
+    model.addAttribute("totsElsGeneres", genereRepository.findAll());
+    
+    return "movies/editar-pelicules";
+}
         
         @PostMapping("/pelicula/edit")
         public String editCinema(@Valid @ModelAttribute("pelicula") Movie pelicula, BindingResult result,Model model){
@@ -388,5 +395,69 @@ public String finalitzarCompra(
     session.removeAttribute("cart");
 
     return "client/confirmacio-exit"; 
+        }
+@GetMapping("/movies")
+public String listMovies(Model model) {
+    // El nom de la variable ha de ser "llista" perquè així ho tens al th:each de l'HTML
+    model.addAttribute("llista", movieRepository.findAll());
+    return "movies/pelicules";
 }
+
+    // 2. FORMULARI PER A NOVA PEL·LÍCULA
+@GetMapping("/new") // O la ruta que usis per obrir el formulari
+public String showNewForm(Model model) {
+    model.addAttribute("pelicula", new Movie());
+    
+    // AQUESTA LÍNIA ÉS LA QUE PORTA ELS GÈNERES DE L'H2 A L'HTML:
+    model.addAttribute("totsElsGeneres", genereRepository.findAll());
+    
+    return "create-pelicules";
+}
+
+  @PostMapping("/movies/save")
+public String saveMovie(@ModelAttribute("pelicula") Movie movie, BindingResult result, Model model) {
+    if (result.hasErrors()) {
+        // Si hi ha algun error de validació (com el títol buit), tornem a carregar els gèneres
+        model.addAttribute("totsElsGeneres", genereRepository.findAll());
+        movieRepository.save(movie);
+        return "movies/create-pelicules";
+    }
+    
+    movieRepository.save(movie);
+    return "redirect:/movies";
+}
+
+    // 4. FORMULARI PER EDITAR
+    @GetMapping("/edit/{id}")
+    public String showEditForm(@PathVariable("id") Long id, Model model) {
+        Movie movie = movieRepository.findById(id)
+                .orElseThrow(() -> new IllegalArgumentException("ID invàlid: " + id));
+        
+        model.addAttribute("movie", movie);
+        
+        // També necessitem els gèneres per poder-los marcar (checked) a l'edició
+        model.addAttribute("totsElsGeneres", genereRepository.findAll());
+        
+        return "movies-form";
+    }
+
+    // 5. ELIMINAR
+    @GetMapping("/delete/{id}")
+    public String deleteMovie(@PathVariable("id") Long id) {
+        movieRepository.deleteById(id);
+        return "redirect:/movies";
+    }
+
+    //@GetMapping("/pelicula/update/{id}") // O la ruta que tinguis per editar
+public String editMovie(@PathVariable Long id, Model model) {
+    Movie movie = movieRepository.findById(id).orElseThrow();
+    model.addAttribute("pelicula", movie);
+    
+    // AIXÒ ÉS EL QUE ET FALTA: enviar tots els gèneres disponibles
+    model.addAttribute("totsElsGeneres", genereRepository.findAll());
+    
+    return "movies/editar-pelicules";
+}
+
+
 }

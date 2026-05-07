@@ -106,7 +106,11 @@
             <tbody>
                 <tr th:each="peli : ${llista}">
                     <td th:text="${peli.titol}">Títol de la peli</td>
-                    <td th:text="${peli.genere}">Acció</td>
+                    <td>
+    <ul>
+        <li th:each="g : ${peli.generes}" th:text="${g.nom}">Nom del gènere</li>
+    </ul>
+</td>
                     <td th:text="${peli.durada + ' min'}">120 min</td>
                     <td th:text="${peli.data_estrena}">2026-03-05</td>
 

@@ -50,9 +50,15 @@
                 <label>Durada (minuts):</label>
                 <input type="number" th:field="*{durada}" required/>
                 <div class="error-msg" th:if="${#fields.hasErrors('durada')}" th:errors="*{durada}"></div>
-                <label>Gènere:</label>
-                <input type="text" th:field="*{genere}"/>
-                <div class="error-msg" th:if="${#fields.hasErrors('genere')}" th:errors="*{genere}"></div>
+                <label>Gèneres:</label>
+<div class="checkbox-group">
+    <div th:each="g : ${totsElsGeneres}">
+        <input type="checkbox" 
+               th:field="*{generes}" 
+               th:value="${g.id}" />
+        <label th:text="${g.nom}"></label>
+    </div>
+</div>
 
                 <label>Descripció:</label>
                 <input type="text" th:field="*{descripcio}"/>

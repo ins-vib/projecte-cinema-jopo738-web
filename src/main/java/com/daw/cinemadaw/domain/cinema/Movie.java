@@ -1,6 +1,8 @@
 package com.daw.cinemadaw.domain.cinema;
 
 import java.time.LocalDate;
+import java.util.ArrayList;
+import java.util.List;
 
 import org.springframework.format.annotation.DateTimeFormat;
 
@@ -9,6 +11,9 @@ import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
+import jakarta.persistence.JoinColumn;
+import jakarta.persistence.JoinTable;
+import jakarta.persistence.ManyToMany;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.Size;
 
@@ -30,10 +35,10 @@ public class Movie {
      @Column (name="duration_minutes",nullable=false)
     private Integer durada; 
     
-    @NotBlank(message="El gènere és obligatori")
-    @Size(min=5,max=150,message="El gènere ha de tenir entre 5 i 150 caràcters")
-     @Column (length=50)
-    private String genere; 
+    // @NotBlank(message="El gènere és obligatori")
+    // @Size(min=5,max=150,message="El gènere ha de tenir entre 5 i 150 caràcters")
+    //  @Column (length=50)
+    // private String genere; 
     
     @NotBlank(message="La descripció és obligatoria")
     @Size(min=5,max=150,message="La descripció ha de tenir entre 5 i 150 caràcters")
@@ -46,18 +51,47 @@ public class Movie {
      @DateTimeFormat(pattern="yyyy-MM-dd")
     private LocalDate data_estrena;  
 
+    @ManyToMany
+@JoinTable(
+  name = "movie_genere", // Taula intermèdia que es crearà sola
+  joinColumns = @JoinColumn(name = "movie_id"), 
+  inverseJoinColumns = @JoinColumn(name = "genere_id"))
+private List<Genere> generes = new ArrayList<>();
+
     public Movie() {
     }
 
-    public Movie(LocalDate data_estrena, String descripcio, int durada, String genere, String titol) {
-        this.data_estrena = data_estrena;
-        this.descripcio = descripcio;
-        this.durada = durada;
-        this.genere = genere;
-        this.titol = titol;
-    }
+    // public Movie(LocalDate data_estrena, String descripcio, int durada, String genere, String titol) {
+    //     this.data_estrena = data_estrena;
+    //     this.descripcio = descripcio;
+    //     this.durada = durada;
+    //     //this.genere = genere;
+    //     this.titol = titol;
+    // }
+    
 
 
+
+    // public Movie(Long id,
+    //         @NotBlank(message = "El títol és obligatori") @Size(min = 5, max = 150, message = "El titol ha de tenir entre 5 i 150 caràcters") String titol,
+    //         Integer durada
+    //         ) {
+    //     this.id = id;
+    //     this.titol = titol;
+    //     this.durada = durada;
+    //     this.descripcio = descripcio;
+    //     this.data_estrena = data_estrena;
+    //     this.generes = generes;
+    // }
+
+    public Movie(Long id, String titol, Integer durada, String descripcio, LocalDate data_estrena, List<Genere> generes) {
+    this.id = id;
+    this.titol = titol;
+    this.durada = durada;
+    this.descripcio = descripcio;
+    this.data_estrena = data_estrena;
+    this.generes = generes != null ? generes : new ArrayList<>();
+}
 
     public Long getId() {
         return id;
@@ -83,13 +117,13 @@ public class Movie {
         this.durada = durada;
     }
 
-    public String getGenere() {
-        return genere;
-    }
+    // public String getGenere() {
+    //     return genere;
+    // }
 
-    public void setGenere(String genere) {
-        this.genere = genere;
-    }
+    // public void setGenere(String genere) {
+    //     this.genere = genere;
+    // }
 
     public String getDescripcio() {
         return descripcio;
@@ -109,16 +143,21 @@ public class Movie {
 
     @Override
     public String toString() {
-        StringBuilder sb = new StringBuilder();
-        sb.append("Movie{");
-        sb.append("id=").append(id);
-        sb.append(", t\u00edtol=").append(titol);
-        sb.append(", durada=").append(durada);
-        sb.append(", genere=").append(genere);
-        sb.append(", descripcio=").append(descripcio);
-        sb.append(", data_estrena=").append(data_estrena);
-        sb.append('}');
-        return sb.toString();
+        return "Movie [id=" + id + ", titol=" + titol + ", durada=" + durada + ", descripcio=" + descripcio
+                + ", data_estrena=" + data_estrena + ", generes=" + generes + ", getClass()=" + getClass()
+                + ", getId()=" + getId() + ", getTitol()=" + getTitol() + ", getDurada()=" + getDurada()
+                + ", hashCode()=" + hashCode() + ", getDescripcio()=" + getDescripcio() + ", getData_estrena()="
+                + getData_estrena() + ", getGeneres()=" + getGeneres() + ", toString()=" + super.toString() + "]";
+    }
+
+    
+
+    public List<Genere> getGeneres() {
+        return generes;
+    }
+
+    public void setGeneres(List<Genere> generes) {
+        this.generes = generes;
     }
 
 
